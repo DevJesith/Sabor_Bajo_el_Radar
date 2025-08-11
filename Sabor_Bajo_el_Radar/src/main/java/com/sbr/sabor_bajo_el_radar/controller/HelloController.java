@@ -1,0 +1,22 @@
+package com.sbr.sabor_bajo_el_radar.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+
+@Controller
+public class HelloController {
+
+
+
+    @GetMapping("/index")
+    public String home() {
+        return "index";
+    }
+
+    @GetMapping("/hola")
+    public String hola() {
+        return "¡Hola! El servidor está funcionando correctamente.";
+    }
+
+}

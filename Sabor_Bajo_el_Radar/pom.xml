@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sbr</groupId>
-	<artifactId>Sabor_Bajo_el_Radar</artifactId>
+	<artifactId>sabor_bajo_el_radar</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Sabor_Bajo_el_Radar</name>
+	<name>sabor_bajo_el_radar</name>
 	<description>Proyecto SBR </description>
 	<url/>
 	<licenses>
