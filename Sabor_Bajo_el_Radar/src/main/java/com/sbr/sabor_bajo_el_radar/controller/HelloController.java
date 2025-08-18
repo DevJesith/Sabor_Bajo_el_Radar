@@ -19,4 +19,7 @@ public class HelloController {
         return "¡Hola! El servidor está funcionando correctamente.";
     }
 
+    /*Reciben peticiones del navegador (como /productos) y deciden qué hacer.
+    Como el recepcionista que recibe al cliente y lo dirige al área correcta.
+     */
 }
