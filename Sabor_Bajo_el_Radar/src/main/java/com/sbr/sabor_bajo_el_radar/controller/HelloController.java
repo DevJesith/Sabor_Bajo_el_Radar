@@ -9,9 +9,9 @@ public class HelloController {
 
 
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String home() {
-        return "index";
+        return "principal/index";
     }
 
     @GetMapping("/hola")

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABOR BAJO EL RADAR</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+
+    <!-- Tu CSS -->
+    <link rel="stylesheet" th:href="@{/css/principal/style.css}">
+
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <nav class="navbar navbar-expand-lg navegacion-sections">
+        <div class="container-fluid navegacion-sections">
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/img/logo_sbr.png}" alt="img" class="logo-principal">
+                Sabor Bajo El Radar
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse nav-final" id="navbarScroll">
+                <ul class="navbar-nav my-2 my-lg-2 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item link-header"><a class="nav-link" aria-current="page" href="#">Inicio</a></li>
+                    <li class="nav-item link-header dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">Nosotros</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
+                            <li><a class="dropdown-item" href="#">Como Funciona</a></li>
+                            <li><a class="dropdown-item" href="#">Equipo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item link-header"><a class="nav-link" href="#">Contacto</a></li>
+                    <li class="nav-item link-header">
+                        <a class="nav-link" th:href="@{/comunidad}" id="comunidad">Únete a nuestra comunidad</a>
+                    </li>
+                    <li class="nav-item link-header">
+                        <a class="nav-link" href="#" id="login">Iniciar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="header-portada">
+        <div class="container text-center">
+            <div class="row align-items-center">
+                <div class="col">
+                    <img th:src="@{/img/header-foto.jpg}" alt="foto portada" class="header-foto">
+                </div>
+                <div class="col">
+                    <h1 class="text-start header-titulo">Explora la ciudad a través de sus sabores</h1>
+                    <p class="header-parrafo">Relaciona la gastronomía con la cultura local y el acto de explorar.</p>
+                    <a href="#" class="header-link">¡Descubre lo que hay bajo el radar!</a>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </section>
+</header>
+
+<!-- Main -->
+<main>
+    <section class="comunidad">
+        <div class="comunidad-bloquetitulo">
+            <h1 class="comunidad-titulo">Nuestra comunidad</h1>
+        </div>
+        <div class="container text-center">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h2 class="comunidad-cliente">Cliente</h2>
+                    <div><img th:src="@{/img/Users.jpg}" alt="" class="comunidad-imgusers"></div>
+                    <span class="contador-cliente" id="contador-cliente">0</span>
+                </div>
+                <div class="col">
+                    <h2 class="comunidad-vendedor">Vendedor</h2>
+                    <div><img th:src="@{/img/vendedor.png}" alt="" class="comunidad-imgvendedor"></div>
+                    <span class="contador-vendedor" id="contador-vendedor">0</span>
+                </div>
+                <div class="col">
+                    <h2 class="comunidad-domiciliario">Domiciliario</h2>
+                    <div><img th:src="@{/img/domiciliario.png}" alt="" class="comunidad-imgdomiciliario"></div>
+                    <span class="contador-domiciliario" id="contador-domiciliario">0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="beneficio">
+        <div class="beneficio-bloquetitulo">
+            <h1 class="beneficio-titulo">Beneficio</h1>
+        </div>
+        <div class="container text-center">
+            <div class="row align-items-center">
+
+                <!-- Cliente -->
+                <div class="col">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front card card-cliente">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cliente</h5>
+                                    <img th:src="@{/img/Cliente-beneficio.png}" class="beneficio-imgCliente" alt="">
+                                </div>
+                            </div>
+                            <div class="flip-card-back card card-cliente">
+                                <div class="card-body">
+                                    <h5 class="card-subtitle">"Descubre los mejores sabores locales con facilidad y confianza."</h5>
+                                    <p class="card-text">Explora una amplia variedad de comidas, con acceso rápido a opciones únicas que se ajustan a tus gustos y ubicación. ¡Una experiencia deliciosa te espera!</p>
+                                    <a href="#" class="link-beneficio-cliente">Descubre nuevos sabores</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendedor -->
+                <div class="col">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front card card-vendedor">
+                                <div class="card-body">
+                                    <h5 class="card-title">Vendedor</h5>
+                                    <img th:src="@{/img/vendedor-beneficio.png}" class="beneficio-imgVendedor" alt="">
+                                </div>
+                            </div>
+                            <div class="flip-card-back card card-vendedor">
+                                <div class="card-body">
+                                    <h5 class="card-subtitle">"Lleva tu negocio a nuevos horizontes."</h5>
+                                    <p class="card-text">Promociona tus productos en una plataforma confiable que conecta con clientes interesados en probar tus especialidades, impulsando tus ventas de forma sencilla y efectiva.</p>
+                                    <a href="#" class="link-beneficio-vendedor">Comparte tu plato culinario</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domiciliario -->
+                <div class="col">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front card card-domiciliario">
+                                <div class="card-body">
+                                    <h5 class="card-title">Domiciliario</h5>
+                                    <img th:src="@{/img/domiciliario-beneficio.png}" class="beneficio-imgDomiciliario" alt="">
+                                </div>
+                            </div>
+                            <div class="flip-card-back card card-domiciliario">
+                                <div class="card-body">
+                                    <h5 class="card-subtitle">"Conecta clientes y sabores."</h5>
+                                    <p class="card-text">Conviértete en un puente entre sabores y clientes con entregas rápidas, rutas optimizadas y el respaldo que necesitas para crecer. Lleva cada pedido con confianza y seguridad.</p>
+                                    <a href="#" class="link-beneficio-domiciliario">Sé Parte del Equipo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Localidades -->
+    <section>
+        <div class="localidad-bloquetitulo">
+            <h2 class="localidad-subtitulo">Descubre las zonas con mayor actividad en la plataforma.</h2>
+        </div>
+        <div class="container text-center">
+            <div class="localidad-bloquetitulo">
+                <h1 class="localidad-titulo">Las localidades más vibrantes</h1>
+            </div>
+            <div class="row align-items-center">
+                <div class="col"><img th:src="@{/img/chapinero.jpg}" alt="" class="localidad-imgusers"><p class="localidades">Chapinero</p></div>
+                <div class="col"><img th:src="@{/img/suba.jpg}" alt="" class="localidad-imgvendedor"><p class="localidades">Suba</p></div>
+                <div class="col"><img th:src="@{/img/Usme.jpg}" alt="" class="localidad-imgdomiciliario"><p class="localidades">Usme</p></div>
+                <div class="col"><img th:src="@{/img/teusaquillo.jpg}" alt="" class="localidad-imgdomiciliario"><p class="localidades">Teusaquillo</p></div>
+            </div>
+            <div class="localidad+">
+                <p class="slogan-localidad">¡Explora todas las localidades, sin importar el nivel de interacción! Encontrarás algo para ti en cada una, <a href="#" id="link-localidades">solo tienes que ingresar y descubrir.</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer principal -->
+    <section class="footer">
+        <div class="container text-center">
+            <div class="row align-items-center">
+
+                <div class="col">
+                    <p class="footer-titulo">Nosotros</p>
+                    <div><a href="#" class="footer-text">Quienes somos</a> <a href="#" class="footer-text">Equipo</a> <a href="#" class="footer-text">Testimonios</a></div>
+                </div>
+
+                <div class="col">
+                    <p class="footer-titulo">Soporte</p>
+                    <div><a href="#" class="footer-text">Contáctanos</a> <a href="#" class="footer-text">PQRS</a> <a href="#" class="footer-text">FAQ</a></div>
+                </div>
+
+                <div class="col"><img th:src="@{/img/logo_sbr.png}" alt="" class="footer-logo"></div>
+
+                <div class="col">
+                    <p class="footer-titulo">Plataformas</p>
+                    <a href="#"><img th:src="@{/img/playstore.png}" alt="" class="playstore"></a>
+                    <a href="#"><img th:src="@{/img/appstore.png}" alt="" class="appstore"></a>
+                </div>
+
+                <div class="col">
+                    <p class="footer-titulo">Redes sociales</p>
+                    <div class="footer-container-redsocial">
+                        <a href="#" class="footer-redsocial fondo-facebook"><img th:src="@{/img/facebook.png}" class="icono-redsocial facebook" alt=""></a>
+                        <a href="#" class="footer-redsocial fondo-instagram"><img th:src="@{/img/instagram.png}" class="icono-redsocial instagram" alt=""></a>
+                        <a href="#" class="footer-redsocial fondo-twitter"><img th:src="@{/img/twitter.png}" class="icono-redsocial twitter" alt=""></a>
+                        <a href="#" class="footer-redsocial fondo-linkedin"><img th:src="@{/img/linkedin.png}" class="icono-redsocial linkedin" alt=""></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer legal -->
+<footer>
+    <div class="footer-container">
+        <a href="#" class="footer-footer-link">Política de privacidad</a>
+        <a th:href="@{/terminos-condiciones}" class="footer-footer-link">Términos y condiciones</a>
+        <a href="#" class="footer-footer-link">Mapa de navegación</a>
+        <p class="footer-footer-text">© 2023 Sabor Bajo El Radar. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script th:src="@{/js/principal/custom.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+</body>
+</html>
