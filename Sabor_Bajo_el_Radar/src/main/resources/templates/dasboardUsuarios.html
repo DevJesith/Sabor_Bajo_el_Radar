@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/chart.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/Dashboard/dashboard.css}">
+</head>
+<body>
+<h1>Dashboard</h1>
+<div class="chart-container">
+    <canvas id="usuariosChart"></canvas>
+</div>
+<script th:src="@{/js/principal/dashboard.js}"></script>
+</body>
+</html>

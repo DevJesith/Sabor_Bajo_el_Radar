@@ -14,10 +14,10 @@ public class HelloController {
         return "principal/index";
     }
 
-    @GetMapping("/hola")
-    public String hola() {
-        return "¡Hola! El servidor está funcionando correctamente.";
-    }
+//    @GetMapping("/dashboard")
+//    public String dashboard() {
+//        return "dasboardUsuarios";
+//    }
 
     /*Reciben peticiones del navegador (como /productos) y deciden qué hacer.
     Como el recepcionista que recibe al cliente y lo dirige al área correcta.
