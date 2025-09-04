@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             data: {
                 labels: Object.keys(data),
                 datasets: [{
-                    label: "Usuarios por Rol",
+                    label: "Cantidad",
                     data: Object.values(data),
                     backgroundColor: [
                         "rgba(255, 99, 132, 0.6)",
