@@ -11,5 +11,20 @@ public class HomeController {
         return "principal/index";
     }
 
+    @GetMapping("/mapa-navegacion")
+    public String mapaNavegacion(){
+        return  "principal/mapa_navegacion";
+    }
+
+    @GetMapping("/terminos-y-condiciones")
+    public String terminosCondiciones(){
+        return  "principal/terminos_condiciones";
+    }
+
+    @GetMapping("/como-funciona")
+    public String comoFunciona(){
+        return  "principal/como_funciona";
+    }
+
 
 }
