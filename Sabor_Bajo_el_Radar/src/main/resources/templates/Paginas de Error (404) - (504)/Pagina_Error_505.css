@@ -1,0 +1,6 @@
+.boton-inicio:hover{
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    border: black solid 1px;
+}
