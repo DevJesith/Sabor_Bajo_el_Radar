@@ -12,7 +12,7 @@
     <nav class="navbar navbar-expand-lg navegacion-sections">
         <div class="container-fluid navegacion-sections">
             <a class="navbar-brand" href="#">
-                <img th:src="@{/img/logo_sbr.png}" alt="img" class="logo-principal">
+                <img src="@{/img/logo_sbr.png}" alt="img" class="logo-principal">
                 Sabor Bajo El Radar
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
@@ -28,14 +28,14 @@
                            aria-expanded="false">Nosotros</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Quienes somos</a></li>
-                            <li><a class="dropdown-item" th:href="@{/como-funciona}">Como Funciona</a></li>
+                            <li><a class="dropdown-item" href="@{/como-funciona}">Como Funciona</a></li>
                             <li><a class="dropdown-item" href="#">Equipo</a></li>
-                            <li><a class="dropdown-item" th:href="@{/dashboard/usuarios}">Ver Usuarios registrados</a></li>
+                            <li><a class="dropdown-item" href="@{/dashboard/usuarios}">Ver Usuarios registrados</a></li>
                         </ul>
                     </li>
                     <li class="nav-item link-header"><a class="nav-link" href="#">Contacto</a></li>
                     <li class="nav-item link-header">
-                        <a class="nav-link" th:href="@{/comunidad}" id="comunidad">Únete a nuestra comunidad</a>
+                        <a class="nav-link" href="@{/comunidad}" id="comunidad">Únete a nuestra comunidad</a>
                     </li>
                     <li class="nav-item link-header">
                         <a class="nav-link" href="#" id="login">Iniciar Sesión</a>
@@ -46,61 +46,67 @@
     </nav>
 </header>
 
+<!-- Contenido de la pagia web -->
 <main class="mt-2 mb-2">
-    <div class="border border-black">
-        <p class="fs-1">
-            hola
-        </p>
-    </div>
-
-</main>
-
-
-<section class="footer">
     <div class="container text-center">
-        <div class="row align-items-center">
+        <div class="row p-3">
 
-            <div class="col">
-                <p class="footer-titulo">Nosotros</p>
-                <div><a href="#" class="footer-text">Quienes somos</a> <a href="#" class="footer-text">Equipo</a> <a href="#" class="footer-text">Testimonios</a></div>
+            <div class="col border border-black rounded-4 me-3">
+                <img src="/resources_pages/quienes_somos/imgperfil.png" class="rounded w-100" alt="IMG WINSTON">
+                <p>
+                    Winston - Integrante del grupo
+                </p>
             </div>
-
-            <div class="col">
-                <p class="footer-titulo">Soporte</p>
-                <div><a href="#" class="footer-text">Contáctanos</a> <a href="#" class="footer-text">PQRS</a> <a href="#" class="footer-text">FAQ</a></div>
+            <div class="col border border-black rounded-4">
+                <img src="/resources_pages/quienes_somos/imgperfil.png" class="rounded w-100" alt="IMG WINSTON">
+                <p>
+                    Jesith - Integrante del grupo
+                </p>
             </div>
-
-            <div class="col"><img th:src="@{/img/logo_sbr.png}" alt="" class="footer-logo"></div>
-
-            <div class="col">
-                <p class="footer-titulo">Plataformas</p>
-                <a href="#"><img th:src="@{/img/playstore.png}" alt="" class="playstore"></a>
-                <a href="#"><img th:src="@{/img/appstore.png}" alt="" class="appstore"></a>
+            <div class="col border border-black rounded-4 ms-3">
+                <img src="/resources_pages/quienes_somos/imgperfil.png" class="rounded w-100" alt="IMG WINSTON">
+                <p>
+                    Damian - Integrante del grupo
+                </p>
             </div>
-
-            <div class="col">
-                <p class="footer-titulo">Redes sociales</p>
-                <div class="footer-container-redsocial">
-                    <a href="#" class="footer-redsocial fondo-facebook"><img th:src="@{/img/facebook.png}" class="icono-redsocial facebook" alt=""></a>
-                    <a href="#" class="footer-redsocial fondo-instagram"><img th:src="@{/img/instagram.png}" class="icono-redsocial instagram" alt=""></a>
-                    <a href="#" class="footer-redsocial fondo-twitter"><img th:src="@{/img/twitter.png}" class="icono-redsocial twitter" alt=""></a>
-                    <a href="#" class="footer-redsocial fondo-linkedin"><img th:src="@{/img/linkedin.png}" class="icono-redsocial linkedin" alt=""></a>
-                </div>
+            <div class="col border border-black rounded-4 ms-3">
+                <img src="/resources_pages/quienes_somos/imgperfil.png" class="rounded w-100" alt="IMG WINSTON">
+                <p>
+                    Leidy - Integrante del grupo
+                </p>
             </div>
 
         </div>
     </div>
-</section>
 
-<!-- Footer legal -->
-<footer>
-    <div class="footer-container">
-        <a href="#" class="footer-footer-link">Política de privacidad</a>
-        <a th:href="@{/terminos-y-condiciones}" class="footer-footer-link">Términos y condiciones</a>
-        <a th:href="@{/mapa-navegacion}" class="footer-footer-link">Mapa de navegación</a>
-        <p class="footer-footer-text">© 2023 Sabor Bajo El Radar. Todos los derechos reservados.</p>
+    <!-- segunda seccion -->
+    <div class="container mt-2 p-2">
+        <div class="row p-3">
+            <div class="col-sm-7 me-5 d-flex align-items-center">
+                <p class="fs-6">
+                    Somos un equipo de estudiantes apasionados por la tecnología y el desarrollo de software. Aunque estamos dando nuestros primeros pasos como desarrolladores junior, nos une la emoción de crear soluciones innovadoras, funcionales y útiles. Creemos que cada proyecto es una oportunidad para aprender, crecer y aportar valor. Nos motiva experimentar con nuevas ideas, trabajar en equipo y transformar desafíos en productos que hagan la diferencia.
+                </p>
+            </div>
+            <div class="col-sm-3 d-flex">
+                <img src="/resources_pages/quienes_somos/Developer.svg" class="rounded w-100" alt="IMG WINSTON">
+            </div>
+        </div>
     </div>
-</footer>
+
+    <!-- Tercera seccion -->
+    <div class="container mt-3 border border-black p-1">
+        <div class="border border-black fs-2 p-1">
+            <p class="text-center">
+                LA RAZON DE SER
+            </p>
+            <div class="border border-black">
+                <p class="fs-6 p-1">
+                    Nuestro objeivo es ofrecer a los vendedores urbanos un espacio digital donde puedan ser vistos y valorados por lo que hacen cada día. A través del aplicativo, buscamos que la comunidad descubra fácilmente sus productos, se acerque a sus historias y reconozca la importancia de su trabajo. Al mismo tiempo, queremos guiarlos en el proceso de formalización de sus negocios, generando oportunidades de crecimiento y construyendo un vínculo más fuerte entre ellos y la ciudad que habitan.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
