@@ -26,5 +26,10 @@ public class HomeController {
         return  "principal/como_funciona";
     }
 
+    @GetMapping("/quienes-somos")
+    public String quienesSomos(){
+        return  "Quienes_Somos/Quienes_somos";
+    }
+
 
 }
