@@ -26,5 +26,10 @@ public class HomeController {
         return  "principal/como_funciona";
     }
 
+    @GetMapping("/correo-masivos")
+    public String correoMasivos(){
+        return  "principal/correoMasivo";
+    }
+
 
 }
