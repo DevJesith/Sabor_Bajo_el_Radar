@@ -31,5 +31,10 @@ public class HomeController {
         return  "principal/correoMasivo";
     }
 
+    @GetMapping("/quienes-somos")
+    public String quienesSomos(){
+        return  "Quienes_Somos/Quienes_somos";
+    }
+
 
 }
