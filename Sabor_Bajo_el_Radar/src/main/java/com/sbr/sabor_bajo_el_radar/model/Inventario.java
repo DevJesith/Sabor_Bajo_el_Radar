@@ -5,6 +5,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "inventario")
 public class Inventario {
@@ -22,6 +24,13 @@ public class Inventario {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
+
+    @ColumnDefault("0")
+    @Column(name = "stock")
+    private Integer stock;
+
+    @Column(name = "precio", precision = 10, scale = 2)
+    private BigDecimal precio;
 
     @ColumnDefault("0")
     @Column(name = "cantidad")
@@ -49,6 +58,22 @@ public class Inventario {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
     }
 
     public Integer getCantidad() {

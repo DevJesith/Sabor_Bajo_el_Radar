@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-252.25557.131">
-    <data-source name="sbr@localhost" uuid="a73966c7-5695-411f-9bd7-be894f52da0f">
-      <database-info product="MySQL" version="5.5.5-10.4.32-MariaDB" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MARIADB" exact-version="10.4.32" exact-driver-version="8.2">
+  <component name="dataSourceStorageLocal" created-in="IU-252.23892.409">
+    <data-source name="@localhost" uuid="c7bf1378-c008-42a6-9403-47858e62aae2">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MARIADB" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping />
+    </data-source>
+    <data-source name="sbr@localhost" uuid="59b8f0ce-972a-48be-aa83-c4ba441398bb">
+      <database-info product="MariaDB" version="10.4.32-MariaDB" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="3.3.3" dbms="MARIADB" exact-version="10.4.32" exact-driver-version="3.3">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
@@ -14,11 +19,6 @@
           <node kind="schema" qname="@" />
         </introspection-scope>
       </schema-mapping>
-    </data-source>
-    <data-source name="@localhost" uuid="c7bf1378-c008-42a6-9403-47858e62aae2">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MARIADB" />
-      <secret-storage>master_key</secret-storage>
-      <schema-mapping />
     </data-source>
   </component>
 </project>

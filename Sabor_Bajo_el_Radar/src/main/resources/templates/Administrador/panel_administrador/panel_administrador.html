@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Menú Lateral con Botón Dinámico</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"/>
+    <link href="profile-admin_style.css" rel="stylesheet"/>
+</head>
+<body class="bg-dark">
+<!-- Botón ☰ para abrir el menú -->
+<button id="menuBtn" class="btn btn-primary" onclick="openSidebar()">☰</button>
+
+<!-- Menú lateral -->
+<div id="sidebar" class="p-3">
+    <button id="closeBtn" onclick="closeSidebar()">✖</button>
+    <h4 class="mt-4">Panel de administrador</h4>
+    <ul class="nav flex-column mt-3">
+        <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Usuarios</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Correos masivos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Exportar</a></li>
+    </ul>
+</div>
+
+<!-- Contenido principal -->
+<div id="content" class="text-center">
+    <h1>Bienvenido a tu plataforma</h1>
+    <p>Gestiona tus pedidos, visualiza estadísticas y conecta con vendedores locales.</p>
+</div>
+
+<div class="container my-4">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Tarjeta de gráfica -->
+        <div class="col">
+            <div class="card shadow-sm p-4 border border-primary bg-light">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Gráfica 1</h5>
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-outline-primary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                            Exportar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">PDF</a></li>
+                            <li><a class="dropdown-item" href="#">Excel</a></li>
+                            <li><a class="dropdown-item" href="#">Word</a></li>
+                            <li><a class="dropdown-item" href="#">PNG</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <canvas id="myChart" style="max-height: 300px; width: 100%"></canvas>
+            </div>
+        </div>
+        
+        <!-- Repite para cada gráfica -->
+        <div class="col">
+            <div class="card shadow-sm p-4 border border-primary bg-light">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Gráfica 2</h5>
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-outline-primary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                            Exportar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">PDF</a></li>
+                            <li><a class="dropdown-item" href="#">Excel</a></li>
+                            <li><a class="dropdown-item" href="#">Word</a></li>
+                            <li><a class="dropdown-item" href="#">PNG</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <canvas id="myBarChart" style="max-height: 300px; width: 100%"></canvas>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card shadow-sm p-4 border border-primary bg-light">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Gráfica 3</h5>
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-outline-primary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                            Exportar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">PDF</a></li>
+                            <li><a class="dropdown-item" href="#">Excel</a></li>
+                            <li><a class="dropdown-item" href="#">Word</a></li>
+                            <li><a class="dropdown-item" href="#">PNG</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <canvas id="dona" style="max-height: 300px; width: 100%"></canvas>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card shadow-sm p-4 border border-primary bg-light">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Gráfica 4</h5>
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-outline-primary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                            Exportar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">PDF</a></li>
+                            <li><a class="dropdown-item" href="#">Excel</a></li>
+                            <li><a class="dropdown-item" href="#">Word</a></li>
+                            <li><a class="dropdown-item" href="#">PNG</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <canvas id="myBarChart1" style="max-height: 300px; width: 100%"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="profile_admin_custom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Incluye la librería Chart.js -->
+<script src="script.js"></script>
+<!-- Tu script JavaScript -->
+<script src="barra.js"></script>
+<script src="dona.js"></script>
+<script src="barraLateral.js"></script>
+</body>
+</html>

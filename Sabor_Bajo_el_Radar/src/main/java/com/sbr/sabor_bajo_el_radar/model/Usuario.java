@@ -31,13 +31,17 @@ public class Usuario {
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
-    @Lob
-    @Column(name = "rol", nullable = false)
-    private String rol;
-
     @ColumnDefault("curdate()")
     @Column(name = "fecha_registro")
     private LocalDate fechaRegistro;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rol_id")
+    private Role rol;
+
+    @Lob
+    @Column(name = "rol", nullable = false)
+    private String rol1;
 
     public Integer getId() {
         return id;
@@ -95,20 +99,28 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
-
     public LocalDate getFechaRegistro() {
         return fechaRegistro;
     }
 
     public void setFechaRegistro(LocalDate fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public Role getRol() {
+        return rol;
+    }
+
+    public void setRol(Role rol) {
+        this.rol = rol;
+    }
+
+    public String getRol1() {
+        return rol1;
+    }
+
+    public void setRol1(String rol1) {
+        this.rol1 = rol1;
     }
 
 }
