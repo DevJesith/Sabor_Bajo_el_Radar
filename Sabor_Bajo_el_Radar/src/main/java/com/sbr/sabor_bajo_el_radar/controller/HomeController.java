@@ -36,5 +36,10 @@ public class HomeController {
         return  "Quienes_Somos/Quienes_somos";
     }
 
+    @GetMapping("/testimonios")
+    public String testimonios(){return "principal/testimonio/testimonios";};
 
+
+
+    
 }

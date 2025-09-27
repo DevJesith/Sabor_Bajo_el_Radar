@@ -1,7 +1,6 @@
 package com.sbr.sabor_bajo_el_radar.controller;
 
 import com.sbr.sabor_bajo_el_radar.model.Role;
-import com.sbr.sabor_bajo_el_radar.repository.RoleRepository;
 import com.sbr.sabor_bajo_el_radar.repository.UsuarioRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

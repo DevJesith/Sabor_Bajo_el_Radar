@@ -1,0 +1,198 @@
+/* --------- ESTILOS GENERALES --------- */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    margin: 0;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 40px;
+}
+
+/* --------- OPINIONES --------- */
+
+.opinion-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.opinion-card {
+    background: #FFD700; /* Fondo amarillo */
+    border-radius: 50%; /* Redondo */
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+    overflow: hidden;
+    position: relative;
+}
+
+.opinion-card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.opinion-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.estrellas {
+    color: #fcfcfc;
+    font-size: 20px;
+}
+
+.footer {
+    margin-top: 40px;
+    color: #777;
+    font-size: 14px;
+}
+
+/* --------- NAVEGACION --------- */
+
+.navegacion-sections {
+    background: #f4f4f4;
+}
+
+.logo-principal {
+    width: 100px;
+}
+
+.nav-final {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: medium;
+    display: flex;
+    justify-content: end;
+    color: black;
+}
+
+.link-header {
+    margin: 0 10px;
+}
+
+.nav-link:hover {
+    background: #ffaa16;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+#comunidad {
+    background: #2289e6;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+#login {
+    background: #d72638;
+    color: white;
+    font-weight: bold;
+    border-radius: 30px;
+}
+
+/* --------- FOOTER PRINCIPAL --------- */
+
+.footer {
+    background: #ececec;
+}
+
+.footer-text {
+    display: block;
+    color: black;
+}
+
+.footer-titulo {
+    margin: 20px 0;
+    font-family: 'Poppins';
+    font-weight: 700;
+}
+
+.footer-logo {
+    width: 200px;
+}
+
+.playstore, .appstore {
+    margin-bottom: 10px;
+    width: 150px;
+}
+
+.footer-container-redsocial {
+    display: flex;
+    align-self: center;
+}
+
+.footer-redsocial {
+    padding: 15px;
+    margin: 0 5px;
+    background: white;
+    border-radius: 50%;
+}
+
+.icono-redsocial {
+    width: 25px;
+}
+
+/* Hover redes sociales */
+
+.fondo-facebook { transition: background-color 0.3s ease-in-out; }
+.facebook { transition: transform 0.3s, filter 0.3s; }
+.fondo-facebook:hover { background-color: #0165E1; }
+.fondo-facebook:hover .facebook { filter: brightness(0) invert(1); }
+
+.fondo-instagram { transition: background-color 0.3s ease-in-out; }
+.instagram { transition: transform 0.3s, filter 0.3s; }
+.fondo-instagram:hover { background: linear-gradient(45deg,#F58529,#FEDA77,#DD2A7B,#8134AF,#515BD4); }
+.fondo-instagram:hover .instagram { filter: brightness(0) invert(1); }
+
+.fondo-twitter { transition: background-color 0.3s ease-in-out; }
+.twitter { transition: transform 0.3s, filter 0.3s; }
+.fondo-twitter:hover { background-color: black; }
+.fondo-twitter:hover .twitter { filter: brightness(0) invert(1); }
+
+.fondo-linkedin { transition: background-color 0.3s ease-in-out; }
+.linkedin { transition: transform 0.3s, filter 0.3s; }
+.fondo-linkedin:hover { background-color: #0165E1; }
+.fondo-linkedin:hover .linkedin { filter: brightness(0) invert(1); }
+
+/* --------- FOOTER INFERIOR --------- */
+
+footer {
+    margin: 0;
+}
+
+.footer-container {
+    margin: 20px 20px;
+}
+
+.footer-footer-link {
+    text-decoration: none;
+    color: black;
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 15px;
+    margin: 10px 5px;
+    padding-right: 10px;
+    border-right: solid 2px black;
+}
+
+.footer-footer-text {
+    display: inline;
+    float: right;
+}
