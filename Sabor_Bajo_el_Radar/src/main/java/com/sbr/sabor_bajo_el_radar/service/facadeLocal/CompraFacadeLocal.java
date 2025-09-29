@@ -1,7 +1,9 @@
 package com.sbr.sabor_bajo_el_radar.service.facadeLocal;
 
 import com.sbr.sabor_bajo_el_radar.model.Compra;
+
 import java.util.List;
+import java.util.Map;
 
 public interface CompraFacadeLocal {
 
@@ -18,4 +20,8 @@ public interface CompraFacadeLocal {
     List<Compra> findRange(int start, int end);
 
     long count();
+
+    Map<String, Double> obtenerVentasPorMes(int year);
+
+    List<Map<String, Object>> obtenerEstadosPorPeriodo();
 }

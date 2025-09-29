@@ -3,10 +3,12 @@ package com.sbr.sabor_bajo_el_radar.service.facade;
 import com.sbr.sabor_bajo_el_radar.model.Direccion;
 import com.sbr.sabor_bajo_el_radar.repository.DireccionRepository;
 import com.sbr.sabor_bajo_el_radar.service.facadeLocal.DireccionFacadeLocal;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DireccionFacade implements DireccionFacadeLocal {
@@ -56,5 +58,18 @@ public class DireccionFacade implements DireccionFacadeLocal {
     @Override
     public long count() {
         return direccionRepository.count();
+    }
+
+    @Override
+    public Map<String, Long> contarUsuariosPorLocalidad() {
+        Map<String, Long> data = new HashMap<>();
+        List<Object[]> resultados = direccionRepository.contarUsuariosPorLocalidad();
+
+        for (Object[] fila : resultados) {
+            String localidad = (String) fila[0];
+            Long cantidad = (Long) fila[1];
+            data.put(localidad, cantidad);
+        }
+        return data;
     }
 }

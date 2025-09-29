@@ -7,9 +7,12 @@ import java.util.Optional;
 
 public interface RoleFacadeLocal {
     Role save(Role role);
+
     Optional<Role> findById(Integer id);
+
     List<Role> findAll();
+
     void deleteById(Integer id);
 
-    Optional<Role> findByNombre(String nombre);
+    //Optional<Role> findByNombre(String nombre);
 }

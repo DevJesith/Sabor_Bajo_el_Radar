@@ -1,8 +1,9 @@
 package com.sbr.sabor_bajo_el_radar.service.facade;
-import com.sbr.sabor_bajo_el_radar.model.Publicacion;
+
 import com.sbr.sabor_bajo_el_radar.model.MuroSocial;
+import com.sbr.sabor_bajo_el_radar.model.Publicacion;
 import com.sbr.sabor_bajo_el_radar.repository.PublicacionRepository;
-import com.sbr.sabor_bajo_el_radar.service.local.PublicacionFacadeLocal;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.PublicacionFacadeLocal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

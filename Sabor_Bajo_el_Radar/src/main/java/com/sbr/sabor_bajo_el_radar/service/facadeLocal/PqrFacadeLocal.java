@@ -7,7 +7,10 @@ import java.util.Optional;
 
 public interface PqrFacadeLocal {
     Pqr save(Pqr pqr);
+
     Optional<Pqr> findById(Integer id);
+
     List<Pqr> findAll();
+
     void deleteById(Integer id);
 }

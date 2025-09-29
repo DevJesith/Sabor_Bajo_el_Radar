@@ -1,7 +1,8 @@
 package com.sbr.sabor_bajo_el_radar.service.facade;
+
 import com.sbr.sabor_bajo_el_radar.model.Role;
 import com.sbr.sabor_bajo_el_radar.repository.RoleRepository;
-import com.sbr.sabor_bajo_el_radar.service.local.RoleFacadeLocal;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.RoleFacadeLocal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,10 +35,5 @@ public class RoleFacade implements RoleFacadeLocal {
     @Override
     public void deleteById(Integer id) {
         roleRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<Role> findByNombre(String nombre) {
-        return roleRepository.findByNombre(nombre);
     }
 }

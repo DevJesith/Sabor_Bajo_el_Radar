@@ -1,6 +1,8 @@
 package com.sbr.sabor_bajo_el_radar.service.facade;
+
 import com.sbr.sabor_bajo_el_radar.model.GestionDeLealtad;
 import com.sbr.sabor_bajo_el_radar.repository.GestionDeLealtadRepository;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.GestionDeLealtadFacadeLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

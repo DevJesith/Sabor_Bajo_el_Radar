@@ -7,8 +7,11 @@ import java.util.Optional;
 
 public interface ProductoFacadeLocal {
     Producto save(Producto producto);
+
     Optional<Producto> findById(Integer id);
+
     List<Producto> findAll();
+
     void deleteById(Integer id);
 
     // Método extra opcional

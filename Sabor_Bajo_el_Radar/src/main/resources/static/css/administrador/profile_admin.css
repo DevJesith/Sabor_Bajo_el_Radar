@@ -1,0 +1,47 @@
+body {
+    overflow-x: hidden;
+    background-color: #e9e7e7;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+#sidebar.visible {
+    transform: translateX(0);
+}
+
+#sidebar .nav-link {
+    color: white;
+}
+
+#closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+}
+
+#menuBtn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+}
+
+#content {
+    padding: 2rem;
+}
+

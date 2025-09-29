@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/dashboard")
 public class DashboardViewController {
 
-    @GetMapping("/usuarios")
-    public String usuarios(){
-        return "dashboard/usuarios";
+    @GetMapping("/admin")
+    public String usuarios() {
+        return "Administrador/panel_administrador/panel_administrador";
     }
+
+
 }

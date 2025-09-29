@@ -1,7 +1,9 @@
 package com.sbr.sabor_bajo_el_radar.service.facadeLocal;
 
 import com.sbr.sabor_bajo_el_radar.model.Direccion;
+
 import java.util.List;
+import java.util.Map;
 
 public interface DireccionFacadeLocal {
 
@@ -18,4 +20,7 @@ public interface DireccionFacadeLocal {
     List<Direccion> findRange(int start, int end);
 
     long count();
+
+    Map<String, Long> contarUsuariosPorLocalidad();
+
 }

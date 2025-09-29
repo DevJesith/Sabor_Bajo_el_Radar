@@ -1,39 +1,59 @@
 package com.sbr.sabor_bajo_el_radar.controller;
 
-import com.sbr.sabor_bajo_el_radar.model.Role;
-import com.sbr.sabor_bajo_el_radar.repository.UsuarioRepository;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.CompraFacadeLocal;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.DetalleCompraFacadeLocal;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.DireccionFacadeLocal;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.UsuarioFacadeLocal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 public class DashboardController {
 
-    private final UsuarioRepository usuarioRepository;
-    private final RoleRepository roleRepository;
+    private final UsuarioFacadeLocal ufl;
 
-    public DashboardController(UsuarioRepository usuarioRepository, RoleRepository roleRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.roleRepository = roleRepository;
+    private final CompraFacadeLocal cfl;
+
+    private final DetalleCompraFacadeLocal dfl;
+
+    private DireccionFacadeLocal direccionfl;
+
+    public DashboardController(UsuarioFacadeLocal ufl, CompraFacadeLocal cfl, DetalleCompraFacadeLocal dfl, DireccionFacadeLocal direccionfl) {
+        this.ufl = ufl;
+        this.cfl = cfl;
+        this.dfl = dfl;
+        this.direccionfl = direccionfl;
     }
 
     @GetMapping("/api/dashboard/usuarios")
-    public Map<String, Long> getUsuariosPorRol() {
-        Map<String, Long> data = new HashMap<>();
-
-        Role admin = roleRepository.findByNombre("Admin");
-        Role cliente = roleRepository.findByNombre("Cliente");
-        Role vendedor = roleRepository.findByNombre("Vendedor");
-        Role domiciliario = roleRepository.findByNombre("Domiciliario");
-
-        data.put("Admin", usuarioRepository.countByRol(admin));
-        data.put("Cliente", usuarioRepository.countByRol(cliente));
-        data.put("Vendedor", usuarioRepository.countByRol(vendedor));
-        data.put("Domiciliario", usuarioRepository.countByRol(domiciliario));
-        return data;
-
+    public Map<String, Long> UsuariosPorRol() {
+        return ufl.contarUsuariosPorRol();
     }
+
+    @GetMapping("/api/dashboard/ventas")
+    public Map<String, Double> VentasPorMes() {
+        int yearActual = LocalDate.now().getYear();
+        return cfl.obtenerVentasPorMes(yearActual);
+    }
+
+    @GetMapping("/api/dashboard/ingresos-categorias")
+    public Map<String, Double> getIngresosPorCategoria() {
+        return dfl.calcularIngresosPorCategoria();
+    }
+
+    @GetMapping("/api/dashboard/estado-pedidos")
+    public List<Map<String, Object>> EstadosPedidosPorPeriodo() {
+        return cfl.obtenerEstadosPorPeriodo();
+    }
+
+    @GetMapping("/api/dashboard/localidades")
+    public Map<String, Long> UsuariosPorLocalidad() {
+        return direccionfl.contarUsuariosPorLocalidad();
+    }
+
 
 }

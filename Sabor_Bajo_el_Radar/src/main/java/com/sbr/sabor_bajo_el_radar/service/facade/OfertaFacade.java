@@ -1,7 +1,8 @@
 package com.sbr.sabor_bajo_el_radar.service.facade;
+
 import com.sbr.sabor_bajo_el_radar.model.Oferta;
 import com.sbr.sabor_bajo_el_radar.repository.OfertaRepository;
-import com.sbr.sabor_bajo_el_radar.service.local.OfertaFacadeLocal;
+import com.sbr.sabor_bajo_el_radar.service.facadeLocal.OfertaFacadeLocal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
