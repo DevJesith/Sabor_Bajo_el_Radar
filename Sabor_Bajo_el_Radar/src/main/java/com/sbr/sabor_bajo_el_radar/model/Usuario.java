@@ -2,125 +2,93 @@ package com.sbr.sabor_bajo_el_radar.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "nombres", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String nombres;
 
-    @Column(name = "apellidos", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String apellidos;
 
-    @Column(name = "documento", nullable = false, length = 15)
-    private String documento;
-
-    @Column(name = "telefono", nullable = false, length = 11)
-    private String telefono;
-
-    @Column(name = "correo", nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String correo;
 
-    @Column(name = "contrasena", nullable = false)
+    @Column(nullable = false)
     private String contrasena;
 
-    @ColumnDefault("curdate()")
-    @Column(name = "fecha_registro")
-    private LocalDate fechaRegistro;
+    @Column(nullable = false, length = 15)
+    private String documento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false, length = 15)
+    private String telefono;
+
+    @ManyToOne(fetch = FetchType.EAGER) // importante que sea EAGER para Spring Security
     @JoinColumn(name = "rol_id")
     private Role rol;
 
-    @Lob
-    @Column(name = "rol", nullable = false)
-    private String rol1;
+    @ColumnDefault("curdate()")
+    private LocalDate fechaRegistro;
 
-    public Integer getId() {
-        return id;
+    // ================== UserDetails ==================
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Devuelve el rol del usuario como autoridad
+        return Collections.singleton(new SimpleGrantedAuthority(rol.getNombre()));
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getContrasena() {
+    @Override
+    public String getPassword() {
         return contrasena;
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+    @Override
+    public String getUsername() {
+        return correo;
     }
 
-    public LocalDate getFechaRegistro() {
-        return fechaRegistro;
-    }
+    @Override
+    public boolean isAccountNonExpired() { return true; }
 
-    public void setFechaRegistro(LocalDate fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
+    @Override
+    public boolean isAccountNonLocked() { return true; }
 
-    public Role getRol() {
-        return rol;
-    }
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
 
-    public void setRol(Role rol) {
-        this.rol = rol;
-    }
+    @Override
+    public boolean isEnabled() { return true; }
 
-    public String getRol1() {
-        return rol1;
-    }
-
-    public void setRol1(String rol1) {
-        this.rol1 = rol1;
-    }
-
+    // ================== Getters y Setters normales ==================
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getNombres() { return nombres; }
+    public void setNombres(String nombres) { this.nombres = nombres; }
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+    public Role getRol() { return rol; }
+    public void setRol(Role rol) { this.rol = rol; }
+    public LocalDate getFechaRegistro() { return fechaRegistro; }
+    public void setFechaRegistro(LocalDate fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+    public String getDocumento() { return documento; }
+    public void setDocumento(String documento) { this.documento = documento; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 }
