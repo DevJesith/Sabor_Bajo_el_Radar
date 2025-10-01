@@ -3,39 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/static/css/login/login.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
 <h2>Iniciar Sesión</h2>
 
-<!-- Mostrar mensaje de error si login falla -->
-<div th:if="${param.error}">
-    <p style="color:red;">Correo o contraseña incorrectos</p>
+<!--&lt;!&ndash; Mostrar mensaje de error si login falla &ndash;&gt;-->
+<!--<div th:if="${param.error}">-->
+<!--    <p style="color:red;">Correo o contraseña incorrectos</p>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Mostrar mensaje de logout exitoso &ndash;&gt;-->
+<!--<div th:if="${param.logout}">-->
+<!--    <p style="color:green;">Sesión cerrada correctamente</p>-->
+<!--</div>-->
+
+
+<div class="container container-form border border-black rounded p-4">
+    <form class="column"  th:action="@{/login}" method="post">
+
+        <!-- Correo -->
+        <div class="mb-3 ">
+            <label for="username" class="form-label">Correo</label>
+            <input type="email" class="form-control" id="username" placeholder="name@example.com" required>
+        </div>
+
+        <!--    Contrasena -->
+
+        <label for="password" class="form-label">Contraseña:</label>
+        <input type="password" id="password" class="form-control" name="password" aria-describedby="passwordHelpBlock" required>
+        <div id="passwordHelpBlock" class="form-text">
+            Tu contrasena no puede tener mas de 20 caracteres, tampoco emojis.
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Iniciae Sesion</button>
+        </div>
+    </form>
 </div>
 
-<!-- Mostrar mensaje de logout exitoso -->
-<div th:if="${param.logout}">
-    <p style="color:green;">Sesión cerrada correctamente</p>
-</div>
-
-<form th:action="@{/login}" method="post">
-    <div>
-        <label for="username">Correo:</label>
-        <input type="email" id="username" name="username" required />
-    </div>
-
-    <div>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required />
-    </div>
-
-    <div>
-        <button type="submit">Iniciar Sesión</button>
-    </div>
-</form>
 
 <p th:if="${mensaje}" th:text="${mensaje}"></p>
 
 <p>¿No tienes cuenta? <a th:href="@{/registro}">Regístrate aquí</a></p>
+
 </body>
 </html>
