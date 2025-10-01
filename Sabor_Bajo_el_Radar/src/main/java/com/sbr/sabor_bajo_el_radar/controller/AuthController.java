@@ -1,13 +1,15 @@
 package com.sbr.sabor_bajo_el_radar.controller;
 
 import com.sbr.sabor_bajo_el_radar.model.Usuario;
-import com.sbr.sabor_bajo_el_radar.model.Role;
 import com.sbr.sabor_bajo_el_radar.repository.RoleRepository;
 import com.sbr.sabor_bajo_el_radar.services.UsuarioService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
@@ -57,9 +59,7 @@ public class AuthController {
                     .map(r -> r.getAuthority())
                     .orElse("");
             return switch (rol) {
-                case "cliente" -> "Cliente/home";
-                case "vendedor" -> "Vendedor/home";
-                case "domiciliario" -> "Domiciliario/home";
+                case "cliente", "vendedor", "domiciliario" -> "mantenimiento/mantenimiento";
                 case "admin" -> "Administrador/panel_administrador/panel_administrador";
                 default -> "Login/login";
             };

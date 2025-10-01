@@ -1,0 +1,40 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.maintenance-container {
+    min-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    height: auto;
+}
+
+.text-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.return-button {
+    margin-top: 5rem;
+}
+
+.btn {
+    font-size: 20px;
+    padding: 10px 90px;
+    font-weight: 500;
+}
+
+.logo {
+    height: 10rem;
+}
+
+footer {
+    font-size: 18px;
+}

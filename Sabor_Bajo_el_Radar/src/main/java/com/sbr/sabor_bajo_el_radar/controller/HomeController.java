@@ -42,7 +42,10 @@ public class HomeController {
         return "principal/testimonio/testimonios";
     }
 
-    ;
+    @GetMapping("/mantenimiento")
+    public String mantenimiento() {
+        return "mantenimiento/mantenimiento";
+    }
 
 
 }

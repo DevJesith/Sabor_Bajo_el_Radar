@@ -24,7 +24,6 @@
         <li class="nav-item"><a class="nav-link" th:href="@{/dashboard/admin}">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Usuarios</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/correo-masivos}">Correos masivos</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Exportar</a></li>
     </ul>
 </div>
 
@@ -57,6 +56,8 @@
                             </li>
                             <li><a class="dropdown-item" href="#" onclick="exportPNG('lineaVentas', 'grafica_ventas')">PNG</a>
                             </li>
+                            <li><a class="dropdown-item" th:href="@{/api/dashboard/ventas}">Web Services (datos)</a>
+                        
                         </ul>
                     </div>
                 </div>
@@ -85,6 +86,8 @@
                             </li>
                             <li><a class="dropdown-item" href="#" onclick="exportPNG('usuarios', 'grafica_usuarios')">PNG</a>
                             </li>
+                            <li><a class="dropdown-item" th:href="@{/api/dashboard/usuarios}">Web Services (datos)</a>
+                        
                         </ul>
                     </div>
                 </div>
@@ -112,6 +115,9 @@
                                    onclick="exportWord('categoriaVenta', 'grafica_categoriaVenta')">Word</a></li>
                             <li><a class="dropdown-item" href="#"
                                    onclick="exportPNG('categoriaVenta', 'grafica_categoriaVenta')">PNG</a></li>
+                            <li><a class="dropdown-item" th:href="@{/api/dashboard/ingresos-categorias}">Web Services
+                                (datos)</a>
+                        
                         </ul>
                     </div>
                 </div>
@@ -139,6 +145,9 @@
                                    onclick="exportWord('localidades', 'grafica_localidades')">Word</a></li>
                             <li><a class="dropdown-item"
                                    onclick="exportPNG('localidades', 'grafica_localidades')">PNG</a></li>
+                            <li><a class="dropdown-item" th:href="@{/api/dashboard/localidades}">Web Services
+                                (datos)</a>
+                        
                         </ul>
                     </div>
                 </div>
