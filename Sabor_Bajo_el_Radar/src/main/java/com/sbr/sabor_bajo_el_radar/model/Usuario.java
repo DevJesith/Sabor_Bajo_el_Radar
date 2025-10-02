@@ -47,7 +47,7 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Devuelve el rol del usuario como autoridad
-        return Collections.singleton(new SimpleGrantedAuthority(rol.getNombre()));
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + rol.getNombre().toUpperCase()));
     }
 
     @Override

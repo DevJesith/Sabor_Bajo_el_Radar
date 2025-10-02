@@ -42,13 +42,27 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/registro", "/login", "/css/**", "/js/**").permitAll()
+                        //publico
+                        .requestMatchers("/","/registro", "/login", "/css/**", "/js/**", "/img/**", "/img/Quienes_Somos/**","/img/testimonio/**", "/mapa-navegacion", "/terminos-y-condiciones", "/como-funciona","/mantenimiento", "/quienes-somos").permitAll()
+
+                        // solo el admin puede ver el Dashboard
+                        .requestMatchers("/Administrador/panel_administrador/panel_administrador").hasRole("ADMINISTRADOR")
+
+                        // las demas necesitan login
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .successHandler(successHandler)  // <-- aquí se aplica correctamente
                         .permitAll()
+                        .successHandler(((request, response, authentication) -> {
+                            // segun el rol se manda a su pagina
+                            var roles = authentication.getAuthorities().toString();
+                            if (roles.contains("ROLE_ADMINISTRADOR")) {
+                                response.sendRedirect("/dashboard/admin");
+                            } else {
+                                response.sendRedirect("/mantenimiento");
+                            }
+                        }))
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")

@@ -60,7 +60,7 @@ public class AuthController {
                     .orElse("");
             return switch (rol) {
                 case "cliente", "vendedor", "domiciliario" -> "mantenimiento/mantenimiento";
-                case "admin" -> "Administrador/panel_administrador/panel_administrador";
+                case "administrador" -> "Administrador/panel_administrador/panel_administrador";
                 default -> "Login/login";
             };
         }

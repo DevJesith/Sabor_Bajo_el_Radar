@@ -47,5 +47,10 @@ public class HomeController {
         return "mantenimiento/mantenimiento";
     }
 
+    @GetMapping("/cliente")
+    public String prueba() {
+        return "mantenimiento/cliente";
+    }
+
 
 }
