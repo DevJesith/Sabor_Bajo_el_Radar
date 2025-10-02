@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Formulario de Usuario</title>
@@ -25,7 +25,12 @@
             </div>
             <div class="col-md-6 mb-3">
                 <label>Contraseña</label>
-                <input class="form-control" type="password" th:field="*{contrasena}" required/>
+                <input id="contrasena" class="form-control" type="password" th:field="*{contrasena}"
+                       th:disabled="${usuario.id != null}" required/>
+                <div class="form-check mt-2" th:if="${usuario.id != null}">
+                    <input id="editarContrasena" class="form-check-input" type="checkbox" onclick="toggleContrasena()">
+                    <label class="form-check-label" for="editarContrasena">Crear nueva contraseña</label>
+                </div>
             </div>
             <div class="col-md-6 mb-3">
                 <label>Documento</label>
@@ -37,14 +42,24 @@
             </div>
             <div class="col-md-6 mb-3">
                 <label>Rol</label>
-                <select class="form-select" th:field="*{rol.id}">
-                    <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.nombre}"></option>
+                <select class="form-select" th:field="*{rol.id}" required>
+                    <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
                 </select>
             </div>
         </div>
         <button class="btn btn-success" type="submit">Guardar</button>
-        <a class="btn btn-secondary" href="/usuarios">Cancelar</a>
+        <a class="btn btn-secondary" th:href="@{/usuarios/lista}">Cancelar</a>
     </form>
 </div>
+<script>
+    function toggleContrasena() {
+        const checkbox = document.getElementById('editarContrasena');
+        const input = document.getElementById('contrasena');
+        input.disabled = !checkbox.checked;
+        if (!checkbox.checked) {
+            input.value = ''; // Limpia el campo si se desactiva
+        }
+    }
+</script>
 </body>
 </html>
