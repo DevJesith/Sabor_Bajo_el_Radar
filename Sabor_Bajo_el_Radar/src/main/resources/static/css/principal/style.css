@@ -1,5 +1,5 @@
 
-.nav-final{
+.nav-final {
     font-family: 'Poppins';
     font-weight: 500;
     font-size: medium;
@@ -9,57 +9,56 @@
 
 }
 
-.navegacion-sections{
+.navegacion-sections {
     background: #f4f4f4;
 }
 
-.link-header{
+.link-header {
     margin: 0 10px;
 
 }
 
 
-
-.nav-link:hover{
+.nav-link:hover {
     background: #ffaa16;
     color: white;
     border-radius: 10px;
     font-weight: bold;
 }
 
-#comunidad{
+#comunidad {
     background: #2289e6;
     color: white;
     font-weight: bold;
     border-radius: 10px;
 }
 
-#login{
+#login {
     background: #d72638;
     color: white;
     font-weight: bold;
     border-radius: 30px;
 }
 
-.header-portada{
+.header-portada {
     background: #ffaa16;
 }
 
-.header-titulo{
+.header-titulo {
     font-family: 'Montserrat';
     font-weight: 800;
     margin: 50px 0;
     font-size: 50px;
 }
 
-.header-parrafo{
+.header-parrafo {
     font-family: 'Montserrat';
     font-weight: 500;
     margin: 50px 0;
     font-size: 25px;
 }
 
-.header-link{
+.header-link {
     /* display: block; */
     background: #d72638;
     color: white;
@@ -69,87 +68,87 @@
     text-decoration: none;
 }
 
-.header-foto{
-    width: 100px;
+.header-foto {
+    width: 300px;
     margin: 50px 0;
     border-radius: 300px 300px 0 0;
 }
 
-.logo-principal{
+.logo-principal {
     width: 100px;
 }
 
 
 /* Main */
 
-.comunidad{
+.comunidad {
     padding-bottom: 50px;
 }
 
-.comunidad-bloquetitulo{
+.comunidad-bloquetitulo {
     text-align: center;
     margin: 20px 0;
 }
 
-.comunidad-titulo{
+.comunidad-titulo {
     display: inline-block; /* Evita que el borde ocupe toda la línea */
     border-bottom: 5px solid #ffaa16; /* Grosor y color del subrayado */
     padding-bottom: 5px; /* Ajusta la distancia del subrayado al texto */
     font-weight: bold;
 }
 
-.comunidad-cliente{
+.comunidad-cliente {
     font-family: 'Poppins';
     font-weight: 700;
     color: #d72638;
 }
 
-.comunidad-vendedor{
+.comunidad-vendedor {
     font-family: 'Poppins';
     font-weight: 700;
     color: #ff7f11;
 
 }
 
-.comunidad-domiciliario{
+.comunidad-domiciliario {
     font-family: 'Poppins';
     font-weight: 700;
     color: #38793b;
 }
 
-.contador-cliente{
+.contador-cliente {
     color: #d72638;
     font-size: 25px;
     font-weight: bold;
 
 }
 
-.contador-vendedor{
+.contador-vendedor {
     color: #ff7f11;
     font-weight: bold;
     font-size: 25px;
 
 }
 
-.contador-domiciliario{
+.contador-domiciliario {
     color: #38793b;
     font-size: 25px;
     font-weight: bold;
 }
 
-.comunidad-imgusers{
+.comunidad-imgusers {
     margin: 20px 0;
     width: 150px;
 
 }
 
-.comunidad-imgvendedor{
+.comunidad-imgvendedor {
     margin: 20px 0;
     width: 150px;
 
 }
 
-.comunidad-imgdomiciliario{
+.comunidad-imgdomiciliario {
     margin: 20px 0;
     width: 150px;
 
@@ -157,16 +156,16 @@
 
 /* Section 2 */
 
-.beneficio{
+.beneficio {
     background: #ececec;
     padding-bottom: 50px;
 }
 
-.beneficio-bloquetitulo{
+.beneficio-bloquetitulo {
     text-align: center;
 }
 
-.beneficio-titulo{
+.beneficio-titulo {
     margin: 20px 0;
     display: inline-block; /* Evita que el borde ocupe toda la línea */
     border-bottom: 5px solid #ffaa16; /* Grosor y color del subrayado */
@@ -175,10 +174,7 @@
 }
 
 
-
-
-
-.beneficio-imgCliente, .beneficio-imgVendedor, .beneficio-imgDomiciliario{
+.beneficio-imgCliente, .beneficio-imgVendedor, .beneficio-imgDomiciliario {
     width: 300px;
     margin: 20px 0;
 
@@ -216,17 +212,17 @@
     z-index: 2;
 }
 
-.card-cliente{
+.card-cliente {
     background: #f35e5e;
 }
 
-.card-vendedor{
+.card-vendedor {
     background: #cecece;
 }
-.card-domiciliario{
+
+.card-domiciliario {
     background: #ffcb47;
 }
-
 
 
 .flip-card-back {
@@ -239,7 +235,7 @@
     padding: 20px;
 }
 
-.link-beneficio-cliente, .link-beneficio-vendedor, .link-beneficio-domiciliario{
+.link-beneficio-cliente, .link-beneficio-vendedor, .link-beneficio-domiciliario {
     background: white;
     color: black;
     font-weight: bold;
@@ -248,65 +244,65 @@
     text-decoration: none;
 }
 
-.card-title{
+.card-title {
     font-family: 'Poppins';
     font-weight: 700;
     font-size: 25px;
 }
 
-.card-text{
+.card-text {
     margin-top: 30px;
     margin-bottom: 50px;
 }
 
 /* Section 3 */
 
-.localidad-bloquetitulo{
+.localidad-bloquetitulo {
     text-align: center;
     margin: 20px 0;
 }
 
-.localidad-titulo{
+.localidad-titulo {
     display: inline-block; /* Evita que el borde ocupe toda la línea */
     border-bottom: 5px solid #ffaa16; /* Grosor y color del subrayado */
     padding-bottom: 5px; /* Ajusta la distancia del subrayado al texto */
     font-weight: bold;
 }
 
-.localidad-cliente{
+.localidad-cliente {
     font-family: 'Poppins';
     font-weight: 700;
     color: #d72638;
 }
 
-.localidad-vendedor{
+.localidad-vendedor {
     font-family: 'Poppins';
     font-weight: 700;
     color: #ff7f11;
 
 }
 
-.localidad-domiciliario{
+.localidad-domiciliario {
     font-family: 'Poppins';
     font-weight: 700;
     color: #38793b;
 }
 
-.contador-cliente{
+.contador-cliente {
     color: #d72638;
     font-size: 25px;
     font-weight: bold;
 
 }
 
-.contador-vendedor{
+.contador-vendedor {
     color: #ff7f11;
     font-weight: bold;
     font-size: 25px;
 
 }
 
-.contador-domiciliario{
+.contador-domiciliario {
     color: #38793b;
     font-size: 25px;
     font-weight: bold;
@@ -314,7 +310,7 @@
 
 .localidad-imgusers,
 .localidad-imgvendedor,
-.localidad-imgdomiciliario{
+.localidad-imgdomiciliario {
     margin: 30px 0;
     width: 200px;
     height: 200px;
@@ -325,20 +321,20 @@
 
 .localidad-imgusers:hover,
 .localidad-imgvendedor:hover,
-.localidad-imgdomiciliario:hover{
+.localidad-imgdomiciliario:hover {
 
     box-shadow: -30px -15px 2px #ffcb47;
     transform: scale(1.1);
 
 }
 
-.localidades{
+.localidades {
     font-family: 'Poppins';
     font-weight: 700;
     font-size: 25px;
 }
 
-.slogan-localidad{
+.slogan-localidad {
     margin: 40px 0;
     font-family: 'Poppins';
     font-weight: 500;
@@ -360,133 +356,133 @@
 
 /* ------------- */
 
-.footer{
+.footer {
     background: #ececec;
 }
 
-.footer-text{
+.footer-text {
     display: block;
     color: black;
 }
 
-.footer-titulo{
+.footer-titulo {
     margin: 20px 0;
     font-family: 'Poppins';
     font-weight: 700;
 }
 
-.footer-logo{
+.footer-logo {
     width: 200px;
 
 }
 
-.playstore , .appstore{
+.playstore, .appstore {
     margin-bottom: 10px;
     width: 150px;
 }
 
-.footer-container-redsocial{
+.footer-container-redsocial {
     display: flex;
     align-self: center;
 }
 
-.footer-redsocial{
+.footer-redsocial {
     padding: 15px;
     margin: 0 5px;
     background: white;
     border-radius: 50%;
 }
 
-.icono-redsocial{
+.icono-redsocial {
     width: 25px;
 
 }
 
-.fondo-facebook{
+.fondo-facebook {
     transition: background-color 0.3s ease-in-out;
 }
 
-.facebook{
+.facebook {
     transition: transform 0.3s, filter 0.3s;
 
 }
 
-.fondo-facebook:hover{
+.fondo-facebook:hover {
     background-color: #0165E1;
 }
 
-.fondo-facebook:hover .facebook{
+.fondo-facebook:hover .facebook {
     filter: brightness(0) invert(1);
 }
 
 /* Instagram */
-.fondo-instagram{
+.fondo-instagram {
     transition: background-color 0.3s ease-in-out;
 }
 
-.instagram{
+.instagram {
     transition: transform 0.3s, filter 0.3s;
 
 }
 
-.fondo-instagram:hover{
+.fondo-instagram:hover {
     background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
 }
 
-.fondo-instagram:hover .instagram{
+.fondo-instagram:hover .instagram {
     filter: brightness(0) invert(1);
 }
 
 /* Twitter */
 
 
-.fondo-twitter{
+.fondo-twitter {
     transition: background-color 0.3s ease-in-out;
 }
 
-.twitter{
+.twitter {
     transition: transform 0.3s, filter 0.3s;
 
 }
 
-.fondo-twitter:hover{
+.fondo-twitter:hover {
     background-color: black;
 }
 
-.fondo-twitter:hover .twitter{
+.fondo-twitter:hover .twitter {
     filter: brightness(0) invert(1);
 }
 
 
 /* linkedin */
-.fondo-linkedin{
+.fondo-linkedin {
     transition: background-color 0.3s ease-in-out;
 }
 
-.linkedin{
+.linkedin {
     transition: transform 0.3s, filter 0.3s;
 
 }
 
-.fondo-linkedin:hover{
+.fondo-linkedin:hover {
     background-color: #0165E1;
 }
 
-.fondo-linkedin:hover .linkedin{
+.fondo-linkedin:hover .linkedin {
     filter: brightness(0) invert(1);
 }
 
 /* ------- */
 
-footer{
+footer {
     margin: 0;
 }
 
-.footer-container{
+.footer-container {
     margin: 20px 20px;
 }
 
-.footer-footer-link{
+.footer-footer-link {
 
     text-decoration: none;
     color: black;
@@ -499,7 +495,7 @@ footer{
 
 }
 
-.footer-footer-text{
+.footer-footer-text {
     display: inline;
     float: right;
 }
