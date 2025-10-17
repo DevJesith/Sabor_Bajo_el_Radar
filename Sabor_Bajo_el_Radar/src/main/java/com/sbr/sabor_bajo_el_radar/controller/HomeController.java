@@ -52,5 +52,8 @@ public class HomeController {
         return "mantenimiento/cliente";
     }
 
+    @GetMapping("/muro-social")
+    public String muroSocial(){return "Muro_Social/muro_social";}
+
 
 }

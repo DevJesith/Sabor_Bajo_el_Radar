@@ -43,7 +43,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         //publico
-                        .requestMatchers("/","/registro", "/login", "/css/**", "/js/**", "/img/**", "/img/Quienes_Somos/**","/img/testimonio/**", "/mapa-navegacion", "/terminos-y-condiciones", "/como-funciona","/mantenimiento", "/quienes-somos").permitAll()
+                        .requestMatchers("/","/registro", "/login", "/css/**", "/js/**", "/img/**", "/img/Quienes_Somos/**","/img/testimonio/**", "/mapa-navegacion", "/terminos-y-condiciones", "/como-funciona","/mantenimiento", "/quienes-somos", "/muro-social").permitAll()
 
                         // solo el admin puede ver el Dashboard
                         .requestMatchers("/Administrador/panel_administrador/panel_administrador").hasRole("ADMINISTRADOR")
