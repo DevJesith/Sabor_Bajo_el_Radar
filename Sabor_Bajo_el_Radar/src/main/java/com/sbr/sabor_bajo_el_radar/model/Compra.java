@@ -13,7 +13,7 @@ import java.time.Instant;
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id_compra", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -21,9 +21,15 @@ public class Compra {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @Column(name = "total", nullable = false, precision = 12)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "vendedor_id", nullable = false)
+    private Vendedor vendedor;
+
+    @Column(name = "total", nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
+    @ColumnDefault("'pendiente'")
     @Lob
     @Column(name = "estado", nullable = false)
     private String estado;
@@ -46,6 +52,14 @@ public class Compra {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Vendedor vendedor) {
+        this.vendedor = vendedor;
     }
 
     public BigDecimal getTotal() {

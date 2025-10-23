@@ -5,7 +5,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -18,19 +17,22 @@ public class Factura {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "compra_id", nullable = false)
-    private Compra compra;
+    @JoinColumn(name = "compra_id_compra", nullable = false)
+    private Compra compraIdCompra;
 
-    @Column(name = "total", nullable = false, precision = 10)
-    private BigDecimal total;
+    @Column(name = "numero_factura", nullable = false, length = 45)
+    private String numeroFactura;
 
     @Lob
     @Column(name = "metodo_pago", nullable = false)
     private String metodoPago;
 
+    @Column(name = "banco", length = 45)
+    private String banco;
+
     @ColumnDefault("current_timestamp()")
-    @Column(name = "fecha", nullable = false)
-    private Instant fecha;
+    @Column(name = "fecha_pago", nullable = false)
+    private Instant fechaPago;
 
     public Integer getId() {
         return id;
@@ -40,20 +42,20 @@ public class Factura {
         this.id = id;
     }
 
-    public Compra getCompra() {
-        return compra;
+    public Compra getCompraIdCompra() {
+        return compraIdCompra;
     }
 
-    public void setCompra(Compra compra) {
-        this.compra = compra;
+    public void setCompraIdCompra(Compra compraIdCompra) {
+        this.compraIdCompra = compraIdCompra;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public String getNumeroFactura() {
+        return numeroFactura;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 
     public String getMetodoPago() {
@@ -64,12 +66,20 @@ public class Factura {
         this.metodoPago = metodoPago;
     }
 
-    public Instant getFecha() {
-        return fecha;
+    public String getBanco() {
+        return banco;
     }
 
-    public void setFecha(Instant fecha) {
-        this.fecha = fecha;
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
+
+    public Instant getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Instant fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
 }

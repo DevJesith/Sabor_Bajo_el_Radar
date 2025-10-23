@@ -17,9 +17,6 @@ public class Domiciliario {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Column(name = "medio_transporte_id", nullable = false)
-    private Integer medioTransporteId;
-
     public Integer getId() {
         return id;
     }
@@ -34,14 +31,6 @@ public class Domiciliario {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Integer getMedioTransporteId() {
-        return medioTransporteId;
-    }
-
-    public void setMedioTransporteId(Integer medioTransporteId) {
-        this.medioTransporteId = medioTransporteId;
     }
 
 }

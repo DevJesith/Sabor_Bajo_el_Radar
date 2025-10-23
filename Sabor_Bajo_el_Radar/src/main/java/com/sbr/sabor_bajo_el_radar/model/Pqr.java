@@ -1,6 +1,7 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,10 +28,12 @@ public class Pqr {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
+    @ColumnDefault("'pendiente'")
     @Lob
     @Column(name = "estado", nullable = false)
     private String estado;
 
+    @ColumnDefault("current_timestamp()")
     @Column(name = "fecha", nullable = false)
     private Instant fecha;
 

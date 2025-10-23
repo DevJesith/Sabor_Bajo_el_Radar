@@ -12,16 +12,10 @@ public class Vendedor {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
-    @Column(name = "nombre_negocio", length = 100)
-    private String nombreNegocio;
-
-    @Column(name = "negocio_id", nullable = false)
-    private Integer negocioId;
 
     public Integer getId() {
         return id;
@@ -37,22 +31,6 @@ public class Vendedor {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public String getNombreNegocio() {
-        return nombreNegocio;
-    }
-
-    public void setNombreNegocio(String nombreNegocio) {
-        this.nombreNegocio = nombreNegocio;
-    }
-
-    public Integer getNegocioId() {
-        return negocioId;
-    }
-
-    public void setNegocioId(Integer negocioId) {
-        this.negocioId = negocioId;
     }
 
 }
