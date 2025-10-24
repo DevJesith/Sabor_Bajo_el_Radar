@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 public class DetalleCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id_detalle", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "compra_id", nullable = false)
-    private Compra compra;
+    @JoinColumn(name = "compra_id_compra", nullable = false)
+    private Compra compraIdCompra;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -30,6 +30,9 @@ public class DetalleCompra {
     @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
+    @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal;
+
     public Integer getId() {
         return id;
     }
@@ -38,12 +41,12 @@ public class DetalleCompra {
         this.id = id;
     }
 
-    public Compra getCompra() {
-        return compra;
+    public Compra getCompraIdCompra() {
+        return compraIdCompra;
     }
 
-    public void setCompra(Compra compra) {
-        this.compra = compra;
+    public void setCompraIdCompra(Compra compraIdCompra) {
+        this.compraIdCompra = compraIdCompra;
     }
 
     public Producto getProducto() {
@@ -68,6 +71,14 @@ public class DetalleCompra {
 
     public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 
 }

@@ -21,14 +21,14 @@ public class Direccion {
     private String barrio;
 
     @Lob
-    @Column(name = "localidad", nullable = false)
+    @Column(name = "Localidad", nullable = false)
     private String localidad;
 
     @Column(name = "Direccion", nullable = false)
     private String direccion;
 
     @Lob
-    @Column(name = "especificacion", nullable = false)
+    @Column(name = "Especificacion")
     private String especificacion;
 
     public Integer getId() {

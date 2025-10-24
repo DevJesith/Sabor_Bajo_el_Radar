@@ -1,0 +1,52 @@
+body {
+    background-color: #d6d6e7;
+    color: #333;
+}
+
+.sidebar {
+    background-color: #2f2f50;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-left: 4px solid transparent;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #444;
+}
+
+.sidebar a.active {
+    background-color: #614a35;
+    border-left: 4px solid #ff9900;
+    color: #fff;
+}
+
+.sidebar i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.card {
+    background-color: #2c2c3c;
+    border: none;
+    color: #fff;
+}
+
+.btn-purple {
+    background-color: #7c3aed;
+    padding: 5% 7%;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.btn-purple:hover {
+    background-color: #5e4786;
+}

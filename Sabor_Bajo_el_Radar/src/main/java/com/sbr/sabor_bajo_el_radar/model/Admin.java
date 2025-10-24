@@ -8,25 +8,25 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 
 @Entity
-@Table(name = "muro_social")
-public class MuroSocial {
+@Table(name = "admin")
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Lob
-    @Column(name = "contenido", nullable = false)
-    private String contenido;
+    @ColumnDefault("'moderador'")
+    @Column(name = "cargo", nullable = false, length = 50)
+    private String cargo;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "fecha", nullable = false)
-    private Instant fecha;
+    @Column(name = "fecha_asignacion", nullable = false)
+    private Instant fechaAsignacion;
 
     public Integer getId() {
         return id;
@@ -44,26 +44,20 @@ public class MuroSocial {
         this.usuario = usuario;
     }
 
-    public String getContenido() {
-        return contenido;
+    public String getCargo() {
+        return cargo;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
-    public Instant getFecha() {
-        return fecha;
+    public Instant getFechaAsignacion() {
+        return fechaAsignacion;
     }
 
-    public void setFecha(Instant fecha) {
-        this.fecha = fecha;
+    public void setFechaAsignacion(Instant fechaAsignacion) {
+        this.fechaAsignacion = fechaAsignacion;
     }
 
-/*
- TODO [Reverse Engineering] create field to map the 'geoalizacion' column
- Available actions: Define target Java type | Uncomment as is | Remove column mapping
-    @Column(name = "geoalizacion", columnDefinition = "geometry")
-    private Object geoalizacion;
-*/
 }

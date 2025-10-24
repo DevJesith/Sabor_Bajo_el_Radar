@@ -1,19 +1,29 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.time.Instant;
 
 @Entity
-@Table(name = "negocio_vendedor")
-public class NegocioVendedor {
+@Table(name = "negocio")
+public class Negocio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id_negocio", nullable = false)
     private Integer id;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "vendedor_id", nullable = false)
     private Vendedor vendedor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "admin_id")
+    private Admin admin;
 
     @Column(name = "nombre_negocio", nullable = false, length = 100)
     private String nombreNegocio;
@@ -32,19 +42,29 @@ public class NegocioVendedor {
     @Column(name = "tipo_negocio", nullable = false)
     private String tipoNegocio;
 
-    @Column(name = "email_negocio", nullable = false, length = 45)
+    @Column(name = "email_negocio", length = 45)
     private String emailNegocio;
 
+    @ColumnDefault("'inactivo'")
     @Lob
     @Column(name = "estado_negocio", nullable = false)
     private String estadoNegocio;
 
-    @Column(name = "fecha_inaguracion", nullable = false, length = 45)
-    private String fechaInaguracion;
-
     @Lob
     @Column(name = "esta_legalizado", nullable = false)
     private String estaLegalizado;
+
+    @ColumnDefault("'pendiente'")
+    @Lob
+    @Column(name = "aprobado", nullable = false)
+    private String aprobado;
+
+    @Column(name = "fecha_aprobacion")
+    private Instant fechaAprobacion;
+
+    @Lob
+    @Column(name = "motivo_rechazo")
+    private String motivoRechazo;
 
     public Integer getId() {
         return id;
@@ -60,6 +80,14 @@ public class NegocioVendedor {
 
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
 
     public String getNombreNegocio() {
@@ -118,20 +146,36 @@ public class NegocioVendedor {
         this.estadoNegocio = estadoNegocio;
     }
 
-    public String getFechaInaguracion() {
-        return fechaInaguracion;
-    }
-
-    public void setFechaInaguracion(String fechaInaguracion) {
-        this.fechaInaguracion = fechaInaguracion;
-    }
-
     public String getEstaLegalizado() {
         return estaLegalizado;
     }
 
     public void setEstaLegalizado(String estaLegalizado) {
         this.estaLegalizado = estaLegalizado;
+    }
+
+    public String getAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(String aprobado) {
+        this.aprobado = aprobado;
+    }
+
+    public Instant getFechaAprobacion() {
+        return fechaAprobacion;
+    }
+
+    public void setFechaAprobacion(Instant fechaAprobacion) {
+        this.fechaAprobacion = fechaAprobacion;
+    }
+
+    public String getMotivoRechazo() {
+        return motivoRechazo;
+    }
+
+    public void setMotivoRechazo(String motivoRechazo) {
+        this.motivoRechazo = motivoRechazo;
     }
 
 }
