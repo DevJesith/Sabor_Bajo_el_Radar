@@ -41,7 +41,10 @@
             </a>
             
             <div class="text-center mt-4">
-                <button class="btn btn-purple btn-sm text-white">Crear cuenta</button>
+                <a th:href="@{/usuarios/nuevo}">
+                    <button class="btn btn-purple btn-sm text-white">Crear cuenta</button>
+                </a>
+            
             </div>
         </div>
         
@@ -374,18 +377,18 @@
 </div>
 
 <!-- Sidebar active state -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const links = document.querySelectorAll('.sidebar a');
-        links.forEach((link) => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                links.forEach((l) => l.classList.remove('active'));
-                link.classList.add('active');
-            });
-        });
-    });
-</script>
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', () => {-->
+<!--        const links = document.querySelectorAll('.sidebar a');-->
+<!--        links.forEach((link) => {-->
+<!--            link.addEventListener('click', (e) => {-->
+<!--                e.preventDefault();-->
+<!--                links.forEach((l) => l.classList.remove('active'));-->
+<!--                link.classList.add('active');-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

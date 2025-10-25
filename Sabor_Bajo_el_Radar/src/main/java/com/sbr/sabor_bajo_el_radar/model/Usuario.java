@@ -27,8 +27,8 @@ public class Usuario {
     @Column(name = "correo", nullable = false, length = 100)
     private String correo;
 
-    @Column(name = "`contraseña`", nullable = false)
-    private String contraseña;
+    @Column(name = "`contrasena`", nullable = false)
+    private String contrasena;
 
     @Lob
     @Column(name = "rol", nullable = false)
@@ -85,12 +85,12 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getRol() {

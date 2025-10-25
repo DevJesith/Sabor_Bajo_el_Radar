@@ -1,61 +1,104 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Gestión de Usuarios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/administrador/profile_admin.css}" rel="stylesheet"/>
+    <meta charset="UTF-8"/>
+    <title>Panel administrativo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"/>
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+        rel="stylesheet"/>
+    
+    <!-- Css -->
+    <link rel="stylesheet" th:href="@{/css/administrador/panel_admin.css}"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-
-<!-- Botón ☰ para abrir el menú -->
-<button id="menuBtn" class="btn btn-primary" onclick="openSidebar()">☰</button>
-
-<!-- Menú lateral -->
-<div id="sidebar" class="p-3">
-    <button id="closeBtn" onclick="closeSidebar()">✖</button>
-    <h4 class="mt-4">Panel de administrador</h4>
-    <ul class="nav flex-column mt-3">
-        <li class="nav-item"><a class="nav-link" th:href="@{/cliente}">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/dashboard/admin}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/usuarios/lista}">Usuarios</a></li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/correo-masivos}">Correos masivos</a></li>
-    </ul>
+<div class="container-fluid">
+    <div class="row">
+        
+        <!-- Menu lateral  -->
+        <div class="col-md-2 sidebar">
+            <h4 class="text-center text-white mb-4">Sabor Bajo El Radar</h4>
+            
+            <!-- Secciones -->
+            <a th:href="@{/dashboard/admin}">
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+            </a>
+            
+            <a class="active" th:href="@{/usuarios/lista}">
+                <i class="bi bi-person-workspace"></i>
+                Usuarios
+            </a>
+            
+            <a th:href="@{correo-masivos}">
+                <i class="bi bi-envelope-fill"></i>
+                Correo Masivos
+            </a>
+            
+            <div class="text-center mt-4">
+                <a th:href="@{/usuarios/nuevo}">
+                    <button class="btn btn-purple btn-sm text-white">Crear cuenta</button>
+                </a>
+            
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="col-md-10 p-4">
+            
+            <!-- Bienvenida -->
+            <div class="text-center mb-4">
+                <h1>Bienvenido a tu plataforma</h1>
+                <p>Gestiona tus pedidos, visualiza estadísticas y conecta con vendedores locales.</p>
+            </div>
+            
+            
+            <div class="container mt-5">
+                <h2 class="mb-4">Usuarios registrados</h2>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Documento</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.id}"></td>
+                        <td th:text="|${usuario.nombres} ${usuario.apellidos}|"></td>
+                        <td th:text="${usuario.correo}"></td>
+                        <td th:text="${usuario.documento}"></td>
+                        <td th:text="${usuario.telefono}"></td>
+                        <td th:text="${usuario.rol}"></td>
+                        <td>
+                            <a class="btn btn-primary btn-sm"
+                               th:href="@{'/usuarios/editar/' + ${usuario.id}}">Editar</a>
+                            <a id="" class="btn btn-danger btn-sm"
+                               th:href="@{'/usuarios/eliminar/' + ${usuario.id}}">Eliminar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        
+        </div>
+    </div>
 </div>
-<div class="container mt-5">
-    <h2 class="mb-4">Usuarios registrados</h2>
-    <a class="btn btn-success mb-3" href="/usuarios/nuevo">Crear nuevo usuario</a>
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Documento</th>
-            <th>Teléfono</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="usuario : ${usuarios}">
-            <td th:text="${usuario.id}"></td>
-            <td th:text="|${usuario.nombres} ${usuario.apellidos}|"></td>
-            <td th:text="${usuario.correo}"></td>
-            <td th:text="${usuario.documento}"></td>
-            <td th:text="${usuario.telefono}"></td>
-            <td th:text="${usuario.rol?.nombre}"></td>
-            <td>
-                <a class="btn btn-primary btn-sm" th:href="@{'/usuarios/editar/' + ${usuario.id}}">Editar</a>
-                <a class="btn btn-danger btn-sm" th:href="@{'/usuarios/eliminar/' + ${usuario.id}}"
-                   onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 
-<script th:src="@{/js/admin/profile_admin_custom.js}"></script>
+<script th:src="@{/js/admin/alertas.js}"></script>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
