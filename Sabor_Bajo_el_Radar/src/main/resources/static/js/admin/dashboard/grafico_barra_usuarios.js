@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        const response = await fetch("/api/dashboard/usuarios");
+        const response = await fetch("/api/dashboard/usuarios-por-rol");
         const data = await response.json();
 
         const ctx = document.getElementById("usuarios").getContext("2d");
 
         new Chart(ctx, {
-            type: "bar", data: {
+            type: "bar",
+            data: {
                 labels: Object.keys(data), datasets: [{
                     label: "Cantidad",
                     data: Object.values(data),

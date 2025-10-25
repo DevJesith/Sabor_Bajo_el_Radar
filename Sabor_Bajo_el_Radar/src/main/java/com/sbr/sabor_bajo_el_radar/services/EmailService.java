@@ -1,4 +1,4 @@
-package com.sbr.sabor_bajo_el_radar.service;
+package com.sbr.sabor_bajo_el_radar.services;
 
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -21,7 +21,7 @@ public class EmailService {
     @Value("${sendgrid.api.key}")
     private String apiKey;
 
-    public  void enviarCorreo(String destinatario, String templateId, Map<String, Object> datosDinamicos) throws IOException{
+    public void enviarCorreo(String destinatario, String templateId, Map<String, Object> datosDinamicos) throws IOException {
         Email from = new Email("jesithmanuel@gmail.com");
         Email to = new Email(destinatario);
 
@@ -31,7 +31,6 @@ public class EmailService {
 
         Personalization personalization = new Personalization();
         personalization.addTo(to);
-
 
 
         for (Map.Entry<String, Object> entry : datosDinamicos.entrySet()) {
@@ -56,14 +55,14 @@ public class EmailService {
         }
     }
 
-    public void  enviarCorreosMasivos(List<String> destinatarios, String templateId, Map<String, Object> datosGenerales) throws IOException{
-        for (String email : destinatarios){
+    public void enviarCorreosMasivos(List<String> destinatarios, String templateId, Map<String, Object> datosGenerales) throws IOException {
+        for (String email : destinatarios) {
             Map<String, Object> datosPorUsuario = Map.copyOf(datosGenerales);
             enviarCorreo(email, templateId, datosPorUsuario);
         }
     }
 
-    public void enviarCorreoLibre(String destinatario, String asunto, String contenido) throws IOException{
+    public void enviarCorreoLibre(String destinatario, String asunto, String contenido) throws IOException {
         Email from = new Email("jesithmanuel@gmail.com");
         Email to = new Email(destinatario);
         Content content = new Content("text/plain", contenido);

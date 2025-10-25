@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Dashboard Windmill</title>
+    <title>Panel administrativo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- Bootstrap CSS -->
     <link
@@ -13,65 +13,133 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
         rel="stylesheet"/>
     
-    <!-- Estilos personalizados -->
+    <!-- Css -->
     <link rel="stylesheet" th:href="@{/css/administrador/panel_admin.css}"/>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
+        
+        <!-- Menu lateral  -->
         <div class="col-md-2 sidebar">
             <h4 class="text-center text-white mb-4">Sabor Bajo El Radar</h4>
+            
+            <!-- Secciones -->
             <a class="active" th:href="@{/dashboard/admin}">
                 <i class="bi bi-speedometer2"></i>
                 Dashboard
             </a>
+            
             <a th:href="@{/usuarios/lista}">
                 <i class="bi bi-person-workspace"></i>
                 Usuarios
             </a>
+            
             <a th:href="@{correo-masivos}">
                 <i class="bi bi-envelope-fill"></i>
                 Correo Masivos
             </a>
+            
             <div class="text-center mt-4">
                 <button class="btn btn-purple btn-sm text-white">Crear cuenta</button>
             </div>
         </div>
         
-        <!-- Main Content -->
+        <!-- Contenido principal -->
         <div class="col-md-10 p-4">
+            
             <!-- Bienvenida -->
             <div class="text-center mb-4">
                 <h1>Bienvenido a tu plataforma</h1>
                 <p>Gestiona tus pedidos, visualiza estadísticas y conecta con vendedores locales.</p>
             </div>
             
-            <!-- Project List -->
+            <!-- Carta de resumenes -->
             <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <h5>Hans Burger</h5>
-                        <p>Ganancias: $863.45</p>
-                        <small>Fecha: 6/10/2021</small>
+                
+                <!-- Carta de la cantidad de usuarios-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <div class="card text-white bg-dark p-3 h-100">
+                        <h5>Total de usuarios</h5>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <i class="bi bi-people-fill fs-3"></i>
+                            <h4 id="totalUsuarios" class="mb-0">...</h4>
+                        </div>
+                        <small>Registrados en el sistema</small>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <h5>Hans Burger</h5>
-                        <p>Ganancias: $863.45</p>
-                        <small>Fecha: 6/10/2021</small>
+                
+                <!-- Carta de los negocios activos-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <div class="card text-white bg-dark p-3 h-100">
+                        <h5>Negocios activos</h5>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <i class="bi bi-shop-window fs-3"></i>
+                            <h4 id="negociosActivos" class="mb-0">...</h4>
+                        </div>
+                        <small>Con estado activo y aprobado</small>
+                    </div>
+                </div>
+                
+                <!-- Carta de las ventas totales del sistema en forma de ingresos-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <div class="card text-white bg-dark p-3 h-100">
+                        <h5>Total de ventas</h5>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <i class="bi bi-currency-dollar fs-3 "></i>
+                            <h4 id="ventasTotales" class="mb-0">...</h4>
+                        </div>
+                        <small>Acumuladas en el sistema</small>
+                    </div>
+                </div>
+                
+                <!-- Carta de PQRS pendientes-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <div class="card text-white bg-dark p-3 h-100">
+                        <h5>PQRS pendientes</h5>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <i class="bi bi-exclamation-circle-fill fs-3"></i>
+                            <h4 id="pqrsPendientes" class="mb-0">...</h4>
+                        </div>
+                        <small>En revision o sin resolver</small>
+                    </div>
+                </div>
+                
+                <!-- Carta del total de ventas-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <div class="card text-white bg-dark p-3 h-100">
+                        <h5>Compras realizadas</h5>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <i class="bi bi-bag-check-fill fs-3"></i>
+                            <h4 id="comprasRealizadas" class="mb-0">...</h4>
+                        </div>
+                        <small>Transacciones completadas</small>
+                    </div>
+                </div>
+                
+                <!-- Carta de los negocios pendientes-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <div class="card text-white bg-dark p-3 h-100">
+                        <h5>Negocios pendientes</h5>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <i class="bi bi-hourglass-split fs-3"></i>
+                            <h4 id="negociosPendientes" class="mb-0">...</h4>
+                        </div>
+                        <small>Esperando aprobacion</small>
                     </div>
                 </div>
             </div>
             
-            <!-- Charts -->
+            <!-- Graficas -->
             <div class="row">
-                <!-- Donut Chart -->
-                <div class="col-md-6">
+                
+                <!-- Grafica de ventas por mes en forma de ingresos -->
+                <div class="col-md-6 my-3">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="mb-0">Revenue</h5>
+                            <h5 class="mb-0">Ventas por mes</h5>
+                            
+                            <!-- Exportaciones-->
                             <div class="dropdown">
                                 <button
                                     class="btn btn-outline-light dropdown-toggle btn-sm"
@@ -113,7 +181,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" th:href="@{/api/dashboard/ventas}">
+                                        <a class="dropdown-item" th:href="@{/api/dashboard/ventas-por-mes}">
                                             Web Services (datos)
                                         </a>
                                     </li>
@@ -124,11 +192,14 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <!-- Grafica de usuarios dependiendo de su rol -->
+                <div class="col-md-6 my-3">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="mb-0">Grafica usuarios</h5>
+                            <h5 class="mb-0">Usuarios por rol</h5>
                             <div class="dropdown">
+                                
+                                <!-- Exportaciones -->
                                 <button
                                     class="btn btn-outline-light dropdown-toggle btn-sm"
                                     type="button"
@@ -169,7 +240,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" th:href="@{/api/dashboard/usuarios}">
+                                        <a class="dropdown-item" th:href="@{/api/dashboard/usuarios-por-rol}">
                                             Web Services (datos)
                                         </a>
                                     </li>
@@ -180,11 +251,14 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <!-- Grafica de los estados de la PQRS -->
+                <div class="col-md-6 my-3">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="mb-0">Compras por categoria</h5>
+                            <h5 class="mb-0">Estados de PQRS</h5>
                             <div class="dropdown">
+                                
+                                <!-- Exportaciones -->
                                 <button
                                     class="btn btn-outline-light dropdown-toggle btn-sm"
                                     type="button"
@@ -196,7 +270,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportPDF('categoriaVenta', 'grafica_categoriaVenta')">
+                                            onclick="exportPDF('estadoPqrs', 'grafica_estadoPqrs')">
                                             PDF
                                         </a>
                                     </li>
@@ -204,7 +278,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportExcel('categoriaVenta', 'grafica_categoriaVenta')">
+                                            onclick="exportExcel('estadoPqrs', 'grafica_estadoPqrs')">
                                             Excel
                                         </a>
                                     </li>
@@ -212,7 +286,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportWord('categoriaVenta', 'grafica_categoriaVenta')">
+                                            onclick="exportWord('estadoPqrs', 'grafica_estadoPqrs')">
                                             Word
                                         </a>
                                     </li>
@@ -220,27 +294,30 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportPNG('categoriaVenta', 'grafica_categoriaVenta')">
+                                            onclick="exportPNG('estadoPqrs', 'grafica_estadoPqrs')">
                                             PNG
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" th:href="@{/api/dashboard/ingresos-categorias}">
+                                        <a class="dropdown-item" th:href="@{/api/dashboard/pqrs-por-estado}">
                                             Web Services (datos)
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <canvas id="categoriaVenta" style="max-height: 300px; width: 100%"></canvas>
+                        <canvas id="estadoPqrs" style="max-height: 300px; width: 100%"></canvas>
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <!-- Grafica los estados de los negocios -->
+                <div class="col-md-6 my-3">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="mb-0">Grafica usuarios</h5>
+                            <h5 class="mb-0">Estado de Negocios</h5>
                             <div class="dropdown">
+                                
+                                <!-- Exportaciones -->
                                 <button
                                     class="btn btn-outline-light dropdown-toggle btn-sm"
                                     type="button"
@@ -252,7 +329,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportPDF('localidades', 'grafica_localidades')">
+                                            onclick="exportPDF('estadoNegocios', 'grafica_estadoNegocios')">
                                             PDF
                                         </a>
                                     </li>
@@ -260,7 +337,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportExcel('localidades', 'grafica_localidades')">
+                                            onclick="exportExcel('estadoNegocios', 'grafica_estadoNegocios')">
                                             Excel
                                         </a>
                                     </li>
@@ -268,7 +345,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportWord('localidades', 'grafica_localidades')">
+                                            onclick="exportWord('estadoNegocios', 'grafica_estadoNegocios')">
                                             Word
                                         </a>
                                     </li>
@@ -276,19 +353,19 @@
                                         <a
                                             class="dropdown-item"
                                             href="#"
-                                            onclick="exportPNG('localidades', 'grafica_localidades')">
+                                            onclick="exportPNG('estadoNegocios', 'grafica_estadoNegocios')">
                                             PNG
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" th:href="@{/api/dashboard/localidades}">
+                                        <a class="dropdown-item" th:href="@{/api/dashboard/negocios-por-estado}">
                                             Web Services (datos)
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <canvas id="localidades" style="max-height: 300px; width: 100%"></canvas>
+                        <canvas id="estadoNegocios" style="max-height: 300px; width: 100%"></canvas>
                     </div>
                 </div>
             </div>
@@ -313,15 +390,11 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Chart scripts -->
-<script src="grafica1.js"></script>
-<script src="grafica2.js"></script>
-
 <!-- Script de las graficas -->
-<script th:src="@{/js/admin/dashboard/grafica_linea_ventas.js}"></script>
+<script th:src="@{/js/admin/dashboard/grafica_barra_negocioByEstado.js}"></script>
 <script th:src="@{/js/admin/dashboard/grafico_barra_usuarios.js}"></script>
-<script th:src="@{/js/admin/dashboard/grafico_circular_categoriaVentas.js}"></script>
-<script th:src="@{/js/admin/dashboard/grafico_circular_localidades.js}"></script>
+<script th:src="@{/js/admin/dashboard/grafico_linea_ventaByMes.js}"></script>
+<script th:src="@{/js/admin/dashboard/grafico_barra_pqrs.js}"></script>
 
 <!-- Export libraries -->
 <!-- Pdf -->
@@ -331,7 +404,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <!-- Exportaciones -->
-<script th:src="@{js/exportarGraficas.js}"></script>
+<script th:src="@{/js/admin/dashboard/exportarGraficas.js}"></script>
+<script th:src="@{/js/admin/dashboard/datos-cartas.js}"></script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

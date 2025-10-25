@@ -1,10 +1,12 @@
 package com.sbr.sabor_bajo_el_radar.correoMasivos;
 
-import com.sbr.sabor_bajo_el_radar.service.EmailService;
+import com.sbr.sabor_bajo_el_radar.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -29,16 +31,14 @@ public class EmailController {
 //    }
 
     @PostMapping("/masivo")
-    public String procesarFormulario(@RequestParam("destinatarios") String correos, @RequestParam("mensaje") String mensaje, @RequestParam("modo") String modo , Model model){
+    public String procesarFormulario(@RequestParam("destinatarios") String correos, @RequestParam("mensaje") String mensaje, @RequestParam("modo") String modo, Model model) {
 
         List<String> listaCorreos = Arrays.stream(correos.split(",")).map(String::trim).toList();
 
 
-
-
         try {
 
-            if (modo.equals("plantilla")){
+            if (modo.equals("plantilla")) {
                 String templateId = "d-adb87f01be414409ab73f1e50245e824";
                 Map<String, Object> datos = Map.of(
                         "nombre", "Usuarios",
@@ -46,7 +46,7 @@ public class EmailController {
                         "url", "https://saborbajoelradar.com"
                 );
                 emailService.enviarCorreosMasivos(listaCorreos, templateId, datos);
-            }else {
+            } else {
                 for (String email : listaCorreos) {
                     emailService.enviarCorreoLibre(email, "Bienvenido a Sabor Bajo el Radar", mensaje);
                 }
