@@ -16,4 +16,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
         - Object[1]: la cantidad de usuarios con ese rol.
     */
     List<Object[]> countRol();
+
 }
