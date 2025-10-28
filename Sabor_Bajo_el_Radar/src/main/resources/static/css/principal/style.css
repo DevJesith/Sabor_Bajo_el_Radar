@@ -1,76 +1,111 @@
-
-.nav-final {
-    font-family: 'Poppins';
-    font-weight: 500;
-    font-size: medium;
-    display: flex;
-    justify-content: end;
-    color: black;
-
-}
-
 .navegacion-sections {
     background: #f4f4f4;
+    padding: 10px 0;
+}
+
+.logo-principal {
+    width: 50px;
+}
+
+.navbar-brand span {
+    font-family: 'Poppins';
+    font-size: 1.2rem;
+    color: black;
+}
+
+.navbar-nav {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 .link-header {
-    margin: 0 10px;
-
+    margin: 0 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
-
 
 .nav-link:hover {
     background: #ffaa16;
-    color: white;
-    border-radius: 10px;
+    color: white !important;
     font-weight: bold;
 }
 
 #comunidad {
     background: #2289e6;
-    color: white;
+    color: white !important;
     font-weight: bold;
     border-radius: 10px;
+    padding: 8px 12px;
 }
 
 #login {
     background: #d72638;
-    color: white;
+    color: white !important;
     font-weight: bold;
     border-radius: 30px;
+    padding: 8px 16px;
 }
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-item {
+        margin-bottom: 10px;
+    }
+
+    #comunidad, #login {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
 
 .header-portada {
     background: #ffaa16;
+    padding: 50px 0;
 }
 
 .header-titulo {
     font-family: 'Montserrat';
     font-weight: 800;
-    margin: 50px 0;
-    font-size: 50px;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    word-break: break-word;
 }
 
 .header-parrafo {
     font-family: 'Montserrat';
     font-weight: 500;
-    margin: 50px 0;
-    font-size: 25px;
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    word-break: break-word;
+
 }
 
 .header-link {
-    /* display: block; */
     background: #d72638;
     color: white;
     font-weight: bold;
     border-radius: 10px;
     padding: 15px 30px;
     text-decoration: none;
+    display: inline-block;
+    /*white-space: nowrap;*/
+    max-width: 100%;
+    /*overflow-wrap: break-word;*/
 }
 
 .header-foto {
-    width: 300px;
-    margin: 50px 0;
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    margin: auto;
     border-radius: 300px 300px 0 0;
 }
 
@@ -156,6 +191,8 @@
 
 /* Section 2 */
 
+/* Section 2: Beneficios */
+
 .beneficio {
     background: #ececec;
     padding-bottom: 50px;
@@ -167,31 +204,45 @@
 
 .beneficio-titulo {
     margin: 20px 0;
-    display: inline-block; /* Evita que el borde ocupe toda la línea */
-    border-bottom: 5px solid #ffaa16; /* Grosor y color del subrayado */
-    padding-bottom: 5px; /* Ajusta la distancia del subrayado al texto */
+    display: inline-block;
+    border-bottom: 5px solid #ffaa16;
+    padding-bottom: 5px;
     font-weight: bold;
 }
 
 
-.beneficio-imgCliente, .beneficio-imgVendedor, .beneficio-imgDomiciliario {
-    width: 300px;
-    margin: 20px 0;
+/* Imágenes fluidas */
+.beneficio-imgCliente,
+.beneficio-imgVendedor,
+.beneficio-imgDomiciliario {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+}
 
+/* Altura dinámica para tarjetas */
+.card-cliente,
+.card-vendedor,
+.card-domiciliario {
+    /*min-height: 270px;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .flip-card {
-    background-color: transparent;
+    perspective: 1000px;
     width: 100%;
-    height: 300px;
-    perspective: 1000px; /* Profundidad */
+    height: auto;
 }
 
 .flip-card-inner {
     position: relative;
     width: 100%;
-    height: 100%;
-    transition: transform 0.8s;
+    height: auto;
+    transition: transform 0.8s ease;
     transform-style: preserve-3d;
 }
 
@@ -199,19 +250,44 @@
     transform: rotateY(180deg);
 }
 
-.flip-card-front, .flip-card-back {
-    position: absolute;
+.flip-card-front,
+.flip-card-back {
     width: 100%;
-    height: 100%;
     backface-visibility: hidden;
     border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: block;
 }
 
 .flip-card-front {
-    background: #d72638; /* o el fondo que quieras */
-    z-index: 2;
+    background-color: #d72638;
 }
 
+.flip-card-back {
+    background-color: inherit;
+    transform: rotateY(180deg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsividad: desactivar flip en móviles */
+/*@media (max-width: 768px) {*/
+/*    .flip-card-inner {*/
+/*        transform: none !important;*/
+/*    }*/
+
+/*    .flip-card-back {*/
+/*        position: relative;*/
+/*        transform: none;*/
+/*        height: auto;*/
+/*    }*/
+/*}*/
+
+/* Colores personalizados */
 .card-cliente {
     background: #f35e5e;
 }
@@ -224,36 +300,40 @@
     background: #ffcb47;
 }
 
-
-.flip-card-back {
-    /* fondo del dorso */
-    transform: rotateY(180deg);
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.link-beneficio-cliente, .link-beneficio-vendedor, .link-beneficio-domiciliario {
+/* Botones */
+.link-beneficio-cliente,
+.link-beneficio-vendedor,
+.link-beneficio-domiciliario {
     background: white;
     color: black;
     font-weight: bold;
     border-radius: 10px;
     padding: 13px 25px;
     text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
 }
 
+/* Tipografía */
 .card-title {
     font-family: 'Poppins';
     font-weight: 700;
     font-size: 25px;
 }
 
-.card-text {
-    margin-top: 30px;
-    margin-bottom: 50px;
+.card-subtitle {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 15px;
 }
+
+.card-text {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
 
 /* Section 3 */
 
