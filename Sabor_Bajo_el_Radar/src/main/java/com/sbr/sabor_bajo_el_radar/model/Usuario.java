@@ -1,12 +1,18 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements UserDetails{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -36,6 +42,73 @@ public class Usuario {
 
     @Column(name = "fecha_registro", nullable = false)
     private LocalDate fechaRegistro;
+
+    // ----------------------------------------------------------------------
+    // IMPLEMENTACIÓN DE LOS MÉTODOS DE LA INTERFAZ UserDetails
+    // ----------------------------------------------------------------------
+
+    /**
+     * Retorna los roles/autoridades del usuario.
+     * Asume que tienes un campo 'rol' en tu clase.
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Convierte el String 'rol' a una colección de GrantedAuthority
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
+    }
+
+    /**
+     * Retorna la contraseña utilizada para la autenticación.
+     */
+    @Override
+    public String getPassword() {
+        return contrasena;
+    }
+
+    /**
+     * Retorna el nombre de usuario (la identidad única).
+     * Usamos el campo 'correo' para este propósito.
+     */
+    @Override
+    public String getUsername() {
+        return correo;
+    }
+
+    /**
+     * Indica si la cuenta del usuario no ha expirado.
+     * Normalmente retorna 'true'.
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * Indica si la cuenta del usuario no está bloqueada.
+     * Normalmente retorna 'true'.
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * Indica si las credenciales del usuario (contraseña) no han expirado.
+     * Normalmente retorna 'true'.
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * Indica si el usuario está habilitado o deshabilitado.
+     * Normalmente retorna 'true'.
+     */
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public Integer getId() {
         return id;
