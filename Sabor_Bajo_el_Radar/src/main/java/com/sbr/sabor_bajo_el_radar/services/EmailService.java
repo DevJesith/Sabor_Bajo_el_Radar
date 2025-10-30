@@ -56,18 +56,54 @@ public class EmailService {
     }
 
     public void enviarCorreosMasivos(List<String> destinatarios, String templateId, Map<String, Object> datosGenerales) throws IOException {
+        Email from = new Email("jesithmanuel@gmail.com");
+        Mail mail = new Mail();
+        mail.setFrom(from);
+        mail.setTemplateId(templateId);
+
         for (String email : destinatarios) {
-            Map<String, Object> datosPorUsuario = Map.copyOf(datosGenerales);
-            enviarCorreo(email, templateId, datosPorUsuario);
+            Email to = new Email(email);
+            Personalization personalization = new Personalization();
+            personalization.addTo(to);
+
+            for (Map.Entry<String, Object> entry : datosGenerales.entrySet()) {
+                personalization.addDynamicTemplateData(entry.getKey(), entry.getValue());
+            }
+
+            mail.addPersonalization(personalization);
+        }
+
+        SendGrid sg = new SendGrid(apiKey);
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+
+            System.out.println("Status: " + response.getStatusCode());
+            System.out.println("Body: " + response.getBody());
+        } catch (IOException ex) {
+            throw ex;
         }
     }
 
-    public void enviarCorreoLibre(String destinatario, String asunto, String contenido) throws IOException {
+    public void enviarCorreoLibre(List<String> destinatario, String asunto, String contenido) throws IOException {
         Email from = new Email("jesithmanuel@gmail.com");
-        Email to = new Email(destinatario);
         Content content = new Content("text/plain", contenido);
+        Mail mail = new Mail();
 
-        Mail mail = new Mail(from, asunto, to, content);
+        mail.setFrom(from);
+        mail.setSubject(asunto);
+        mail.addContent(content);
+
+        for (String email : destinatario) {
+            Personalization personalization = new Personalization();
+            personalization.addTo(new Email(email));
+            mail.addPersonalization(personalization);
+        }
 
         SendGrid sg = new SendGrid(apiKey);
         Request request = new Request();

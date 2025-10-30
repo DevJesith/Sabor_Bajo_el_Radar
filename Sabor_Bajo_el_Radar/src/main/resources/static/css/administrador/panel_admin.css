@@ -50,3 +50,8 @@ body {
 .btn-purple:hover {
     background-color: #5e4786;
 }
+
+#buscadorUsuarios:focus {
+    border-color: #6f42c1;
+    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+}

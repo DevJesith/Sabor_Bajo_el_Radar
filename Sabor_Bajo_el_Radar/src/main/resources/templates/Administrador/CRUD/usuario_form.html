@@ -44,6 +44,7 @@
             <div class="col-md-6 mb-3">
                 <label for="rol">Rol</label>
                 <select id="rol" class="form-select" th:field="*{rol}" required>
+                    <option value="" selected> Selecciona un rol</option>
                     <option th:each="rol : ${roles}" th:value="${rol}" th:text="${rol}"></option>
                 </select>
             </div>

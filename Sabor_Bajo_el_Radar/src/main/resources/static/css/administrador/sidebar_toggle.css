@@ -1,0 +1,171 @@
+/* ============================================
+   ESTILOS ADICIONALES PARA SIDEBAR CON TOGGLE
+   Solo se aplica en páginas que incluyan este CSS
+   ============================================ */
+
+/* Hacer el sidebar fijo y con transiciones */
+.sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+    width: 16.666667%; /* Equivalente a col-md-2 */
+}
+
+.sidebar h4,
+.sidebar-text {
+    transition: opacity 0.3s ease;
+}
+
+/* Ajustar contenido principal para sidebar fijo - Funciona con cualquier estructura */
+#mainContent,
+.sidebar ~ .col-md-10,
+.sidebar ~ div[class*="col-"] {
+    margin-left: 16.666667%; /* Mismo ancho que sidebar */
+    transition: margin-left 0.3s ease-in-out;
+    width: calc(100% - 16.666667%) !important;
+    max-width: none !important;
+}
+
+/* ============================================
+   BOTÓN TOGGLE
+   ============================================ */
+.sidebar-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    background-color: #2f2f50;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-in-out;
+}
+
+.sidebar-toggle:hover {
+    background-color: #444;
+    transform: scale(1.05);
+}
+
+/* ============================================
+   OVERLAY PARA MÓVIL
+   ============================================ */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ============================================
+   ESTADO COLAPSADO (DESKTOP)
+   ============================================ */
+.sidebar.collapsed {
+    width: 80px !important;
+}
+
+.sidebar.collapsed h4,
+.sidebar.collapsed .sidebar-text {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar.collapsed a {
+    justify-content: center;
+    padding: 12px 10px;
+}
+
+.sidebar.collapsed i {
+    margin-right: 0;
+}
+
+.sidebar.collapsed .text-center {
+    display: none;
+}
+
+/* Ajustar el contenido cuando sidebar está colapsado - EXPANDIR COMPLETAMENTE */
+.sidebar.collapsed ~ #mainContent,
+.sidebar.collapsed ~ .col-md-10,
+.sidebar.collapsed ~ div[class*="col-"] {
+    margin-left: 80px !important;
+    width: calc(100% - 80px) !important;
+    max-width: none !important;
+}
+
+/* ============================================
+   RESPONSIVE - TABLETS
+   ============================================ */
+@media (min-width: 768px) and (max-width: 991px) {
+    .sidebar {
+        width: 250px !important;
+    }
+
+    #mainContent,
+    .sidebar ~ .col-md-10,
+    .sidebar ~ div[class*="col-"] {
+        margin-left: 250px;
+        width: calc(100% - 250px) !important;
+    }
+
+    .sidebar.collapsed {
+        width: 80px !important;
+    }
+
+    .sidebar.collapsed ~ #mainContent,
+    .sidebar.collapsed ~ .col-md-10,
+    .sidebar.collapsed ~ div[class*="col-"] {
+        margin-left: 80px !important;
+        width: calc(100% - 80px) !important;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVILES
+   ============================================ */
+@media (max-width: 767px) {
+    .sidebar {
+        width: 250px !important;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0) !important;
+    }
+
+    #mainContent,
+    .sidebar ~ .col-md-10,
+    .sidebar ~ div[class*="col-"] {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 575px) {
+    .sidebar {
+        width: 220px !important;
+    }
+
+    .sidebar-toggle {
+        top: 10px;
+        font-size: 1.3rem;
+        padding: 6px 10px;
+    }
+}

@@ -23,21 +23,23 @@
 <!-- Header -->
 <header>
     <nav class="navbar navbar-expand-lg navegacion-sections">
-        <div class="container-fluid navegacion-sections">
-            <a class="navbar-brand" href="#">
-                <img class="logo-principal" alt="img" th:src="@{/img/logo_sbr.png}">
-                Sabor Bajo El Radar
+        <div class="container-fluid">
+            
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img class="logo-principal me-2" alt="img" th:src="@{/img/logo_sbr.png}">
+                <span class="fw-bold">Sabor Bajo El Radar</span>
             </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                     aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <div id="navbarScroll" class="collapse navbar-collapse nav-final">
-                <ul class="navbar-nav my-2 my-lg-2 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item link-header"><a class="nav-link" href="#" aria-current="page">Inicio</a></li>
-                    <li class="nav-item link-header dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+            <div id="navbarScroll" class="collapse navbar-collapse ">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item "><a class="nav-link link-header" href="#" aria-current="page">Inicio</a></li>
+                    <li class="nav-item  dropdown">
+                        <a class="nav-link dropdown-toggle link-header" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">Nosotros</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
@@ -45,12 +47,13 @@
                             <li><a class="dropdown-item" th:href="@{/dashboard/admin}">Admin</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item link-header"><a class="nav-link" href="#">Contacto</a></li>
-                    <li class="nav-item link-header">
-                        <a id="comunidad" class="nav-link" th:href="@{/comunidad}">Únete a nuestra comunidad</a>
+                    <li class="nav-item "><a class="nav-link link-header" href="#">Contacto</a></li>
+                    <li class="nav-item ">
+                        <a id="comunidad" class="nav-link link-header" th:href="@{/comunidad}">Únete a nuestra
+                            comunidad</a>
                     </li>
-                    <li class="nav-item link-header">
-                        <a id="login" class="nav-link" th:href="@{/login}">Iniciar Sesión</a>
+                    <li class="nav-item ">
+                        <a id="login" class="nav-link link-header" th:href="@{/login}">Iniciar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -60,13 +63,13 @@
     <section class="header-portada">
         <div class="container text-center">
             <div class="row align-items-center">
-                <div class="col">
-                    <img class="header-foto" alt="foto portada" th:src="@{/img/header-foto.jpg}">
+                <div class="col-12 col-md-6 text-center mb-4 mb-md-0">
+                    <img class="header-foto img-fluid" alt="foto portada" th:src="@{/img/header-foto.jpg}">
                 </div>
-                <div class="col">
-                    <h1 class="text-start header-titulo">Explora la ciudad a través de sus sabores</h1>
+                <div class="col-12 col-md-6 text-center text-md-start">
+                    <h1 class="header-titulo">Explora la ciudad a través de sus sabores</h1>
                     <p class="header-parrafo">Relaciona la gastronomía con la cultura local y el acto de explorar.</p>
-                    <a class="header-link" href="#">¡Descubre lo que hay bajo el radar!</a>
+                    <a class="header-link btn btn-lg" href="#">¡Descubre lo que hay bajo el radar!</a>
                 </div>
                 <div class="col"></div>
             </div>
@@ -102,21 +105,23 @@
     </section>
     
     <!-- Beneficios -->
+    <!-- Beneficios -->
+    <!-- Beneficios -->
     <section class="beneficio">
         <div class="beneficio-bloquetitulo">
             <h1 class="beneficio-titulo">Beneficio</h1>
         </div>
         <div class="container text-center">
-            <div class="row align-items-center">
-                
+            <div class="row g-4">
                 <!-- Cliente -->
-                <div class="col">
+                <div class="col-12 col-md-4">
                     <div class="flip-card">
                         <div class="flip-card-inner">
                             <div class="flip-card-front card card-cliente">
-                                <div class="card-body">
+                                <div class="card-body text-center">
                                     <h5 class="card-title">Cliente</h5>
-                                    <img class="beneficio-imgCliente" alt="" th:src="@{/img/Cliente-beneficio.png}">
+                                    <img class="beneficio-imgCliente img-fluid" alt="Beneficio cliente"
+                                         th:src="@{/img/Cliente-beneficio.png}">
                                 </div>
                             </div>
                             <div class="flip-card-back card card-cliente">
@@ -134,13 +139,14 @@
                 </div>
                 
                 <!-- Vendedor -->
-                <div class="col">
+                <div class="col-12 col-md-4">
                     <div class="flip-card">
                         <div class="flip-card-inner">
                             <div class="flip-card-front card card-vendedor">
-                                <div class="card-body">
+                                <div class="card-body text-center">
                                     <h5 class="card-title">Vendedor</h5>
-                                    <img class="beneficio-imgVendedor" alt="" th:src="@{/img/vendedor-beneficio.png}">
+                                    <img class="beneficio-imgVendedor img-fluid" alt="Beneficio vendedor"
+                                         th:src="@{/img/vendedor-beneficio.png}">
                                 </div>
                             </div>
                             <div class="flip-card-back card card-vendedor">
@@ -157,13 +163,13 @@
                 </div>
                 
                 <!-- Domiciliario -->
-                <div class="col">
+                <div class="col-12 col-md-4">
                     <div class="flip-card">
                         <div class="flip-card-inner">
                             <div class="flip-card-front card card-domiciliario">
-                                <div class="card-body">
+                                <div class="card-body text-center">
                                     <h5 class="card-title">Domiciliario</h5>
-                                    <img class="beneficio-imgDomiciliario" alt=""
+                                    <img class="beneficio-imgDomiciliario img-fluid" alt="Beneficio domiciliario"
                                          th:src="@{/img/domiciliario-beneficio.png}">
                                 </div>
                             </div>
@@ -179,10 +185,10 @@
                         </div>
                     </div>
                 </div>
-            
             </div>
         </div>
     </section>
+    
     
     <!-- Localidades -->
     <section>

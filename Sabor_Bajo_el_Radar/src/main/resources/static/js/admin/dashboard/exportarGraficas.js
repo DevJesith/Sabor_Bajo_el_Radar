@@ -70,3 +70,72 @@ function exportWord(canvasId, nombreArchivo) {
     link.click();
 }
 
+//------------------------------
+function exportTablaPDF(nombreArchivo) {
+    const {jsPDF} = window.jspdf;
+    const pdf = new jsPDF();
+    const tabla = document.querySelector("table");
+
+    // Ocultar columna de acciones
+    tabla.querySelectorAll("tr").forEach(fila => {
+        if (fila.lastElementChild) {
+            fila.lastElementChild.style.display = "none";
+        }
+    });
+
+    html2canvas(tabla).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        pdf.text("Usuarios registrados", 10, 10);
+        pdf.addImage(imgData, "PNG", 10, 20, 190, 0);
+        pdf.save(`${nombreArchivo}.pdf`);
+
+        // Restaurar columna
+        tabla.querySelectorAll("tr").forEach(fila => {
+            if (fila.lastElementChild) {
+                fila.lastElementChild.style.display = "";
+            }
+        });
+    });
+}
+
+//------------------------------
+
+function exportTablaExcel(nombreArchivo) {
+    const tablaOriginal = document.querySelector("table");
+    const tablaClonada = tablaOriginal.cloneNode(true);
+
+    // Eliminar la última columna de cada fila (acciones)
+    tablaClonada.querySelectorAll("tr").forEach(fila => {
+        fila.lastElementChild?.remove();
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.table_to_sheet(tablaClonada);
+    XLSX.utils.book_append_sheet(wb, ws, "Usuarios");
+    XLSX.writeFile(wb, `${nombreArchivo}.xlsx`);
+}
+
+//-------------------------------
+
+function exportTablaImagen(nombreArchivo, formato = "png") {
+    const tabla = document.querySelector("table");
+
+    tabla.querySelectorAll("tr").forEach(fila => {
+        if (fila.lastElementChild) {
+            fila.lastElementChild.style.display = "none";
+        }
+    });
+
+    html2canvas(tabla).then(canvas => {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL(`image/${formato}`);
+        link.download = `${nombreArchivo}.${formato}`;
+        link.click();
+
+        tabla.querySelectorAll("tr").forEach(fila => {
+            if (fila.lastElementChild) {
+                fila.lastElementChild.style.display = "";
+            }
+        });
+    });
+}
