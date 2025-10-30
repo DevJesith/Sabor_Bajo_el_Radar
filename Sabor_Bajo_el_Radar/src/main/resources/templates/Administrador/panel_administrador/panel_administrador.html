@@ -15,36 +15,31 @@
     
     <!-- Css -->
     <link rel="stylesheet" th:href="@{/css/administrador/panel_admin.css}"/>
+    <link rel="stylesheet" th:href="@{/css/administrador/sidebar_toggle.css}"/>
+
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
         
-        <!-- Menu lateral  -->
-        <div class="col-md-2 sidebar">
+        <!-- Sidebar -->
+        <div id="sidebar" class="col-md-2 sidebar">
             <h4 class="text-center text-white mb-4">Sabor Bajo El Radar</h4>
             
-            <!-- Secciones -->
-            <a class="active" th:href="@{/dashboard/admin}">
-                <i class="bi bi-speedometer2"></i>
-                Dashboard
+            <a th:href="@{/dashboard/admin}">
+                <i class="bi bi-speedometer2"></i> <span class="sidebar-text">Dashboard</span>
             </a>
-            
             <a th:href="@{/usuarios/lista}">
-                <i class="bi bi-person-workspace"></i>
-                Usuarios
+                <i class="bi bi-person-workspace"></i> <span class="sidebar-text">Usuarios</span>
             </a>
-            
-            <a th:href="@{correo-masivos}">
-                <i class="bi bi-envelope-fill"></i>
-                Correo Masivos
+            <a class="active" th:href="@{/correo/masivos}">
+                <i class="bi bi-envelope-fill"></i> <span class="sidebar-text">Correo Masivos</span>
             </a>
             
             <div class="text-center mt-4">
                 <a th:href="@{/usuarios/nuevo}">
                     <button class="btn btn-purple btn-sm text-white">Crear cuenta</button>
                 </a>
-            
             </div>
         </div>
         
@@ -412,5 +407,7 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JavaScript del toggle - SOLO en páginas que lo necesiten -->
+<script th:src="@{/js/admin/profile_admin_custom.js}"></script>
 </body>
 </html>
