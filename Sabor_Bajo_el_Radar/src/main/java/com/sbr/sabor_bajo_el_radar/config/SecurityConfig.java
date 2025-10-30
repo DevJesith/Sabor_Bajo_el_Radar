@@ -48,12 +48,12 @@ public class SecurityConfig {
                                 "/img/**",
                                 "/img/Quienes_Somos/**",
                                 "/img/testimonio/**",
-                                "/mapa-navegacion",
-                                "/terminos-y-condiciones",
-                                "/como-funciona",
-                                "/mantenimiento",
-                                "/quienes-somos",
-                                "/muro-social"
+                                "/mapa-navegacion/**",
+                                "/terminos-y-condiciones/**",
+                                "/como-funciona/**",
+                                "/mantenimiento/**",
+                                "/quienes-somos/**",
+                                "/muro-social/**"
                         ).permitAll()
 
                         // Solo el admin puede ver el Dashboard
