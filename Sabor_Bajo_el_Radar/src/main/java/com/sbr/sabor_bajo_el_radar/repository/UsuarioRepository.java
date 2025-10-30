@@ -22,10 +22,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Object[]> countRol();
 
     // Encontrar por correo
-
     Optional<Usuario> findByCorreo(String correo);
     Optional<Usuario> findByDocumento(String documento);
     boolean existsByCorreo(String correo);
     boolean existsByDocumento(String documento);
     boolean existsByRol(String rol);
+
+    List<Usuario> findByRol(String rol);
 }
