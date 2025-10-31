@@ -1,150 +1,118 @@
-/* NAVEGACION */
-
-/* .navegacion-sections
-contenedor que almacena toda la barra de navegación
-
--background: #f4f4f4 es el color de fondo de la barra de navegación;
-
-*/
-
-.navegacion-sections{
-  background: #f4f4f4;
+.navegacion-sections {
+    background: #f4f4f4;
+    padding: 10px 0;
 }
 
-/* .logo-principal
-contenedor que almacena el logo de la empresa
-
-- width: 100px, es el ancho del logo
-
-*/
-
-.logo-principal{
-  width: 100px;
+.logo-principal {
+    width: 50px;
 }
 
-/* .nav-final
-
-contenedor que almacena la barra de navegación
-
--Poppins es la fuente utilizada para el texto de la navegación.;
--font-weight: 500 es el grosor de la fuente utilizada para el texto de la navegación;
--font-size: medium es el tamaño de la fuente utilizada para el texto de la navegación para que sea light;
--display: flex es la propiedad utilizada para crear un contenedor flexible;
--justify-content: end es la propiedad utilizada para alinear los elementos dentro del contenedor flexible a la derecha;
--color: black para dar que las letras sean de color negro
-*/
-
-.nav-final{
-  font-family: 'Poppins';
-  font-weight: 500;
-  font-size: medium;
-  display: flex;
-  justify-content: end;
-  color: black;
-
+.navbar-brand span {
+    font-family: 'Poppins';
+    font-size: 1.2rem;
+    color: black;
 }
 
-/* .link-header
-margen de los links de las secciones
-
--margin: 0 10px, este margin tiene 0px de top-bottom y 10px de left-right
-
-*/
-
-.link-header{
-  margin: 0 10px;
+.navbar-nav {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
 }
 
-/* .nav-link:hover
-
-Los hipervinculos tendran un color al momento de pasar el mouse saobre ellas
-
--background: #ffaa16, color de fondo
-- color: white, color blanco de las letras cuando se pase el mouse
--border-radius: 10px, sus bordes tendran una curvatura de 10 px
--font-weight: bold, las letras sera bold (negrillas)
-*/
-
-.nav-link:hover{
-  background: #ffaa16;
-  color: white;
-  border-radius: 10px;
-  font-weight: bold;
+.link-header {
+    margin: 0 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
-/* #comunidad
-
-- background: #2289e6, color azul para el fondo del hipervinculo
-- color:white, color blanco para sus letras
-- font-weight: bold, letras en bold (negrillas)
-- border-radius: 10px, cuvartura de los bordes
-
-*/
-
-#comunidad{
-  background: #2289e6;
-  color: white;
-  font-weight: bold;
-  border-radius: 10px;
+.nav-link:hover {
+    background: #ffaa16;
+    color: white !important;
+    font-weight: bold;
 }
 
-/* #login
+#comunidad {
+    background: #2289e6;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
 
-- background: #d72638, color rojo para el fondo del hipervinculo
-- color:white, color blanco para sus letras
-- font-weight: bold, letras en bold (negrillas)
-- border-radius: 30px, cuvartura de los bordes
+#login {
+    background: #d72638;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 8px 16px;
+}
 
-*/
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
 
+    .nav-item {
+        margin-bottom: 10px;
+    }
 
-#login{
-  background: #d72638;
-  color: white;
-  font-weight: bold;
-  border-radius: 30px;
+    #comunidad, #login {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
 }
 
 
 body {
     background-color: #fff8f0;
-  }
-  .titulo {
+}
+
+.titulo {
     font-weight: bold;
     color: #e5533c;
-  }
-  .nodo {
+}
+
+.nodo {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s, box-shadow 0.3s;
     text-align: center;
-  }
-  .nodo:hover {
+}
+
+.nodo:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
-  }
-  .nodo a {
+}
+
+.nodo a {
     text-decoration: none;
     color: #333;
-  }
-  .nodo a:hover {
+}
+
+.nodo a:hover {
     color: #e5533c;
-  }
-  .icono {
+}
+
+.icono {
     font-size: 30px;
     color: #e5533c;
     margin-bottom: 10px;
-  }
-  ul {
+}
+
+ul {
     list-style: none;
     padding-left: 0;
-  }
-  ul li a {
+}
+
+ul li a {
     display: block;
     padding: 5px 0;
-  }
+}
 
 /* ------------- */
 
@@ -159,13 +127,13 @@ body {
 
 */
 
-.footer{
-  background: #ececec;
+.footer {
+    background: #ececec;
 }
 
-.footer-text{
-  display: block;
-  color: black;
+.footer-text {
+    display: block;
+    color: black;
 }
 
 /*
@@ -177,10 +145,10 @@ body {
 
 */
 
-.footer-titulo{
-  margin: 20px 0;
-  font-family: 'Poppins';
-  font-weight: 700;
+.footer-titulo {
+    margin: 20px 0;
+    font-family: 'Poppins';
+    font-weight: 700;
 }
 
 /*
@@ -190,8 +158,8 @@ body {
 
 */
 
-.footer-logo{
-  width: 200px;
+.footer-logo {
+    width: 200px;
 }
 
 /*
@@ -202,9 +170,9 @@ body {
 
 */
 
-.playstore , .appstore{
-  margin-bottom: 10px;
-  width: 150px;
+.playstore, .appstore {
+    margin-bottom: 10px;
+    width: 150px;
 }
 
 /*
@@ -215,9 +183,9 @@ body {
 
 */
 
-.footer-container-redsocial{
-  display: flex;
-  align-self: center;
+.footer-container-redsocial {
+    display: flex;
+    align-self: center;
 }
 
 /*
@@ -228,11 +196,11 @@ body {
 - border-radius: 50%, los bordes tendran una curvatura de 50% (seran circulares)
 */
 
-.footer-redsocial{
-  padding: 15px;
-  margin: 0 5px;
-  background: white;
-  border-radius: 50%;
+.footer-redsocial {
+    padding: 15px;
+    margin: 0 5px;
+    background: white;
+    border-radius: 50%;
 }
 
 /*
@@ -242,8 +210,8 @@ body {
 
 */
 
-.icono-redsocial{
-  width: 25px;
+.icono-redsocial {
+    width: 25px;
 }
 
 /*
@@ -253,8 +221,8 @@ body {
 
 */
 
-.fondo-facebook{
-  transition: background-color 0.3s ease-in-out;
+.fondo-facebook {
+    transition: background-color 0.3s ease-in-out;
 }
 
 /*
@@ -263,8 +231,8 @@ body {
 - transition: transform 0.3s, filter 0.3s, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.facebook{
-  transition: transform 0.3s, filter 0.3s;
+.facebook {
+    transition: transform 0.3s, filter 0.3s;
 }
 
 /*
@@ -274,8 +242,8 @@ body {
 
 */
 
-.fondo-facebook:hover{
-  background-color: #0165E1;
+.fondo-facebook:hover {
+    background-color: #0165E1;
 }
 
 /*
@@ -286,10 +254,9 @@ body {
 
 */
 
-.fondo-facebook:hover .facebook{
-  filter: brightness(0) invert(1);
+.fondo-facebook:hover .facebook {
+    filter: brightness(0) invert(1);
 }
-
 
 
 /* Instagram */
@@ -300,8 +267,8 @@ body {
 - transition: background-color 0.3 ease-in-out, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 
 */
-.fondo-instagram{
-  transition: background-color 0.3s ease-in-out;
+.fondo-instagram {
+    transition: background-color 0.3s ease-in-out;
 }
 
 /*
@@ -311,8 +278,8 @@ body {
 
 */
 
-.instagram{
-  transition: transform 0.3s, filter 0.3s;
+.instagram {
+    transition: transform 0.3s, filter 0.3s;
 }
 
 /*
@@ -322,8 +289,8 @@ body {
 
 */
 
-.fondo-instagram:hover{
-  background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
+.fondo-instagram:hover {
+    background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
 }
 
 /*
@@ -332,8 +299,8 @@ body {
 - filter: brightness(0) invert(1), el color de la imagen sera blanco al pasar el mouse
 */
 
-.fondo-instagram:hover .instagram{
-  filter: brightness(0) invert(1);
+.fondo-instagram:hover .instagram {
+    filter: brightness(0) invert(1);
 }
 
 /* Twitter */
@@ -346,8 +313,8 @@ body {
 
 */
 
-.fondo-twitter{
-  transition: background-color 0.3s ease-in-out;
+.fondo-twitter {
+    transition: background-color 0.3s ease-in-out;
 }
 
 /*
@@ -355,8 +322,8 @@ body {
 - transition: transform 0.3s, filter 0.3s, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.twitter{
-  transition: transform 0.3s, filter 0.3s;
+.twitter {
+    transition: transform 0.3s, filter 0.3s;
 
 }
 
@@ -367,8 +334,8 @@ body {
 
 */
 
-.fondo-twitter:hover{
-  background-color: black;
+.fondo-twitter:hover {
+    background-color: black;
 }
 
 /*
@@ -378,8 +345,8 @@ body {
 
 */
 
-.fondo-twitter:hover .twitter{
-  filter: brightness(0) invert(1);
+.fondo-twitter:hover .twitter {
+    filter: brightness(0) invert(1);
 }
 
 
@@ -394,8 +361,8 @@ body {
 
 */
 
-.fondo-linkedin{
-  transition: background-color 0.3s ease-in-out;
+.fondo-linkedin {
+    transition: background-color 0.3s ease-in-out;
 }
 
 /*
@@ -406,8 +373,8 @@ body {
 
 */
 
-.linkedin{
-  transition: transform 0.3s, filter 0.3s;
+.linkedin {
+    transition: transform 0.3s, filter 0.3s;
 
 }
 
@@ -420,8 +387,8 @@ body {
 
 */
 
-.fondo-linkedin:hover{
-  background-color: #0165E1;
+.fondo-linkedin:hover {
+    background-color: #0165E1;
 }
 
 /*
@@ -433,8 +400,8 @@ body {
 
 */
 
-.fondo-linkedin:hover .linkedin{
-  filter: brightness(0) invert(1);
+.fondo-linkedin:hover .linkedin {
+    filter: brightness(0) invert(1);
 }
 
 /* ------- */
@@ -447,8 +414,8 @@ footer
 
 - margin: 0, el margin de la etiqueta semantica sera del contenedor pirncipal sera de 0
 */
-footer{
-  margin: 0;
+footer {
+    margin: 0;
 }
 
 /*
@@ -459,8 +426,8 @@ Conetendor secundiario donde tiene los hipervinculos
 
 */
 
-.footer-container{
-  margin: 20px 20px;
+.footer-container {
+    margin: 20px 20px;
 }
 
 /*
@@ -478,16 +445,16 @@ Conetendor secundiario donde tiene los hipervinculos
 
 */
 
-.footer-footer-link{
+.footer-footer-link {
 
-  text-decoration: none;
-  color: black;
-  font-family: 'Poppins';
-  font-weight: 500;
-  font-size: 15px;
-  margin: 10px 5px;
-  padding-right: 10px;
-  border-right: solid 2px black;
+    text-decoration: none;
+    color: black;
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 15px;
+    margin: 10px 5px;
+    padding-right: 10px;
+    border-right: solid 2px black;
 
 }
 
@@ -503,9 +470,9 @@ Texto de la fuente de agua sobre el nombre del proyecto
 
 */
 
-.footer-footer-text{
-  display: inline;
-  float: right;
+.footer-footer-text {
+    display: inline;
+    float: right;
 }
 
 

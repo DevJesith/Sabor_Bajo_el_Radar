@@ -2,35 +2,45 @@ let contadorCliente = document.getElementById("contador-cliente");
 let contadorVendedor = document.getElementById("contador-vendedor");
 let contadorDomiciliario = document.getElementById("contador-domiciliario");
 
-let numero = 0;
+// Metas individuales
 let metaCliente = 8000;
 let metaVendedor = 5000;
 let metaDomiciliario = 6500;
-let velocidad = 1; // velocidad en milisegundos
+let velocidad = 1; // milisegundos
 
+// Contadores independientes
+let numeroCliente = 0;
+let numeroVendedor = 0;
+let numeroDomiciliario = 0;
+
+
+// Intervalo Cliente
 let intervaloCliente = setInterval(() => {
-    if (numero < metaCliente) {
-        numero++;
-        contadorCliente.textContent = "+ " + numero;
+    if (numeroCliente < metaCliente) {
+        numeroCliente++;
+        contadorCliente.textContent = "+ " + numeroCliente;
     } else {
-        clearInterval(intervaloCliente); // Detiene el contador
+        clearInterval(intervaloCliente);
     }
 }, velocidad);
+
 
 let intervaloVendedor = setInterval(() => {
-    if (numero < metaVendedor) {
-        numero++;
-        contadorVendedor.textContent = "+ " + numero;
+    if (numeroVendedor < metaVendedor) {
+        numeroVendedor++;
+        contadorVendedor.textContent = "+ " + numeroVendedor;
     } else {
-        clearInterval(intervaloVendedor); // Detiene el contador
+        clearInterval(intervaloVendedor);
     }
 }, velocidad);
 
+
+// Intervalo Domiciliario
 let intervaloDomiciliario = setInterval(() => {
-    if (numero < metaDomiciliario) {
-        numero++;
-        contadorDomiciliario.textContent = "+ " + numero;
+    if (numeroDomiciliario < metaDomiciliario) {
+        numeroDomiciliario++;
+        contadorDomiciliario.textContent = "+ " + numeroDomiciliario;
     } else {
-        clearInterval(intervaloDomiciliario); // Detiene el contador
+        clearInterval(intervaloDomiciliario);
     }
 }, velocidad);

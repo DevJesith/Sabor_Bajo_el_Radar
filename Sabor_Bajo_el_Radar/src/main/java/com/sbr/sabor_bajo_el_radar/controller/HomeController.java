@@ -17,7 +17,7 @@ public class HomeController {
         return "principal/mapa_navegacion";
     }
 
-    @GetMapping("/terminos-y-condiciones")
+    @GetMapping("/terminos-condiciones")
     public String terminosCondiciones() {
         return "principal/terminos_condiciones";
     }
@@ -53,7 +53,9 @@ public class HomeController {
     }
 
     @GetMapping("/muro-social")
-    public String muroSocial(){return "Muro_Social/muro_social";}
+    public String muroSocial() {
+        return "Muro_Social/muro_social";
+    }
 
 
 }

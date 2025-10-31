@@ -1,73 +1,71 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Terminos y Condiciones</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Terminos y condiciones</title>
+    <!-- Bootstrap -->
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-            rel="stylesheet" />
-    <link rel="stylesheet" th:href="@{/css/principal/estilos-terminos.css}" />
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" th:href="@{/css/principal/estilos-terminos.css}"/>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
     </style>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-    </style>
+
 </head>
 <body>
-<!-- Header -->
 <header>
-    <!-- NAVEGACION -->
     <nav class="navbar navbar-expand-lg navegacion-sections">
-        <div class="container-fluid navegacion-sections">
-            <!--Logo con su hipervinculo  -->
-            <a class="navbar-brand" th:href="@{/}">
-                <img th:src="@{/img/logo_sbr.png}" alt="Logo" class="logo-principal" />
-                Sabor Bajo El Radar
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" th:href="/">
+                <img class="logo-principal me-2" alt="img" th:src="@{/img/logo_sbr.png}"/>
+                <span class="fw-bold">Sabor Bajo El Radar</span>
             </a>
+            
             <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarScroll"
-                    aria-controls="navbarScroll"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarScroll"
+                aria-controls="navbarScroll"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- Barra de navegacion -->
-            <div class="collapse navbar-collapse nav-final" id="navbarScroll">
-                <ul class="navbar-nav my-2 my-lg-2 navbar-nav-scroll" style="--bs-scroll-height: 100px">
-                    <li class="nav-item link-header">
-                        <a class="nav-link" aria-current="page" th:href="@{/}">Inicio</a>
+            
+            <div id="navbarScroll" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link link-header" th:href="@{/}" aria-current="page">Inicio</a>
                     </li>
-
-                    <!-- Lista desplegable -->
-                    <li class="nav-item link-header dropdown">
+                    <li class="nav-item dropdown">
                         <a
-                                class="nav-link dropdown-toggle"
-                                href="#"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            class="nav-link dropdown-toggle link-header"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             Nosotros
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Quienes somos</a></li>
-                            <li><a class="dropdown-item" href="#">Como Funciona</a></li>
+                            <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/como-funciona}">Como Funciona</a></li>
+                            <li><a class="dropdown-item" th:href="@{/dashboard/admin}">Admin</a></li>
                         </ul>
                     </li>
-
-                    <li class="nav-item link-header">
-                        <a class="nav-link" href="#">Contacto</a>
+                    <li class="nav-item"><a class="nav-link link-header" href="#">Contacto</a></li>
+                    <li class="nav-item">
+                        <a id="comunidad" class="nav-link link-header" th:href="@{/comunidad}">
+                            Únete a nuestra comunidad
+                        </a>
                     </li>
-                    <li class="nav-item link-header">
-                        <a class="nav-link" href="#" id="comunidad">Unete a nuestra comunidad</a>
-                    </li>
-                    <li class="nav-item link-header">
-                        <a class="nav-link" href="#" id="login">Iniciar Sesion</a>
+                    <li class="nav-item">
+                        <a id="login" class="nav-link link-header" th:href="@{/login}">Iniciar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -75,131 +73,132 @@
     </nav>
 </header>
 
+<!-- Main -->
 <main>
     <div class="container py-5">
         <h1 class="text-center mb-3">Terminos y condiciones</h1>
         <p class="text-center text-muted mb-4">Ultima actualización: 13 de junio de 2025</p>
-
-        <div class="accordion" id="terminosCondiciones">
+        
+        <div id="terminosCondiciones" class="accordion">
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading1">
+                <h2 id="heading1" class="accordion-header">
                     <button
-                            class="accordion-button"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse1">
+                        class="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse1">
                         1. Aceptación de los Terminos
                     </button>
                 </h2>
                 <div
-                        id="collapse1"
-                        class="accordion-collapse collapse show"
-                        data-bs-parent="#terminosCondiciones">
+                    id="collapse1"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#terminosCondiciones">
                     <div class="accordion-body">
                         Al acceder y utilizar nuestro sitio web, aceptas estar sujeto a estos Terminos y
                         Condiciones
                     </div>
                 </div>
             </div>
-
+            
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading2">
+                <h2 id="heading2" class="accordion-header">
                     <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse2">
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse2">
                         2. Uso del Sitio
                     </button>
                 </h2>
                 <div
-                        id="collapse2"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#terminosCondiciones">
+                    id="collapse2"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#terminosCondiciones">
                     <div class="accordion-body">
                         Te comprometes a utilizar el sitio de manera repsonsable y a no relaizar acciones
                         que puedan dañar la plataforma o a otros usuarios
                     </div>
                 </div>
             </div>
-
+            
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading3">
+                <h2 id="heading3" class="accordion-header">
                     <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse3">
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse3">
                         3. Registro y Cuentas
                     </button>
                 </h2>
                 <div
-                        id="collapse3"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#terminosCondiciones">
+                    id="collapse3"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#terminosCondiciones">
                     <div class="accordion-body">
                         Al crear una cuenta, aceptas proporcionar informacion veraz yt mantehner la
                         confidencialidad de tus datos de acceso.
                     </div>
                 </div>
             </div>
-
+            
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading4">
+                <h2 id="heading4" class="accordion-header">
                     <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse4">
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse4">
                         4. Propiedad Intelectual
                     </button>
                 </h2>
                 <div
-                        id="collapse4"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#terminosCondiciones">
+                    id="collapse4"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#terminosCondiciones">
                     <div class="accordion-body">
                         Todos los contenidos del sitio son propiedada de "Sabor Bajo el Radar" o de sus
                         respectivos autores, y estab protegidos por las leyes de propiedad intelectual.
                     </div>
                 </div>
             </div>
-
+            
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading5">
+                <h2 id="heading5" class="accordion-header">
                     <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse5">
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse5">
                         5. Modificaciones de los terminos
                     </button>
                 </h2>
                 <div
-                        id="collapse5"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#terminosCondiciones">
+                    id="collapse5"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#terminosCondiciones">
                     <div class="accordion-body">
                         Nos reservamos el derecho de modificar estos terminos en cualquier momento. Los
                         cambios se publicarán en esta pagina
                     </div>
                 </div>
             </div>
-
+            
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading6">
+                <h2 id="heading6" class="accordion-header">
                     <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse6">
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse6">
                         6. Contacto
                     </button>
                 </h2>
                 <div
-                        id="collapse6"
-                        class="accordion-collapse collapse show"
-                        data-bs-parent="#terminosCondiciones">
+                    id="collapse6"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#terminosCondiciones">
                     <div class="accordion-body">
                         Si tienes preguntas sobre estos terminos, puedes escribirnos a
                         contacto@saborbajoelradar.com
@@ -208,52 +207,51 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- Footer principal -->
     <section class="footer">
         <div class="container text-center">
             <div class="row align-items-center">
                 <div class="col">
                     <p class="footer-titulo">Nosotros</p>
-                    <div class="footer-text">
-                        <a href="" class="footer-text">Quienes somos</a>
-                        <a href="" class="footer-text">Equipo</a>
-                        <a href="" class="footer-text">Testimonios</a>
+                    <div>
+                        <a class="footer-text" th:href="@{/quienes-somos}">Quienes somos</a>
+                        <a class="footer-text" href="#">Equipo</a>
+                        <a class="footer-text" th:href="@{/testimonios}">Testimonios</a>
                     </div>
                 </div>
-
+                
                 <div class="col">
                     <p class="footer-titulo">Soporte</p>
-                    <div class="footer-text">
-                        <a href="" class="footer-text">Contactanos</a>
-                        <a href="" class="footer-text">PQRS</a>
-                        <a href="" class="footer-text">FAQ</a>
+                    <div>
+                        <a class="footer-text" href="#">Contáctanos</a>
+                        <a class="footer-text" href="#">PQRS</a>
+                        <a class="footer-text" href="#">FAQ</a>
                     </div>
                 </div>
-
-                <div class="col">
-                    <img th:src="@{/img/logo_sbr.png}" alt="" class="footer-logo" />
-                </div>
-
+                
+                <div class="col"><img class="footer-logo" alt="" th:src="@{/img/logo_sbr.png}"/></div>
+                
                 <div class="col">
                     <p class="footer-titulo">Plataformas</p>
-                    <a href=""><img th:src="@{/img/playstore.png}" alt="" class="playstore" /></a>
-                    <a href=""><img th:src="@{/img/appstore.png}" alt="" class="appstore" /></a>
+                    <a href="#"><img class="playstore" alt="" th:src="@{/img/playstore.png}"/></a>
+                    <a href="#"><img class="appstore" alt="" th:src="@{/img/appstore.png}"/></a>
                 </div>
-
+                
                 <div class="col">
                     <p class="footer-titulo">Redes sociales</p>
                     <div class="footer-container-redsocial">
-                        <a href="" class="footer-redsocial fondo-facebook">
-                            <img th:src="@{/img/facebook.png}" class="icono-redsocial facebook" alt="">
+                        <a class="footer-redsocial fondo-facebook" href="#">
+                            <img class="icono-redsocial facebook" alt="" th:src="@{/img/facebook.png}"/>
                         </a>
-                        <a href="" class="footer-redsocial fondo-instagram">
-                            <img th:src="@{/img/instagram.png}" class="icono-redsocial instagram" alt="">
+                        <a class="footer-redsocial fondo-instagram" href="#">
+                            <img class="icono-redsocial instagram" alt="" th:src="@{/img/instagram.png}"/>
                         </a>
-                        <a href="" class="footer-redsocial fondo-twitter">
-                            <img th:src="@{/img/twitter.png}" class="icono-redsocial twitter" alt="" />
+                        <a class="footer-redsocial fondo-twitter" href="#">
+                            <img class="icono-redsocial twitter" alt="" th:src="@{/img/twitter.png}"/>
                         </a>
-                        <a href="" class="footer-redsocial fondo-linkedin">
-                            <img th:src="@{/img/linkedin.png}" class="icono-redsocial linkedin" alt="" />
+                        <a class="footer-redsocial fondo-linkedin" href="#">
+                            <img class="icono-redsocial linkedin" alt="" th:src="@{/img/linkedin.png}"/>
                         </a>
                     </div>
                 </div>
@@ -262,21 +260,19 @@
     </section>
 </main>
 
+<!-- Footer legal -->
 <footer>
-    <!-- Contenedor secundario donde almacena el contenidp -->
-    <div>
-        <!-- Contenedor terciario donde se podra manejar el contenido -->
-        <div class="footer-container">
-            <!-- Hipervinculos y texto -->
-            <a href="" class="footer-footer-link">Politica de privacidad</a>
-            <a href="" class="footer-footer-link">Terminos y codiciones</a>
-            <a th:href="/mapa-navegacion" class="footer-footer-link">Mapa de navegacion</a>
-            <p class="footer-footer-text">
-                © 2024 Sabor Bajo El Radar. Todos los derechos reservados.
-            </p>
-        </div>
+    <div class="footer-container">
+        <a class="footer-footer-link" href="#">Política de privacidad</a>
+        <a class="footer-footer-link" th:href="@{/terminos-condiciones}">Términos y condiciones</a>
+        <a class="footer-footer-link" th:href="@{/mapa-navegacion}">Mapa de navegación</a>
+        <p class="footer-footer-text">© 2023 Sabor Bajo El Radar. Todos los derechos reservados.</p>
     </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"></script>
 </body>
 </html>

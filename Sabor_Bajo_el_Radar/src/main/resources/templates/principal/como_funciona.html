@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>¿Cómo Funciona?</title>
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-            rel="stylesheet" />
-    <link rel="stylesheet" th:href="@{/css/principal/como-funciona.css}" />
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/principal/como-funciona.css}"/>
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
-            crossorigin="anonymous" />
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+        crossorigin="anonymous"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
     </style>
@@ -23,58 +23,38 @@
 <body>
 <!-- Header -->
 <header>
-    <!-- NAVEGACION -->
     <nav class="navbar navbar-expand-lg navegacion-sections">
-        <div class="container-fluid navegacion-sections">
-            <!--Logo con su hipervinculo  -->
-            <a class="navbar-brand" th:href="@{/}">
-                <img th:src="@{/img/logo_sbr.png}" alt="Logo" class="logo-principal" />
-                Sabor Bajo El Radar
+        <div class="container-fluid">
+            
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img class="logo-principal me-2" alt="img" th:src="@{/img/logo_sbr.png}">
+                <span class="fw-bold">Sabor Bajo El Radar</span>
             </a>
-            <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarScroll"
-                    aria-controls="navbarScroll"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- Barra de navegacion -->
-            <div class="collapse navbar-collapse nav-final" id="navbarScroll">
-                <ul class="navbar-nav my-2 my-lg-2 navbar-nav-scroll" style="--bs-scroll-height: 100px">
-                    <li class="nav-item link-header">
-                        <a class="nav-link" aria-current="page" th:href="@{/}">Inicio</a>
-                    </li>
-
-                    <!-- Lista desplegable -->
-                    <li class="nav-item link-header dropdown">
-                        <a
-                                class="nav-link dropdown-toggle"
-                                href="#"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                            Nosotros
-                        </a>
+            
+            <div id="navbarScroll" class="collapse navbar-collapse ">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item "><a class="nav-link link-header" href="#" aria-current="page">Inicio</a></li>
+                    <li class="nav-item  dropdown">
+                        <a class="nav-link dropdown-toggle link-header" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">Nosotros</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Quienes somos</a></li>
-                            <li><a class="dropdown-item" href="#">Como Funciona</a></li>
-                            <!-- <li><hr class="dropdown-divider"></li> -->
-                            <li><a class="dropdown-item" href="#">Equipo</a></li>
+                            <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/como-funciona}">Como Funciona</a></li>
+                            <li><a class="dropdown-item" th:href="@{/dashboard/admin}">Admin</a></li>
                         </ul>
                     </li>
-
-                    <li class="nav-item link-header">
-                        <a class="nav-link" href="#">Contacto</a>
+                    <li class="nav-item "><a class="nav-link link-header" href="#">Contacto</a></li>
+                    <li class="nav-item ">
+                        <a id="comunidad" class="nav-link link-header" th:href="@{/comunidad}">Únete a nuestra
+                            comunidad</a>
                     </li>
-                    <li class="nav-item link-header">
-                        <a class="nav-link" href="#" id="comunidad">Unete a nuestra comunidad</a>
-                    </li>
-                    <li class="nav-item link-header">
-                        <a class="nav-link" href="#" id="login">Iniciar Sesion</a>
+                    <li class="nav-item ">
+                        <a id="login" class="nav-link link-header" th:href="@{/login}">Iniciar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -89,21 +69,21 @@
                 <h1 class="titulo-principal">
                     ¿Cómo Funciona
                     <span>Sabor Bajo el Radar?</span>
-
+                
                 </h1>
                 <p class="descripcion">
                     Conoce cómo conectamos a los vendedores ambulantes con los amantes de la comida
                     callejera a través de una plataforma accesible y potente.
                 </p>
             </div>
-
+            
             <div class="row pasos">
                 <div class="col-md-4 text-center mb-4">
                     <div class="tarjeta-paso">
                         <img
-                                src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
-                                alt="Explora"
-                                class="icono" />
+                            class="icono"
+                            src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
+                            alt="Explora"/>
                         <h4>1. Explora el mapa</h4>
                         <p>
                             Visualiza todos los puestos disponibles en tu ciudad según tu ubicación actual.
@@ -113,9 +93,9 @@
                 <div class="col-md-4 text-center mb-4">
                     <div class="tarjeta-paso">
                         <img
-                                src="https://cdn-icons-png.flaticon.com/512/3565/3565418.png"
-                                alt="Conecta"
-                                class="icono" />
+                            class="icono"
+                            src="https://cdn-icons-png.flaticon.com/512/3565/3565418.png"
+                            alt="Conecta"/>
                         <h4>2. Elige y contacta</h4>
                         <p>Revisa fotos, menús, calificaciones y contacta directamente a los vendedores.</p>
                     </div>
@@ -123,15 +103,15 @@
                 <div class="col-md-4 text-center mb-4">
                     <div class="tarjeta-paso">
                         <img
-                                src="https://cdn-icons-png.flaticon.com/512/4285/4285811.png"
-                                alt="Apoya"
-                                class="icono" />
+                            class="icono"
+                            src="https://cdn-icons-png.flaticon.com/512/4285/4285811.png"
+                            alt="Apoya"/>
                         <h4>3. Apoya el talento local</h4>
                         <p>Comparte tu experiencia, deja una reseña y vuelve a visitar a tus favoritos.</p>
                     </div>
                 </div>
             </div>
-
+            
             <div class="row beneficios mt-5">
                 <div class="col-md-6">
                     <h2 class="beneficios-titulo">Beneficios para los usuarios</h2>
@@ -154,52 +134,52 @@
             </div>
         </div>
     </section>
-
+    
     <section class="footer">
         <div class="container text-center">
             <div class="row align-items-center">
                 <div class="col">
                     <p class="footer-titulo">Nosotros</p>
                     <div class="footer-text">
-                        <a href="" class="footer-text">Quienes somos</a>
-                        <a href="" class="footer-text">Equipo</a>
-                        <a href="" class="footer-text">Testimonios</a>
+                        <a class="footer-text" th:href="@{/quienes-somos}">Quienes somos</a>
+                        <a class="footer-text" href="">Equipo</a>
+                        <a class="footer-text" th:href="/testimonios">Testimonios</a>
                     </div>
                 </div>
-
+                
                 <div class="col">
                     <p class="footer-titulo">Soporte</p>
                     <div class="footer-text">
-                        <a href="" class="footer-text">Contactanos</a>
-                        <a href="" class="footer-text">PQRS</a>
-                        <a href="" class="footer-text">FAQ</a>
+                        <a class="footer-text" href="">Contactanos</a>
+                        <a class="footer-text" href="">PQRS</a>
+                        <a class="footer-text" href="">FAQ</a>
                     </div>
                 </div>
-
+                
                 <div class="col">
-                    <img th:src="@{/img/logo_sbr.png}" alt="" class="footer-logo" />
+                    <img class="footer-logo" alt="" th:src="@{/img/logo_sbr.png}"/>
                 </div>
-
+                
                 <div class="col">
                     <p class="footer-titulo">Plataformas</p>
-                    <a href=""><img th:src="@{/img/playstore.png}" alt="" class="playstore" /></a>
-                    <a href=""><img th:src="@{/img/appstore.png}" alt="" class="appstore" /></a>
+                    <a href=""><img class="playstore" alt="" th:src="@{/img/playstore.png}"/></a>
+                    <a href=""><img class="appstore" alt="" th:src="@{/img/appstore.png}"/></a>
                 </div>
-
+                
                 <div class="col">
                     <p class="footer-titulo">Redes sociales</p>
                     <div class="footer-container-redsocial">
-                        <a href="" class="footer-redsocial fondo-facebook">
-                            <img th:src="@{/img/facebook.png}" class="icono-redsocial facebook" alt="">
+                        <a class="footer-redsocial fondo-facebook" href="">
+                            <img class="icono-redsocial facebook" alt="" th:src="@{/img/facebook.png}">
                         </a>
-                        <a href="" class="footer-redsocial fondo-instagram">
-                            <img th:src="@{img/instagram.png}" class="icono-redsocial instagram" alt="">
+                        <a class="footer-redsocial fondo-instagram" href="">
+                            <img class="icono-redsocial instagram" alt="" th:src="@{img/instagram.png}">
                         </a>
-                        <a href="" class="footer-redsocial fondo-twitter">
-                            <img th:src="@{img/twitter.png}" class="icono-redsocial twitter" alt="" />
+                        <a class="footer-redsocial fondo-twitter" href="">
+                            <img class="icono-redsocial twitter" alt="" th:src="@{img/twitter.png}"/>
                         </a>
-                        <a href="" class="footer-redsocial fondo-linkedin">
-                            <img th:src="@{img/linkedin.png}" class="icono-redsocial linkedin" alt="" />
+                        <a class="footer-redsocial fondo-linkedin" href="">
+                            <img class="icono-redsocial linkedin" alt="" th:src="@{img/linkedin.png}"/>
                         </a>
                     </div>
                 </div>
@@ -215,9 +195,9 @@
         <!-- Contenedor terciario donde se podra manejar el contenido -->
         <div class="footer-container">
             <!-- Hipervinculos y texto -->
-            <a href="" class="footer-footer-link">Politica de privacidad</a>
-            <a href="" class="footer-footer-link">Terminos y codiciones</a>
-            <a href="" class="footer-footer-link">Mapa de navegacion</a>
+            <a class="footer-footer-link" href="">Politica de privacidad</a>
+            <a class="footer-footer-link" th:href="@{/terminos-condiciones}">Terminos y codiciones</a>
+            <a class="footer-footer-link" th:href="@{/mapa-navegacion}">Mapa de navegacion</a>
             <p class="footer-footer-text">
                 © 2023 Sabor Bajo El Radar. Todos los derechos reservados.
             </p>
@@ -225,10 +205,9 @@
     </div>
 </footer>
 
-<script th:src="@{/js/principal/custom.js}"></script>
 <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
-        crossorigin="anonymous"></script>
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"></script>
 </body>
 </html>

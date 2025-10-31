@@ -1,108 +1,68 @@
-/* NAVEGACION */
-
-/*
-.navegacion-sections
-contenedor que almacena toda la barra de navegación
-
--background: #f4f4f4 es el color de fondo de la barra de navegación;
-*/
-
-.navegacion-sections{
+.navegacion-sections {
     background: #f4f4f4;
+    padding: 10px 0;
 }
 
-/* .logo-principal
-contenedor que almacena el logo de la empresa
-
-- width: 100px, es el ancho del logo
-*/
-
-.logo-principal{
-    width: 100px;
+.logo-principal {
+    width: 50px;
 }
 
-/*
-.nav-final
-contenedor que almacena la barra de navegación
+.navbar-brand span {
+    font-family: 'Poppins';
+    font-size: 1.2rem;
+    color: black;
+}
 
--Poppins es la fuente utilizada para el texto de la navegación.;
--font-weight: 500 es el grosor de la fuente utilizada para el texto de la navegación;
--font-size: medium es el tamaño de la fuente utilizada para el texto de la navegación para que sea light;
--display: flex es la propiedad utilizada para crear un contenedor flexible;
--justify-content: end es la propiedad utilizada para alinear los elementos dentro del contenedor flexible a la derecha;
--color: black para dar que las letras sean de color negro
-*/
-
-.nav-final{
+.navbar-nav {
     font-family: 'Poppins';
     font-weight: 500;
-    font-size: medium;
-    display: flex;
-    justify-content: end;
-    color: black;
-
+    font-size: 1rem;
 }
 
-/*
-.link-header
-margen de los links de las secciones
-
--margin: 0 10px, este margin tiene 0px de top-bottom y 10px de left-right
-*/
-
-.link-header{
-    margin: 0 10px;
+.link-header {
+    margin: 0 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
-/*
-.nav-link:hover
-Los hipervinculos tendran un color al momento de pasar el mouse saobre ellas
-
--background: #ffaa16, color de fondo
-- color: white, color blanco de las letras cuando se pase el mouse
--border-radius: 10px, sus bordes tendran una curvatura de 10 px
--font-weight: bold, las letras sera bold (negrillas)
-*/
-
-.nav-link:hover{
+.nav-link:hover {
     background: #ffaa16;
-    color: white;
-    border-radius: 10px;
+    color: white !important;
     font-weight: bold;
 }
 
-/*
-#comunidad
-
-- background: #2289e6, color azul para el fondo del hipervinculo
-- color:white, color blanco para sus letras
-- font-weight: bold, letras en bold (negrillas)
-- border-radius: 10px, cuvartura de los bordes
-
-*/
-
-#comunidad{
+#comunidad {
     background: #2289e6;
-    color: white;
+    color: white !important;
     font-weight: bold;
     border-radius: 10px;
+    padding: 8px 12px;
 }
 
-/*
-#login
-
-- background: #d72638, color rojo para el fondo del hipervinculo
-- color:white, color blanco para sus letras
-- font-weight: bold, letras en bold (negrillas)
-- border-radius: 30px, cuvartura de los bordes
-*/
-
-
-#login{
+#login {
     background: #d72638;
-    color: white;
+    color: white !important;
     font-weight: bold;
     border-radius: 30px;
+    padding: 8px 16px;
+}
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-item {
+        margin-bottom: 10px;
+    }
+
+    #comunidad, #login {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
 }
 
 
@@ -168,7 +128,7 @@ body {
     padding: 40px;
     border-radius: 15px;
     margin-top: 40px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
 .beneficios-titulo {
@@ -197,6 +157,7 @@ body {
     color: #28a745;
     font-weight: bold;
 }
+
 /* Footer */
 
 /*
@@ -209,11 +170,11 @@ body {
 - color: black, el color de la letra
 */
 
-.footer{
+.footer {
     background: #ececec;
 }
 
-.footer-text{
+.footer-text {
     display: block;
     color: black;
 }
@@ -226,7 +187,7 @@ body {
 - font-weight: 700, la letra sera bold (negrillas)
 */
 
-.footer-titulo{
+.footer-titulo {
     margin: 20px 0;
     font-family: 'Poppins';
     font-weight: 700;
@@ -237,7 +198,7 @@ body {
 - width: 200px, el ancho del logo sera de 200px
 */
 
-.footer-logo{
+.footer-logo {
     width: 200px;
 }
 
@@ -248,7 +209,7 @@ body {
 - width: 150px, el ancho de los logos sera de 150px
 */
 
-.playstore , .appstore{
+.playstore, .appstore {
     margin-bottom: 10px;
     width: 150px;
 }
@@ -260,7 +221,7 @@ body {
 - align-self: center, el contenedor se alineara al centro
 */
 
-.footer-container-redsocial{
+.footer-container-redsocial {
     display: flex;
     align-self: center;
 }
@@ -274,7 +235,7 @@ body {
 - border-radius: 50%, los bordes tendran una curvatura de 50% (seran circulares)
 */
 
-.footer-redsocial{
+.footer-redsocial {
     padding: 15px;
     margin: 0 5px;
     background: white;
@@ -286,7 +247,7 @@ body {
 - width: 25px, el ancho de los iconos sera de 25px
 */
 
-.icono-redsocial{
+.icono-redsocial {
     width: 25px;
 }
 
@@ -296,7 +257,7 @@ body {
 - transition: background-color 0.3s ease-in-out, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.fondo-facebook{
+.fondo-facebook {
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -306,7 +267,7 @@ body {
 - transition: transform 0.3s, filter 0.3s, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.facebook{
+.facebook {
     transition: transform 0.3s, filter 0.3s;
 }
 
@@ -316,7 +277,7 @@ body {
 - background-color: #0165E1, el color de fondo sera azul al pasar el mouse
 */
 
-.fondo-facebook:hover{
+.fondo-facebook:hover {
     background-color: #0165E1;
 }
 
@@ -326,7 +287,7 @@ body {
 - filter: brightness(0) invert(1), el color de la imagen sera blanco al pasar el mouse
 */
 
-.fondo-facebook:hover .facebook{
+.fondo-facebook:hover .facebook {
     filter: brightness(0) invert(1);
 }
 
@@ -337,7 +298,7 @@ body {
 
 - transition: background-color 0.3 ease-in-out, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
-.fondo-instagram{
+.fondo-instagram {
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -347,7 +308,7 @@ body {
 - transition: transform 0.3s, filter 0.3s, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.instagram{
+.instagram {
     transition: transform 0.3s, filter 0.3s;
 }
 
@@ -357,7 +318,7 @@ body {
 - background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4), el color de fondo sera un degradado al pasar el mouse
 */
 
-.fondo-instagram:hover{
+.fondo-instagram:hover {
     background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
 }
 
@@ -367,7 +328,7 @@ body {
 - filter: brightness(0) invert(1), el color de la imagen sera blanco al pasar el mouse
 */
 
-.fondo-instagram:hover .instagram{
+.fondo-instagram:hover .instagram {
     filter: brightness(0) invert(1);
 }
 
@@ -379,7 +340,7 @@ body {
 - transition: background-color 0.3s ease-in-out, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.fondo-twitter{
+.fondo-twitter {
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -389,7 +350,7 @@ body {
 - transition: transform 0.3s, filter 0.3s, la transicion sera de 0.3 segundos y el color de fondo cambiara al pasar el mouse
 */
 
-.twitter{
+.twitter {
     transition: transform 0.3s, filter 0.3s;
 }
 
@@ -399,7 +360,7 @@ body {
 - background-color: black, el color de fondo sera negro cuando pase el mouse
 */
 
-.fondo-twitter:hover{
+.fondo-twitter:hover {
     background-color: black;
 }
 
@@ -409,7 +370,7 @@ body {
 - filter: brightness(0) invert(1), el fondo y la imagen cambiara de color cuadndo pase el mouse
 */
 
-.fondo-twitter:hover .twitter{
+.fondo-twitter:hover .twitter {
     filter: brightness(0) invert(1);
 }
 
@@ -422,7 +383,7 @@ body {
 -transitiom: background-color 0.3s ease-in-out, tendra una transicion suave cuando se pase el mouse
 */
 
-.fondo-linkedin{
+.fondo-linkedin {
     transition: background-color 0.3s ease-in-out;
 }
 
@@ -432,7 +393,7 @@ body {
 - transition: transform 0.3s, filter 0.3s, la transition de la imagen sera suave
 */
 
-.linkedin{
+.linkedin {
     transition: transform 0.3s, filter 0.3s;
 
 }
@@ -443,7 +404,7 @@ body {
 - background-color: #0165e1, el fondo cambiara de color cuando pase el mouse
 */
 
-.fondo-linkedin:hover{
+.fondo-linkedin:hover {
     background-color: #0165E1;
 }
 
@@ -453,7 +414,7 @@ body {
 - filter: brightness(0) invert(1), tanto el fondo y la imagen cambiara su filtro al mismo tiempo cuando pase el mouse
 */
 
-.fondo-linkedin:hover .linkedin{
+.fondo-linkedin:hover .linkedin {
     filter: brightness(0) invert(1);
 }
 
@@ -467,7 +428,7 @@ footer
 
 - margin: 0, el margin de la etiqueta semantica sera del contenedor pirncipal sera de 0
 */
-footer{
+footer {
     margin: 0;
 }
 
@@ -478,7 +439,7 @@ Conetendor secundiario donde tiene los hipervinculos
 - margin: 20px 20px, tiene un margin en todos los lados de 20px
 */
 
-.footer-container{
+.footer-container {
     margin: 20px 20px;
 }
 
@@ -495,7 +456,7 @@ Conetendor secundiario donde tiene los hipervinculos
 -border-right: solid 2px black, su border-right  tiene un groso de 2px y de color black
 */
 
-.footer-footer-link{
+.footer-footer-link {
     text-decoration: none;
     color: black;
     font-family: 'Poppins';
@@ -514,7 +475,7 @@ Texto de la fuente de agua sobre el nombre del proyecto
 -float: right, esta al final de la fila en la parte derecha
 */
 
-.footer-footer-text{
+.footer-footer-text {
     display: inline;
     float: right;
 }

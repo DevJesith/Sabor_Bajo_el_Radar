@@ -25,7 +25,7 @@
     <nav class="navbar navbar-expand-lg navegacion-sections">
         <div class="container-fluid">
             
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                 <img class="logo-principal me-2" alt="img" th:src="@{/img/logo_sbr.png}">
                 <span class="fw-bold">Sabor Bajo El Radar</span>
             </a>
@@ -104,8 +104,6 @@
         </div>
     </section>
     
-    <!-- Beneficios -->
-    <!-- Beneficios -->
     <!-- Beneficios -->
     <section class="beneficio">
         <div class="beneficio-bloquetitulo">
@@ -224,7 +222,8 @@
                 
                 <div class="col">
                     <p class="footer-titulo">Nosotros</p>
-                    <div><a class="footer-text" href="#">Quienes somos</a> <a class="footer-text" href="#">Equipo</a> <a
+                    <div><a class="footer-text" th:href="@{/quienes-somos}">Quienes somos</a> <a class="footer-text"
+                                                                                                 href="#">Equipo</a> <a
                         class="footer-text" th:href="@{/testimonios}">Testimonios</a></div>
                 </div>
                 
@@ -268,7 +267,7 @@
 <footer>
     <div class="footer-container">
         <a class="footer-footer-link" href="#">Política de privacidad</a>
-        <a class="footer-footer-link" th:href="@{/terminos-y-condiciones}">Términos y condiciones</a>
+        <a class="footer-footer-link" th:href="@{/terminos-condiciones}">Términos y condiciones</a>
         <a class="footer-footer-link" th:href="@{/mapa-navegacion}">Mapa de navegación</a>
         <p class="footer-footer-text">© 2023 Sabor Bajo El Radar. Todos los derechos reservados.</p>
     </div>
