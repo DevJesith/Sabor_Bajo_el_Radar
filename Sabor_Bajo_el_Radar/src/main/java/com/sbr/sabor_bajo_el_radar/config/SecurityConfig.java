@@ -54,6 +54,7 @@ public class SecurityConfig {
                                 "/mantenimiento/**",
                                 "/quienes-somos/**",
                                 "/muro-social/**"
+                                //"/perfil/**"
                         ).permitAll()
 
                         // Solo el admin puede ver el Dashboard

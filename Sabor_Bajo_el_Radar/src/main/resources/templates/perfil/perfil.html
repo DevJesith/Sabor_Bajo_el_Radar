@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Editar Perfil</title>
+</head>
+<body class="m-0 p-0">
+<header class="navbar navbar-light d-flex justify-content-center mb-4 mt-2">
+    <nav class="text-center fs-4 row mt-3">
+        <div class="col-12 mb-2">
+            <a th:href="@{/muro-social}">
+                <button class="btn btn-danger shadow">
+                    Volver
+                </button>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<main class="container-fluid justify-content-center align-items-center">
+
+    <!-- Contenedor de imagenes y reacciones -->
+    <div class="container-fluid border border-gray rounded-5 shadow-lg" style="width: 50%; margin-top: 5%; margin-bottom: 5%;">
+
+
+        <!-- -->
+        <div class="container-fluid border border-gray rounded-4 d-flex justify-content-start mt-3 shadow mb-3" style="min-height: 340px;">
+            <!-- publicacion 1-->
+            <div class="col-12 ">
+                <!-- Columna 1-->
+                <div class="row">
+                    <!-- Nombre perfil -->
+                    <div class="col-12 mt-5 mb-3 text-center">
+                        <strong> Pepito rodriguez </strong>
+                    </div>
+                    <!-- foto perfil -->
+                    <div class=" p-1 d-flex justify-content-center align-items-center text-center mb-3">
+                        <img src="/img/muroSocial/foto.jpg" class="rounded-circle" alt="foto" style="width: 150px; height: 150px;">
+                    </div>
+                    <!-- cambiar foto-->
+                    <div class="col-12 text-center mb-3">
+                        <a href="">
+                            <button class="btn btn-danger">
+                                Cambiar foto
+                            </button>
+                        </a>
+                    </div>
+
+                    <!-- Datos -->
+                    <div class="container-fluid border border-gray rounded-4 d-flex justify-content-center mt-3 shadow mb-3 text-white p-3" style="width: 90%;">
+                        <div class="row w-100">
+                            <!-- nombre -->
+                            <div class=" col-12 border border-gray rounded-5 d-flex justify-content-center shadow text-white mt-1 mb-1 bg-danger col w-100" style="height: 30px;;">
+
+                                <label class="col-3 text-center">Nombre: </label>
+                                <p class="col-8 text-center">
+                                    Adri
+                                </p>
+                            </div>
+
+                            <!-- apellidos -->
+                            <div class="col-12 container-fluid border border-gray rounded-5 d-flex justify-content-center shadow text-white mt-1 mb-1 bg-danger col w-100" style="height: 30px;;">
+
+                                <label class="col-3 text-center">Apellido: </label>
+                                <p class="col-8 text-center">
+                                    JS
+                                </p>
+                            </div>
+
+                            <!-- Descripcion -->
+                            <div class="col-12 container-fluid border border-gray rounded-5 d-flex justify-content-center shadow text-white mt-1 mb-1 bg-danger col w-100" style="height: auto;">
+
+                                <label class="col-12 p-1 mb-1">Descripcion: <textarea name="Descripcion" id="" class="fs-6 mt-1 rounded-4 border w-100"></textarea></label>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+</body>
+</html>

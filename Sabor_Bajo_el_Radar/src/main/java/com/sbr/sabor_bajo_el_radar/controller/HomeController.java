@@ -57,5 +57,8 @@ public class HomeController {
         return "Muro_Social/muro_social";
     }
 
+    @GetMapping("/perfil")
+    public String editarPerfil(){return "perfil/perfil";}
+
 
 }
