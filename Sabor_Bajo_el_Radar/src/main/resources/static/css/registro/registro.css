@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #832323 0%, #aeb11a 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -151,7 +151,7 @@ input:focus {
 .btn-registro {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #000000 0%, #000000 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -174,13 +174,23 @@ input:focus {
 }
 
 .login-link a {
-    color: #667eea;
+    color: #3c30a1;
     text-decoration: none;
     font-weight: 600;
 }
 
 .login-link a:hover {
     text-decoration: underline;
+}
+
+.logo{
+    width: 100%;
+    height: 100px;
+}
+
+.logo img{
+    width: 150px;
+    height: 150px;
 }
 
 @media (max-width: 768px) {
