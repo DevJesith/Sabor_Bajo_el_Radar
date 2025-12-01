@@ -77,7 +77,7 @@ public class SecurityConfig {
                             // Redirigir según el rol
                             if (authentication.getAuthorities().stream()
                                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR"))) {
-                                response.sendRedirect("/Administrador/panel_administrador/panel_administrador");
+                                    response.sendRedirect("/dashboard/admin");
                             } else {
                                 response.sendRedirect("/mantenimiento");
                             }

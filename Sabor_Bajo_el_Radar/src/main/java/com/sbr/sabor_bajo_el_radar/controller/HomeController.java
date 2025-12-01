@@ -7,60 +7,69 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+
     @GetMapping("/")
     public String index() {
         return "principal/index";
     }
+
 
     @GetMapping("/mapa-navegacion")
     public String mapaNavegacion() {
         return "principal/mapa_navegacion";
     }
 
+
     @GetMapping("/terminos-condiciones")
     public String terminosCondiciones() {
         return "principal/terminos_condiciones";
     }
+
 
     @GetMapping("/como-funciona")
     public String comoFunciona() {
         return "principal/como_funciona";
     }
 
+
     @GetMapping("/correo-masivos")
     public String correoMasivos() {
         return "principal/correoMasivo";
     }
+
 
     @GetMapping("/quienes-somos")
     public String quienesSomos() {
         return "Quienes_Somos/Quienes_somos";
     }
 
+
     @GetMapping("/testimonios")
     public String testimonios() {
         return "principal/testimonio/testimonios";
     }
+
 
     @GetMapping("/mantenimiento")
     public String mantenimiento() {
         return "mantenimiento/mantenimiento";
     }
 
+
     @GetMapping("/cliente")
     public String prueba() {
         return "mantenimiento/cliente";
     }
+
 
     @GetMapping("/muro-social")
     public String muroSocial() {
         return "Muro_Social/muro_social";
     }
 
+
     @GetMapping("/perfil")
     public String editarPerfil(){return "perfil/perfil";}
-
-
 
 
 }

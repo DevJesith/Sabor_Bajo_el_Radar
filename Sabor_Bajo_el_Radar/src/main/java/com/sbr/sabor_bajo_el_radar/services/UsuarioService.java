@@ -25,9 +25,19 @@ public class UsuarioService implements UserDetailsService {
 
     // encontrar usuarios por correo
     @Override
-    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-        return usuarioRepository.findByCorreo(correo).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + correo));
+    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException{
+        Usuario usuario = usuarioRepository.findByCorreo(correo).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + correo));
+
+        // Se agrega el prefijo ROLE
+        String roleName = "ROLE_" + usuario.getRol().toUpperCase();
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(usuario.getCorreo())
+                .password(usuario.getContrasena())
+                .authorities(roleName)
+                .build();
     }
+
 
     //Metodo para registrar usuarios
     public Usuario registrar(Usuario usuario) {

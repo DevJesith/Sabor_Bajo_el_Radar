@@ -9,6 +9,7 @@
 
 <!-- CONTENEDOR PRINCIPAL -->
 <div class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-lg">
+    <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 transition duration-200 ease-in-out hover:scale-95" type="button" onclick="history.back()">Atras</button>
 
     <!-- Contenedor titulo-->
     <div class="text-center">
@@ -31,7 +32,7 @@
 
             <!-- Botón -->
             <div class="text-center">
-                <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 text-sm sm:text-base transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105" type="submit">Importar</button>
+                <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 text-sm sm:text-base transition duration-200 ease-in-out hover:scale-95" type="submit">Importar</button>
             </div>
         </form>
     </div>
@@ -40,7 +41,7 @@
     <div th:if="${mensaje}" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm z-50">
         <div class="flex flex-col items-center gap-4 bg-black/70 p-6 rounded-lg mx-4">
             <strong class="text-white text-center text-base sm:text-lg" th:text="${mensaje}"></strong>
-            <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105" type="button" onclick="history.back()">Cerrar</button>
+            <button class="w-auto bg-red-500 text-white rounded-lg p-1 transition duration-300 ease-in-out hover:scale-95" type="button" onclick="history.back()">Cerrar</button>
         </div>
     </div>
 

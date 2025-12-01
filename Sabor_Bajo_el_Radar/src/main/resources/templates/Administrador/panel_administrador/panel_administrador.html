@@ -35,6 +35,10 @@
             <a class="active" th:href="@{/correo/masivos}">
                 <i class="bi bi-envelope-fill"></i> <span class="sidebar-text">Correo Masivos</span>
             </a>
+            <!-- Importacion de usuarios -->
+            <a th:href="@{/usuarios/importar}">
+                <i class="bi bi-envelope-fill"></i> <span class="sidebar-text">Importar usuarios a gran escala</span>
+            </a>
             
             <div class="text-center mt-4">
                 <a th:href="@{/usuarios/nuevo}">
@@ -42,12 +46,6 @@
                 </a>
             </div>
 
-            <!-- Importacion de usuarios -->
-            <div class="text-center mt-4">
-                <a th:href="@{/usuarios/importar}">
-                    <button class="btn btn-purple btn-sm text-white">Importar ususarios a gran escala</button>
-                </a>
-            </div>
         </div>
         
         <!-- Contenido principal -->
