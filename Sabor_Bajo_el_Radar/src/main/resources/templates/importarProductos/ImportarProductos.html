@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Importar Productos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#661b1b] to-[#8d8f15]">
+
+<!-- CONTENEDOR PRINCIPAL -->
+<div class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-lg">
+
+    <!-- Contenedor titulo-->
+    <div class="text-center">
+        <!-- imagen logo-->
+        <div class="flex justify-center">
+            <img th:src="@{/img/logo_sbr.png}" alt="Logo" class="w-16 h-16 sm:w-20 sm:h-20">
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold">Importe sus productos aquí</h2>
+        <p class="text-gray-500 text-sm sm:text-base mt-2">Solo puede subir archivos Excel (.xlsx)</p>
+    </div>
+
+    <!-- Contenedor formulario-->
+    <div class="mt-6">
+        <form th:action="@{/productos/importar}" method="post" enctype="multipart/form-data" class="space-y-4">
+
+            <!-- Input archivo -->
+            <div class="text-center">
+                <input class="w-auto border rounded-lg p-2 bg-black text-white text-sm sm:text-base transition duration-200 ease-in-out hover:scale-95" type="file" name="archivo" accept=".xlsx" required>
+            </div>
+
+            <!-- Botón -->
+            <div class="text-center">
+                <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 text-sm sm:text-base transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105" type="submit">Importar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- MENSAJE DE RESULTADO -->
+    <div th:if="${mensaje}" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm z-50">
+        <div class="flex flex-col items-center gap-4 bg-black/70 p-6 rounded-lg mx-4">
+            <strong class="text-white text-center text-base sm:text-lg" th:text="${mensaje}"></strong>
+            <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105" type="button" onclick="history.back()">Cerrar</button>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

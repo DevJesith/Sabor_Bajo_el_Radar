@@ -53,9 +53,13 @@ public class SecurityConfig {
                                 "/como-funciona/**",
                                 "/mantenimiento/**",
                                 "/quienes-somos/**",
-                                "/muro-social/**"
+                                "/muro-social/**",
+                                "/productos/**",
+                                "/usuarios/**"
                                 //"/perfil/**"
                         ).permitAll()
+
+
 
                         // Solo el admin puede ver el Dashboard
                         .requestMatchers("/Administrador/**").hasRole("ADMINISTRADOR")

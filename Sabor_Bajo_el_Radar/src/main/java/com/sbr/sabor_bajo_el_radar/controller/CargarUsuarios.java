@@ -1,16 +1,43 @@
 package com.sbr.sabor_bajo_el_radar.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.sbr.sabor_bajo_el_radar.services.CargaUsuariosService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
-@RequestMapping("/cargar/usuarios")
-public class CargarUsuarios
-{
-    @PostMapping ("/CargarUsuarios")
-    public ResponseEntity<?> cargarArchivo(@RequestParam("file")MultipartFile archivo)
-    {
-        return ResponseEntity.ok("Archivo Recibido");
+
+@Controller
+public class CargarUsuarios {
+
+    // llamamos el servicio de carga de usuario
+    private final CargaUsuariosService cargaUsuariosService;
+
+    public CargarUsuarios(CargaUsuariosService cargaUsuariosService) {
+        this.cargaUsuariosService = cargaUsuariosService;
     }
+
+    @GetMapping("/usuarios/importar")
+    public String mostrarFormulario()
+    {
+        return "ImportarUsuarios/importarUsuarios";
+    }
+
+    @PostMapping("/usuarios/importar/procesar")
+    public String importarArchivo(MultipartFile archivo, Model model)
+    {
+
+        if (archivo.isEmpty())
+        {
+            model.addAttribute("mensaje", "Debe seleccionar un archivo.");
+            return "ImportarUsuarios/importarUsuarios";
+        }
+
+        var resulato = cargaUsuariosService.importarUsuarios(archivo);
+        model.addAttribute("mensaje", resulato.get("mensaje"));
+
+        return "ImportarUsuarios/importarUsuarios";
+    }
+
 }
