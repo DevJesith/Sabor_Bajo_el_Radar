@@ -39,6 +39,11 @@
             <a th:href="@{/usuarios/importar}">
                 <i class="bi bi-envelope-fill"></i> <span class="sidebar-text">Importar usuarios a gran escala</span>
             </a>
+
+            <!-- Panel Pedidos -->
+            <a th:href="@{/domiciliario/panel-pedidos}">
+                <i class="bi bi-envelope-fill"></i> <span class="sidebar-text">Panel de Pedidos</span>
+            </a>
             
             <div class="text-center mt-4">
                 <a th:href="@{/usuarios/nuevo}">
@@ -46,6 +51,11 @@
                 </a>
             </div>
 
+            <div class="text-center me-5 mt-2">
+                <form th:action="@{/logout}" method="post" >
+                    <button class="btn btn-danger btn-sm text-white" type="submit">Cerrar sesión</button>
+                </form>
+            </div>
         </div>
         
         <!-- Contenido principal -->

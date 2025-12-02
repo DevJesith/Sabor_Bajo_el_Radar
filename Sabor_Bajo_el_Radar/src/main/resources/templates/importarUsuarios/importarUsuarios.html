@@ -4,21 +4,25 @@
     <meta charset="UTF-8">
     <title>Importar Usuarios</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+    </style>
 </head>
-<body class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#661b1b] to-[#8d8f15]">
+<body class="flex justify-center items-center min-h-screen bg-linear-to-t from-yellow-300 to-red-500 ">
 
 <!-- CONTENEDOR PRINCIPAL -->
-<div class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-lg">
+<div class="w-full max-w-md mx-4 p-6 rounded-xl bg-gray-800 shadow-xl text-white font-[<Poppins>]">
     <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 transition duration-200 ease-in-out hover:scale-95" type="button" onclick="history.back()">Atras</button>
 
     <!-- Contenedor titulo-->
     <div class="text-center">
         <!-- imagen logo-->
         <div class="flex justify-center">
-            <img th:src="@{/img/logo_sbr.png}" alt="Logo" class="w-16 h-16 sm:w-20 sm:h-20">
+            <img th:src="@{/img/logo_sbr.png}" alt="Logo" class="w-20 h-20 sm:w-30 sm:h-30">
         </div>
         <h2 class="text-xl sm:text-2x2 font-bold">Importacion de Usuarios a gran escala</h2>
-        <p class="text-gray-500 text-sm sm:text-base mt-2">Solo puede subir archivos Excel (.xlsx)</p>
+        <p class="text-gray-400 text-sm sm:text-base mt-2">Solo puede subir archivos Excel (.xlsx)</p>
     </div>
 
     <!-- Contenedor formulario-->
@@ -27,12 +31,12 @@
 
             <!-- Input archivo -->
             <div class="text-center">
-                <input class="w-auto border rounded-lg p-2 bg-black text-white text-sm sm:text-base transition duration-200 ease-in-out hover:scale-95" type="file" name="archivo" accept=".xlsx" required>
+                <input class="w-auto border rounded-lg p-2 bg-white text-black bold text-sm sm:text-base transition duration-200 ease-in-out hover:scale-95" type="file" name="archivo" accept=".xlsx" required>
             </div>
 
             <!-- Botón -->
             <div class="text-center">
-                <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 text-sm sm:text-base transition duration-200 ease-in-out hover:scale-95" type="submit">Importar</button>
+                <button class="w-auto bg-red-500 text-white rounded-lg px-4 py-2 text-sm sm:text-base transition duration-200 ease-in-out hover:scale-95 shadow-lg" type="submit">Importar</button>
             </div>
         </form>
     </div>
@@ -41,7 +45,7 @@
     <div th:if="${mensaje}" class="fixed inset-0 flex justify-center items-center backdrop-blur-sm z-50">
         <div class="flex flex-col items-center gap-4 bg-black/70 p-6 rounded-lg mx-4">
             <strong class="text-white text-center text-base sm:text-lg" th:text="${mensaje}"></strong>
-            <button class="w-auto bg-red-500 text-white rounded-lg p-1 transition duration-300 ease-in-out hover:scale-95" type="button" onclick="history.back()">Cerrar</button>
+            <button class="w-auto bg-red-500 text-white rounded-lg p-1 transition duration-300 ease-in-out hover:scale-95 shadow-lg" type="button" onclick="history.back()">Cerrar</button>
         </div>
     </div>
 

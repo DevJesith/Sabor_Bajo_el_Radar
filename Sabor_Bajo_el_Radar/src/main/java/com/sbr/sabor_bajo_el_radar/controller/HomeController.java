@@ -71,5 +71,7 @@ public class HomeController {
     @GetMapping("/perfil")
     public String editarPerfil(){return "perfil/perfil";}
 
+    @GetMapping("/domiciliario/panel-pedidos")
+    public String panelPedidos(){return "panel_Pedidos/Panel_Pedidos";}
 
 }
