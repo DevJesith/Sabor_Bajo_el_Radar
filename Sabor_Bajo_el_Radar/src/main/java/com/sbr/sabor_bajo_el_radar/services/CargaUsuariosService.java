@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-// Le decimos a Spring que es un servicio
+/// / Le decimos a Spring que es un servicio
 @Service
 public class CargaUsuariosService {
 
@@ -35,8 +35,7 @@ public class CargaUsuariosService {
     }
 
     // Usaremos map para recorrer el Excel
-    public Map<String, Object> importarUsuarios(MultipartFile archivo)
-    {
+    public Map<String, Object> importarUsuarios(MultipartFile archivo) {
         Map<String, Object> resultado = new HashMap<>();
 
         // reiniciamos el contador para cada vez que se haga una carga
@@ -45,14 +44,12 @@ public class CargaUsuariosService {
 
         // la logica de todo
         // creamos un libro para los datos
-        try(XSSFWorkbook workbook = new XSSFWorkbook((archivo.getInputStream())))
-        {
+        try (XSSFWorkbook workbook = new XSSFWorkbook((archivo.getInputStream()))) {
             // tomamos la primera hoja del archivo
             Sheet hoja = workbook.getSheetAt(0);
 
             // Recorremos el archivo
-            for (int i = 1; i <= hoja.getLastRowNum(); i++)
-            {
+            for (int i = 1; i <= hoja.getLastRowNum(); i++) {
                 Row fila = hoja.getRow(i);
 
                 // validaciones, si la fila esta vacia se pasa a la otra
@@ -69,7 +66,7 @@ public class CargaUsuariosService {
 
                 String telefono = formatter.formatCellValue(fila.getCell(3)).trim();
 
-                String contrasena =  formatter.formatCellValue(fila.getCell(4)).trim();
+                String contrasena = formatter.formatCellValue(fila.getCell(4)).trim();
 
                 String correo = formatter.formatCellValue(fila.getCell(5)).trim();
 
@@ -78,14 +75,12 @@ public class CargaUsuariosService {
                 Optional<Usuario> usuarioOpt = usuarioRepository.findByDocumento(documento);
 
                 // mas validaciones, en este caso el documento
-                if (usuarioOpt.isPresent())
-                {
+                if (usuarioOpt.isPresent()) {
                     ignorados++;
                     continue;
                 }
 
-                if (rol.isEmpty())
-                {
+                if (rol.isEmpty()) {
                     ignorados++;
                     continue;
                 }
