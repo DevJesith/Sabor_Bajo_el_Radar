@@ -76,7 +76,7 @@ public class UsuarioService implements UserDetailsService {
 
         // validar que solo se puedan registrar ciertos roles
         String rolUpper = registroDTO.getRol().toUpperCase();
-        if (!rolUpper.equals("CLIENTE") && !rolUpper.equals("VENDEDOR") && !rolUpper.equals("DOMICILIARIO")){
+        if (!rolUpper.equals("CLIENTE") && !rolUpper.equals("VENDEDOR") && !rolUpper.equals("DOMICILIARIO") && !rolUpper.equals("ADMINISTRADOR")){
             throw new IllegalArgumentException("Rol no permitido");
         }
 

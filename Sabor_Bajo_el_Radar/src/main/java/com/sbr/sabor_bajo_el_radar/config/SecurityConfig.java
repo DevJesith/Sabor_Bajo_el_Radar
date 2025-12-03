@@ -77,8 +77,15 @@ public class SecurityConfig {
                             if (authentication.getAuthorities().stream()
                                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR"))) {
                                 response.sendRedirect("/dashboard/admin");
-                            } else {
+                            } else if (authentication.getAuthorities().stream()
+                                    .anyMatch(b -> b.getAuthority().equals("ROLE_CLIENTE"))) {
+                                response.sendRedirect("/cliente");
+                            } else if (authentication.getAuthorities().stream()
+                                    .anyMatch(c -> c.getAuthority().equals("ROLE_VENDEDOR"))){
                                 response.sendRedirect("/vendedor");
+                            } else if(authentication.getAuthorities().stream()
+                                    .anyMatch(d -> d.getAuthority().equals("ROLE_DOMICILIARIO"))){
+                                response.sendRedirect("/domiciliario/panel-pedidos");
                             }
                         })
                         .failureUrl("/login?error=true")
