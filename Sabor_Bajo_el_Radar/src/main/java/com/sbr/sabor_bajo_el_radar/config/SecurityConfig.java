@@ -3,9 +3,9 @@ package com.sbr.sabor_bajo_el_radar.config;
 import com.sbr.sabor_bajo_el_radar.services.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -60,7 +60,6 @@ public class SecurityConfig {
                         ).permitAll()
 
 
-
                         // Solo el admin puede ver el Dashboard
                         .requestMatchers("/Administrador/**").hasRole("ADMINISTRADOR")
 
@@ -77,9 +76,9 @@ public class SecurityConfig {
                             // Redirigir según el rol
                             if (authentication.getAuthorities().stream()
                                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR"))) {
-                                    response.sendRedirect("/dashboard/admin");
+                                response.sendRedirect("/dashboard/admin");
                             } else {
-                                response.sendRedirect("/mantenimiento");
+                                response.sendRedirect("/vendedor");
                             }
                         })
                         .failureUrl("/login?error=true")
@@ -90,8 +89,8 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
-                )
-                .csrf(csrf -> csrf.disable()); // deshabilitado para hacer pruebas
+                );
+        //.csrf(csrf -> csrf.disable()); // deshabilitado para hacer pruebas
 
         return http.build();
     }

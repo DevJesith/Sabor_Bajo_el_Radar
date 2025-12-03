@@ -47,11 +47,6 @@ public class HomeController {
         return "mantenimiento/mantenimiento";
     }
 
-    @GetMapping("/cliente")
-    public String prueba() {
-        return "mantenimiento/cliente";
-    }
-
     @GetMapping("/muro-social")
     public String muroSocial() {
         return "Muro_Social/muro_social";
@@ -64,6 +59,8 @@ public class HomeController {
     }
 
     @GetMapping("/domiciliario/panel-pedidos")
-    public String panelPedidos(){return "panel_Pedidos/Panel_Pedidos";}
+    public String panelPedidos() {
+        return "panel_Pedidos/Panel_Pedidos";
+    }
 
 }
