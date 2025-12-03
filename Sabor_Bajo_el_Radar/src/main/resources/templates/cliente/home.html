@@ -1,12 +1,554 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Cliente</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SBR - Delivery de Comida</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/cliente/cliente-home.css}">
 </head>
 <body>
-<h1>Bienvenido Cliente</h1>
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Cerrar sesión</button>
-</form></body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container-fluid px-4">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img class="me-2" src="https://via.placeholder.com/40/ff6b35/FFFFFF?text=SBR" alt="SBR Logo">
+            <span class="fw-bold">SBR</span>
+        </a>
+        
+        <!-- Botón toggle para móvil -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Contenido del navbar -->
+        <div id="navbarContent" class="collapse navbar-collapse">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <!-- Buscador -->
+                <!-- Buscador mejorado -->
+                <div class="search-wrapper mx-auto">
+                    <div class="search-container-enhanced">
+                        <i class="fas fa-search search-icon"></i>
+                        <input id="mainSearchInput" class="form-control search-input-enhanced"
+                               type="search"
+                               placeholder="Buscar comidas, restaurantes..."
+                               autocomplete="off"/>
+                        <button class="btn-filters" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#filtersOffcanvas">
+                            <i class="fas fa-sliders-h"></i>
+                            <span class="d-none d-md-inline ms-2">Filtros</span>
+                        </button>
+                    </div>
+                    <!-- Resultados de búsqueda -->
+                    <div id="searchResults" class="search-results" style="display: none;"></div>
+                </div>
+                
+                <!-- Acciones -->
+                <div class="nav-actions d-flex align-items-center gap-3">
+                    <!-- Ubicación -->
+                    <a class="nav-link d-flex align-items-center" href="#">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                        <span class="d-none d-lg-inline">Agrega tu ubicación</span>
+                    </a>
+                    
+                    <!-- Carrito -->
+                    <a class="nav-link position-relative" href="#" data-bs-toggle="offcanvas"
+                       data-bs-target="#cartOffcanvas">
+                        <i class="fas fa-shopping-cart fs-5"></i>
+                        <span id="cartCount" class="cart-badge">0</span>
+                    </a>
+                    
+                    <!-- Usuario -->
+                    <div class="dropdown">
+                        <button class="btn btn-link nav-link dropdown-toggle p-0" type="button"
+                                data-bs-toggle="dropdown">
+                            <span class="d-none d-lg-inline me-2">Hola, [nombre]</span>
+                            <i class="fas fa-user-circle fs-4" style="color: var(--primary-orange)"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="perfil.html"><i class="fas fa-user me-2"></i>Ver
+                                perfil</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i>Mis pedidos</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Favoritos</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Cerrar
+                                sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <!-- Banners Promocionales -->
+    <section class="container-fluid px-4 mt-4">
+        <div class="row g-3">
+            <div class="col-md-2 col-6">
+                <div class="promo-banner" style="background: linear-gradient(135deg, #ff6b35, #ff8c5a)">
+                    <h6>Ahorra en tu pedido</h6>
+                    <p class="small mb-0">Envíos gratis en tus 3 primeras compras</p>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="promo-banner" style="background: linear-gradient(135deg, #52b788, #74c69d)">
+                    <h6>Pide tu comida online</h6>
+                    <p class="small mb-0">Descubre lo que todos están pidiendo hoy</p>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="promo-banner" style="background: linear-gradient(135deg, #ff6b35, #ff8c5a)">
+                    <h6>Obtén un descuento</h6>
+                    <p class="small mb-0">20% en tus primeras 5 compras</p>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="promo-banner" style="background: linear-gradient(135deg, #7209b7, #9d4edd)">
+                    <h6>Pide desde tu barrio</h6>
+                    <p class="small mb-0">y apoya lo local</p>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="promo-banner" style="background: linear-gradient(135deg, #ff6b35, #ff8c5a)">
+                    <h6>Aprovecha el 2x1</h6>
+                    <p class="small mb-0">en las plataformas favoritos</p>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="promo-banner" style="background: linear-gradient(135deg, #0077b6, #0096c7)">
+                    <h6>Recomienda y gana</h6>
+                    <p class="small mb-0">Invita a tus amigos, comparte los beneficios que cada nuevo viviente</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Recomendado por nosotros -->
+    <section class="container-fluid px-4 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Recomendado por nosotros</h3>
+            <div>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle me-2"
+                        onclick="scrollSection('recommendedVendors', 'left')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle"
+                        onclick="scrollSection('recommendedVendors', 'right')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="scroll-container">
+            <div id="recommendedVendors" class="row flex-nowrap"></div>
+        </div>
+    </section>
+    
+    <!-- Promociones -->
+    <section class="container-fluid px-4 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Promociones</h3>
+            <div>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle me-2"
+                        onclick="scrollSection('promotionVendors', 'left')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle"
+                        onclick="scrollSection('promotionVendors', 'right')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="scroll-container">
+            <div id="promotionVendors" class="row flex-nowrap"></div>
+        </div>
+    </section>
+    
+    <!-- Categorías -->
+    <section class="container-fluid px-4 mt-5">
+        <h3 class="mb-4">Categorías</h3>
+        <div class="row text-center g-4">
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-egg fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Desayunos</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-drumstick-bite fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Almuerzos</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-ice-cream fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Cena</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-glass-whiskey fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Bebidas</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-cake fs-2" style="color: #ffc107"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Desserts</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-hamburger fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Hamburguesas</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-pizza-slice fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Pizza</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-hotdog fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Perro calientes</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-1">
+                <a class="text-decoration-none" href="#">
+                    <div class="category-icon" style="background: #fff4e6">
+                        <i class="fas fa-bacon fs-2" style="color: #ff6b35"></i>
+                    </div>
+                    <p class="small fw-bold text-dark">Salchipapas</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Desayunos -->
+    <section class="container-fluid px-4 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Breakfasts</h3>
+            <div>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle me-2"
+                        onclick="scrollSection('breakfastVendors', 'left')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle"
+                        onclick="scrollSection('breakfastVendors', 'right')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="scroll-container">
+            <div id="breakfastVendors" class="row flex-nowrap"></div>
+        </div>
+    </section>
+    
+    <!-- Postres -->
+    <section class="container-fluid px-4 mt-5 mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Desserts</h3>
+            <div>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle me-2"
+                        onclick="scrollSection('dessertVendors', 'left')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle"
+                        onclick="scrollSection('dessertVendors', 'right')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="scroll-container">
+            <div id="dessertVendors" class="row flex-nowrap"></div>
+        </div>
+    </section>
+    
+    <!-- Modal del Menú -->
+    <div id="menuModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 id="vendorName" class="modal-title fw-bold"></h5>
+                        <p id="vendorCategory" class="text-muted small mb-0"></p>
+                    </div>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="menuItems"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Offcanvas del Carrito -->
+    <div id="cartOffcanvas" class="offcanvas offcanvas-end" tabindex="-1">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Mi Carrito</h5>
+            <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="cartItems"></div>
+            <div class="mt-4 pt-3 border-top">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5>Total:</h5>
+                    <h5 id="cartTotal" class="text-primary">S/ 0.00</h5>
+                </div>
+                <a class="btn btn-outline-primary w-100 mb-2" href="carrito.html">
+                    <i class="fas fa-shopping-cart me-2"></i>Ver Carrito
+                </a>fxb
+                <a class="btn btn-primary w-100" href="checkout.html">
+                    <i class="fas fa-credit-card me-2"></i>Finalizar compra
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Offcanvas de Filtros -->
+    <div id="filtersOffcanvas" class="offcanvas offcanvas-end" tabindex="-1">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">
+                <i class="fas fa-filter me-2"></i>Filtros de búsqueda
+            </h5>
+            <button class="btn-close" type="button" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Filtro por localidad -->
+            <div class="filter-section mb-4">
+                <h6 class="filter-title">
+                    <i class="fas fa-map-marker-alt me-2 text-danger"></i>
+                    Localidad
+                </h6>
+                <select id="filterLocality" class="form-select">
+                    <option value="">Todas las localidades</option>
+                    <option value="Usaquén">Usaquén</option>
+                    <option value="Chapinero">Chapinero</option>
+                    <option value="Santa Fe">Santa Fe</option>
+                    <option value="San Cristóbal">San Cristóbal</option>
+                    <option value="Usme">Usme</option>
+                    <option value="Tunjuelito">Tunjuelito</option>
+                    <option value="Bosa">Bosa</option>
+                    <option value="Kennedy">Kennedy</option>
+                    <option value="Fontibón">Fontibón</option>
+                    <option value="Engativá">Engativá</option>
+                    <option value="Suba">Suba</option>
+                    <option value="Barrios Unidos">Barrios Unidos</option>
+                    <option value="Teusaquillo">Teusaquillo</option>
+                </select>
+            </div>
+            
+            <!-- Filtro por categoría -->
+            <div class="filter-section mb-4">
+                <h6 class="filter-title">
+                    <i class="fas fa-utensils me-2 text-primary"></i>
+                    Categoría de comida
+                </h6>
+                <div class="category-filters-grid">
+                    <button class="category-filter-item active" data-category="todos">
+                        <i class="fas fa-th-large"></i>
+                        <span>Todos</span>
+                    </button>
+                    <button class="category-filter-item" data-category="desayunos">
+                        <i class="fas fa-egg"></i>
+                        <span>Desayunos</span>
+                    </button>
+                    <button class="category-filter-item" data-category="almuerzos">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <span>Almuerzos</span>
+                    </button>
+                    <button class="category-filter-item" data-category="hamburguesas">
+                        <i class="fas fa-hamburger"></i>
+                        <span>Hamburguesas</span>
+                    </button>
+                    <button class="category-filter-item" data-category="pizza">
+                        <i class="fas fa-pizza-slice"></i>
+                        <span>Pizza</span>
+                    </button>
+                    <button class="category-filter-item" data-category="postres">
+                        <i class="fas fa-ice-cream"></i>
+                        <span>Postres</span>
+                    </button>
+                    <button class="category-filter-item" data-category="bebidas">
+                        <i class="fas fa-glass-whiskey"></i>
+                        <span>Bebidas</span>
+                    </button>
+                    <button class="category-filter-item" data-category="ensaladas">
+                        <i class="fas fa-salad-bowl"></i>
+                        <span>Ensaladas</span>
+                    </button>
+                    <button class="category-filter-item" data-category="perros-calientes">
+                        <i class="fas fa-hotdog"></i>
+                        <span>Perros</span>
+                    </button>
+                    <button class="category-filter-item" data-category="salchipapas">
+                        <i class="fas fa-bacon"></i>
+                        <span>Salchipapas</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filtro por precio -->
+            <div class="filter-section mb-4">
+                <h6 class="filter-title">
+                    <i class="fas fa-dollar-sign me-2 text-success"></i>
+                    Rango de precio
+                </h6>
+                <div class="price-range">
+                    <label class="form-label" for="priceRange">
+                        Hasta: <strong id="priceRangeValue">S/ 50</strong>
+                    </label>
+                    <input id="priceRange" class="form-range" type="range"
+                           min="0" max="100" value="50" step="5">
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>S/ 0</span>
+                        <span>S/ 100+</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtro por calificación -->
+            <div class="filter-section mb-4">
+                <h6 class="filter-title">
+                    <i class="fas fa-star me-2 text-warning"></i>
+                    Calificación mínima
+                </h6>
+                <div class="rating-filters">
+                    <button class="rating-filter-btn active" data-rating="0">
+                        <span>Todas</span>
+                    </button>
+                    <button class="rating-filter-btn" data-rating="4">
+                        <i class="fas fa-star"></i>
+                        <span>4+</span>
+                    </button>
+                    <button class="rating-filter-btn" data-rating="4.5">
+                        <i class="fas fa-star"></i>
+                        <span>4.5+</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Opciones adicionales -->
+            <div class="filter-section mb-4">
+                <h6 class="filter-title">
+                    <i class="fas fa-check-circle me-2 text-info"></i>
+                    Opciones adicionales
+                </h6>
+                <div class="form-check mb-2">
+                    <input id="filterDiscount" class="form-check-input" type="checkbox">
+                    <label class="form-check-label" for="filterDiscount">
+                        Con descuento
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input id="filterFreeDelivery" class="form-check-input" type="checkbox">
+                    <label class="form-check-label" for="filterFreeDelivery">
+                        Envío gratis
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input id="filterNewVendors" class="form-check-input" type="checkbox">
+                    <label class="form-check-label" for="filterNewVendors">
+                        Nuevos puestos
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Botones de acción -->
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-check me-2"></i>Aplicar filtros
+                </button>
+                <button class="btn btn-outline-secondary" onclick="clearFilters()">
+                    <i class="fas fa-times me-2"></i>Limpiar filtros
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer principal -->
+    <section class="footer">
+        <div class="container text-center">
+            <div class="row align-items-center">
+                
+                <div class="col">
+                    <p class="footer-titulo">Nosotros</p>
+                    <div><a class="footer-text" th:href="@{/quienes-somos}">Quienes somos</a> <a class="footer-text"
+                                                                                                 href="#">Equipo</a> <a
+                        class="footer-text" th:href="@{/testimonios}">Testimonios</a></div>
+                </div>
+                
+                <div class="col">
+                    <p class="footer-titulo">Soporte</p>
+                    <div><a class="footer-text" href="#">Contáctanos</a> <a class="footer-text" href="#">PQRS</a> <a
+                        class="footer-text" href="#">FAQ</a></div>
+                </div>
+                
+                <div class="col"><img class="footer-logo" alt="" th:src="@{/img/logo_sbr.png}"></div>
+                
+                <div class="col">
+                    <p class="footer-titulo">Plataformas</p>
+                    <a href="#"><img class="playstore" alt="" th:src="@{/img/playstore.png}"></a>
+                    <a href="#"><img class="appstore" alt="" th:src="@{/img/appstore.png}"></a>
+                </div>
+                
+                <div class="col">
+                    <p class="footer-titulo">Redes sociales</p>
+                    <div class="footer-container-redsocial">
+                        <a class="footer-redsocial fondo-facebook" href="#"><img class="icono-redsocial facebook"
+                                                                                 alt=""
+                                                                                 th:src="@{/img/facebook.png}"></a>
+                        <a class="footer-redsocial fondo-instagram" href="#"><img class="icono-redsocial instagram"
+                                                                                  alt=""
+                                                                                  th:src="@{/img/instagram.png}"></a>
+                        <a class="footer-redsocial fondo-twitter" href="#"><img class="icono-redsocial twitter"
+                                                                                alt="" th:src="@{/img/twitter.png}"></a>
+                        <a class="footer-redsocial fondo-linkedin" href="#"><img class="icono-redsocial linkedin"
+                                                                                 alt=""
+                                                                                 th:src="@{/img/linkedin.png}"></a>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer legal -->
+<footer>
+    <div class="footer-container">
+        <a class="footer-footer-link" href="#">Política de privacidad</a>
+        <a class="footer-footer-link" th:href="@{/terminos-condiciones}">Términos y condiciones</a>
+        <a class="footer-footer-link" th:href="@{/mapa-navegacion}">Mapa de navegación</a>
+        <p class="footer-footer-text">© 2023 Sabor Bajo El Radar. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/cliente/cliente-home.js}"></script>
+</body>
 </html>

@@ -13,12 +13,12 @@ import java.util.Objects;
 public class DetalleCompraDto implements Serializable {
     private final Integer id;
     private final CompraDto compraIdCompra;
-    private final ProductoDto producto;
+    private final ProductoDTO producto;
     private final Integer cantidad;
     private final BigDecimal precioUnitario;
     private final BigDecimal subtotal;
 
-    public DetalleCompraDto(Integer id, CompraDto compraIdCompra, ProductoDto producto, Integer cantidad, BigDecimal precioUnitario, BigDecimal subtotal) {
+    public DetalleCompraDto(Integer id, CompraDto compraIdCompra, ProductoDTO producto, Integer cantidad, BigDecimal precioUnitario, BigDecimal subtotal) {
         this.id = id;
         this.compraIdCompra = compraIdCompra;
         this.producto = producto;
@@ -35,7 +35,7 @@ public class DetalleCompraDto implements Serializable {
         return compraIdCompra;
     }
 
-    public ProductoDto getProducto() {
+    public ProductoDTO getProducto() {
         return producto;
     }
 

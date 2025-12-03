@@ -1,0 +1,295 @@
+/* ========== ADDRESSES PANEL ========== */
+.addresses-panel {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+.addresses-panel h4 {
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+/* ========== SEARCH ADDRESS BOX ========== */
+.search-address-box .input-group-text {
+    border-right: none;
+    border-radius: 25px 0 0 25px;
+}
+
+.search-address-box .form-control {
+    border-left: none;
+    border-radius: 0 25px 25px 0;
+    padding-left: 0;
+}
+
+.search-address-box .form-control:focus {
+    border-color: #e0e0e0;
+    box-shadow: none;
+}
+
+/* ========== SAVED ADDRESSES ========== */
+.saved-addresses {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.address-card {
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.address-card:hover {
+    border-color: #ff6b35;
+    background: white;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.address-card.active {
+    border-color: #ff6b35;
+    background: rgba(255, 107, 53, 0.05);
+}
+
+.address-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.address-tag.tag-casa {
+    color: #ff6b35;
+    border: 1px solid #ff6b35;
+}
+
+.address-tag.tag-trabajo {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+}
+
+.address-tag.tag-otro {
+    color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+.address-card.default-address {
+    border-color: #28a745;
+}
+
+.address-card.default-address::before {
+    content: 'Predeterminada';
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #28a745;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.address-text {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.address-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.address-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-use-address {
+    background: #ff6b35;
+    color: white;
+}
+
+.btn-use-address:hover {
+    background: #e55a2b;
+}
+
+.btn-edit-address {
+    background: #e9ecef;
+    color: #333;
+}
+
+.btn-edit-address:hover {
+    background: #dee2e6;
+}
+
+.btn-delete-address {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-delete-address:hover {
+    background: #c82333;
+}
+
+/* ========== MAP PANEL ========== */
+.map-panel {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-header {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ff6b35, #ff8c5a);
+    color: white;
+}
+
+#map {
+    width: 100%;
+    height: 500px;
+    z-index: 1;
+}
+
+/* ========== SELECTED LOCATION INFO ========== */
+.selected-location-info {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 3px solid #ff6b35;
+}
+
+/* ========== ADDRESS TAGS (MODAL) ========== */
+.address-tags {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.address-tags input[type="radio"] {
+    display: none;
+}
+
+.address-tags label {
+    flex: 1;
+    min-width: 120px;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.address-tags label i {
+    font-size: 1.5rem;
+}
+
+.address-tags input[type="radio"]:checked + label {
+    border-color: #ff6b35;
+    background: rgba(255, 107, 53, 0.05);
+    color: #ff6b35;
+}
+
+.address-tags label:hover {
+    border-color: #ff6b35;
+}
+
+/* ========== LEAFLET CUSTOM STYLES ========== */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+}
+
+.leaflet-popup-content {
+    margin: 1rem;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 991px) {
+    .addresses-panel {
+        max-height: none;
+        margin-bottom: 2rem;
+    }
+
+    #map {
+        height: 400px;
+    }
+
+    .address-tags {
+        flex-direction: column;
+    }
+
+    .address-tags label {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .addresses-panel {
+        padding: 1.5rem;
+    }
+
+    .map-header {
+        padding: 1rem;
+    }
+
+    .selected-location-info {
+        padding: 1rem;
+    }
+
+    #map {
+        height: 350px;
+    }
+
+    .address-actions {
+        flex-direction: column;
+    }
+}
+
+/* ========== SCROLLBAR STYLING ========== */
+.addresses-panel::-webkit-scrollbar,
+.saved-addresses::-webkit-scrollbar {
+    width: 6px;
+}
+
+.addresses-panel::-webkit-scrollbar-track,
+.saved-addresses::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.addresses-panel::-webkit-scrollbar-thumb,
+.saved-addresses::-webkit-scrollbar-thumb {
+    background: #ff6b35;
+    border-radius: 3px;
+}
+
+.addresses-panel::-webkit-scrollbar-thumb:hover,
+.saved-addresses::-webkit-scrollbar-thumb:hover {
+    background: #e55a2b;
+}
