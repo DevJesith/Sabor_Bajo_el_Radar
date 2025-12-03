@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface NegocioRepository extends JpaRepository<Negocio, Integer> {
+public interface NegocioRepository extends JpaRepository<Negocio, Long> {
 
     // Ejecuta una consulta JPQL sobre la entidad Negocio.
     // Cuenta cuántos negocios hay en cada combinación de estado y aprobación
@@ -30,4 +30,6 @@ public interface NegocioRepository extends JpaRepository<Negocio, Integer> {
 
     // Un número entero (long) con la cantidad total de negocios que están pendientes de aprobación.
     long negociosPendiente();
+
+    List<Negocio> findByVendedorId(Long vendedorId);
 }

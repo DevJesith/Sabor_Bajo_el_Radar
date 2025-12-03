@@ -1,5 +1,6 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -9,20 +10,23 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "negocio")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Negocio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_negocio", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "vendedor_id", nullable = false)
+    @JsonIgnoreProperties("negocios")
     private Vendedor vendedor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "admin_id")
+    @JsonIgnoreProperties("negocios")
     private Admin admin;
 
     @Column(name = "nombre_negocio", nullable = false, length = 100)
@@ -48,7 +52,7 @@ public class Negocio {
     @ColumnDefault("'inactivo'")
     @Lob
     @Column(name = "estado_negocio", nullable = false)
-    private String estadoNegocio;
+    private String estadoNegocio = "inactivo";
 
     @Lob
     @Column(name = "esta_legalizado", nullable = false)
@@ -57,7 +61,7 @@ public class Negocio {
     @ColumnDefault("'pendiente'")
     @Lob
     @Column(name = "aprobado", nullable = false)
-    private String aprobado;
+    private String aprobado = "pendiente";
 
     @Column(name = "fecha_aprobacion")
     private Instant fechaAprobacion;
@@ -66,11 +70,15 @@ public class Negocio {
     @Column(name = "motivo_rechazo")
     private String motivoRechazo;
 
-    public Integer getId() {
+    @Lob // Usamos @Lob para permitir strings muy largos (para imágenes en base64)
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -178,4 +186,11 @@ public class Negocio {
         this.motivoRechazo = motivoRechazo;
     }
 
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
+    }
 }
