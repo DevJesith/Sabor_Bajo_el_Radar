@@ -1,5 +1,6 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -9,16 +10,17 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "producto")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "vendedor_id", nullable = false)
-    private Vendedor vendedor;
+    @JoinColumn(name = "negocio_id", nullable = false)
+    private Negocio negocio;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
@@ -37,20 +39,20 @@ public class Producto {
     @Column(name = "categoria", nullable = false, length = 100)
     private String categoria;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Vendedor getVendedor() {
-        return vendedor;
+    public Negocio getNegocio() {
+        return negocio;
     }
 
-    public void setVendedor(Vendedor vendedor) {
-        this.vendedor = vendedor;
+    public void setNegocio(Negocio negocio) {
+        this.negocio = negocio;
     }
 
     public String getNombre() {
