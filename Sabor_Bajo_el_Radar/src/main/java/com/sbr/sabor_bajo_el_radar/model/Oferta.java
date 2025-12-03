@@ -1,5 +1,6 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -9,21 +10,25 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "oferta")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Oferta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "vendedor_id", nullable = false)
-    private Vendedor vendedor;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
+
+    // --- AÑADIR ESTOS CAMPOS ---
+    @Column(name = "titulo", nullable = false, length = 100)
+    private String titulo;
+
+    @Column(name = "descripcion")
+    private String descripcion;
 
     @Column(name = "descuento", nullable = false, precision = 5, scale = 2)
     private BigDecimal descuento;
@@ -34,21 +39,14 @@ public class Oferta {
     @Column(name = "fecha_expiracion", nullable = false)
     private LocalDate fechaExpiracion;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Vendedor getVendedor() {
-        return vendedor;
-    }
-
-    public void setVendedor(Vendedor vendedor) {
-        this.vendedor = vendedor;
-    }
 
     public Producto getProducto() {
         return producto;
@@ -56,6 +54,22 @@ public class Oferta {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public BigDecimal getDescuento() {
