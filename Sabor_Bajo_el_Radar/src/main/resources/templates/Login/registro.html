@@ -148,8 +148,22 @@
                     </label>
                 </div>
             </div>
-            <span class="error-message" th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}"></span>
+
+            <div class="rol-option">
+                <input type="radio"
+                       id="rol_administrador"
+                       th:field="*{rol}"
+                       name="opciones"
+                       value="ADMINISTRADOR"
+                       required>
+                <label for="rol_administrador" class="rol-label">
+                    <span class="rol-icon">🤖</span>
+                    <span class="rol-name">Administrador</span>
+                    <span class="rol-description">Monitorea el sistema</span>
+                </label>
+            </div>
         </div>
+            <span class="error-message" th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}"></span>
 
         <!-- Botón de Registro -->
         <button type="submit" class="btn-registro">Crear Cuenta</button>
