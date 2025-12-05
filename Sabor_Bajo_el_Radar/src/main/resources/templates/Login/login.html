@@ -26,50 +26,52 @@
     <!-- fomulario de login-->
     <div class="w-full flex-1 flex items-center rounded-xl text-white mt-4 justify-center sm:mt-0">
 
-        <form class=" px-10 py-4 flex flex-col w-full sm:px-20 lg:px-70"  th:action="@{/login}" method="POST">
+        <div class="w-full flex flex-col items-center">
+            <form id="loginForm" class="px-10 py-4 flex flex-col w-full sm:px-20 lg:px-70"  th:action="@{/login}" method="POST">
 
-            <div th:if="${exito}" class="alert alert-success text-center" th:text="${exito}"></div>
-            <div th:if="${param.error}" class="text-center">
-                <p style="color:red;">Correo o contraseña incorrectos</p>
-            </div>
-
-            <div th:if="${param.logout}" class="text-center">
-                <p style="color:green;">Sesión cerrada correctamente</p>
-            </div>
-
-            <h1 class="text-3xl font-bold text-center mb-4 sm:text-4xl lg:text-5xl lg:mb-10">
-                Iniciar Sesion
-            </h1>
-            <!-- Correo -->
-            <label for="correo" class="text-lg text-center mb-2">Correo</label>
-            <input type="email" id="correo" class="border-white border-1 rounded-lg mb-2 px-2" name="correo" aria-describedby="emailHelpBlock" required>
-            <div id="emailHelpBlock" class="text-xs text-center text-gray-500 mb-4">
-                Tu correo no puede tener mas de 50 caracteres
-            </div>
-
-            <!--    Contrasena -->
-
-            <label for="contrasena" class="text-lg text-center mb-2">Contraseña</label>
-            <input type="password" id="contrasena" class="border-white border-1 rounded-lg mb-2 px-2" name="contrasena" aria-describedby="passwordHelpBlock" required>
-            <div id="passwordHelpBlock" class="text-xs text-center text-gray-500 mb-6">
-                Tu contrasena no puede tener mas de 20 caracteres
-            </div>
-
-            <!--    Botones -->
-            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-5">
-                <div class="text-center">
-                    <button class="border-gray-500 border-1 rounded-lg w-40 py-2 bg-white text-black hover:bg-black hover:text-white transition duration-300 ease-in-out hover:cursor-pointer hover:scale-95"  type="submit">Iniciar Sesion</button>
+                <div th:if="${exito}" class="alert alert-success text-center" th:text="${exito}"></div>
+                <div th:if="${param.error}" class="text-center">
+                    <p style="color:red;">Correo o contraseña incorrectos</p>
                 </div>
 
+                <div th:if="${param.logout}" class="text-center">
+                    <p style="color:green;">Sesión cerrada correctamente</p>
+                </div>
+
+                <h1 class="text-3xl font-bold text-center mb-4 sm:text-4xl lg:text-5xl lg:mb-10">
+                    Iniciar Sesion
+                </h1>
+                <!-- Correo -->
+                <label for="correo" class="text-lg text-center mb-2">Correo</label>
+                <input type="email" id="correo" class="border-white border-1 rounded-lg mb-2 px-2" name="correo" aria-describedby="emailHelpBlock" required>
+                <div id="emailHelpBlock" class="text-xs text-center text-gray-500 mb-4">
+                    Tu correo no puede tener mas de 50 caracteres
+                </div>
+
+                <!--    Contrasena -->
+
+                <label for="contrasena" class="text-lg text-center mb-2">Contraseña</label>
+                <input type="password" id="contrasena" class="border-white border-1 rounded-lg mb-2 px-2" name="contrasena" aria-describedby="passwordHelpBlock" required>
+                <div id="passwordHelpBlock" class="text-xs text-center text-gray-500 mb-6">
+                    Tu contrasena no puede tener mas de 20 caracteres
+                </div>
+
+            </form>
+
+            <!--    Botones -->
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-5 items-center pb-4">
+                <div class="text-center">
+                    <button form="loginForm" class="border-gray-500 border-1 rounded-lg w-40 py-2 bg-white text-black hover:bg-black hover:text-white transition duration-300 ease-in-out hover:cursor-pointer hover:scale-95"  type="submit">Iniciar Sesion</button>
+                </div>
                 <div class="text-center">
                     <a th:href="@{/registro}" class="text-white">
-                        <button class="border-gray-500 border-1 rounded-lg w-40 py-2 bg-white text-black mb-2 hover:bg-black hover:text-white transition duration-300 ease-in-out hover:cursor-pointer hover:scale-95">
+                        <button class="border-gray-500 border-1 rounded-lg w-40 py-2 bg-white text-black hover:bg-black hover:text-white transition duration-300 ease-in-out hover:cursor-pointer hover:scale-95">
                             registrarte
                         </button>
                     </a>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </main>
 <footer class="text-center">
