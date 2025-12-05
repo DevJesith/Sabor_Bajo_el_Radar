@@ -8,12 +8,17 @@
     
     <title>Dashboard Vendedor - SBR</title>
     
+    <!-- Bootstrap CSS y Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    
+    <!-- CSS Personalizados -->
     <link th:href="@{/css/vendedor/panel-vendedor.css}" rel="stylesheet"/>
     <link th:href="@{/css/vendedor/side-bar.css}" rel="stylesheet"/>
     
+    <!-- Chart.js y SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -29,9 +34,8 @@
         <!-- Sidebar -->
         <div id="sidebar" class="col-md-3 col-lg-2 sidebar">
             <div class="text-center py-4 border-bottom">
-                <a class="d-inline-block mb-3" href="#">
-                    <img class="logo-sidebar" src="https://via.placeholder.com/50/ff6b35/FFFFFF?text=SBR" alt="Logo">
-                </a>
+                <a class="d-inline-block mb-3" href="#"><img class="logo-sidebar" alt="Logo"
+                                                             th:src="@{/img/logo/logo-SBR.png}"></a>
                 <div class="vendor-avatar mx-auto mb-2"><i class="fas fa-user-circle"></i></div>
                 <h6 id="vendorNameSidebar" class="text-white mb-0">Vendedor</h6>
                 <small class="text-muted">Panel de Control</small>
@@ -48,6 +52,8 @@
                     class="sidebar-text">Productos</span></a>
                 <a class="sidebar-link" href="#" data-section="ofertas"><i class="fas fa-tags"></i> <span
                     class="sidebar-text">Ofertas</span></a>
+                <a class="sidebar-link" href="#" data-section="perfil"><i class="fas fa-user-cog"></i> <span
+                    class="sidebar-text">Mi Perfil</span></a>
             </div>
             
             <div class="mt-auto p-3 border-top">
@@ -64,8 +70,10 @@
             
             <!-- SECCIÓN: DASHBOARD -->
             <div id="dashboard" class="content-section active">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Dashboard</h2>
+                <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Dashboard</h2>
+                    <div id="dashboardFiltroContainer" class="d-flex align-items-center" style="display: none;"><label
+                        class="form-label me-2 mb-0" for="dashboardPuestoFiltro">Ver datos de:</label><select
+                        id="dashboardPuestoFiltro" class="form-select" style="width: 250px;"></select></div>
                 </div>
                 <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -76,7 +84,6 @@
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ventas
                                             (Hoy)
                                         </div>
-                                        <!-- CAMBIO DE MONEDA -->
                                         <div id="totalVentas" class="h5 mb-0 font-weight-bold text-gray-800">$ 0</div>
                                     </div>
                                     <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
@@ -107,7 +114,6 @@
                                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ticket
                                             Promedio
                                         </div>
-                                        <!-- CAMBIO DE MONEDA -->
                                         <div id="ticketPromedio" class="h5 mb-0 font-weight-bold text-gray-800">$ 0
                                         </div>
                                     </div>
@@ -137,9 +143,8 @@
                 <div class="row">
                     <div class="col-lg-7 mb-4">
                         <div class="card shadow">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Ventas de la Semana</h6>
-                            </div>
+                            <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Ventas de la
+                                Semana</h6></div>
                             <div class="card-body">
                                 <canvas id="salesChart"></canvas>
                             </div>
@@ -147,9 +152,8 @@
                     </div>
                     <div class="col-lg-5 mb-4">
                         <div class="card shadow">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Productos Más Vendidos</h6>
-                            </div>
+                            <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Productos Más
+                                Vendidos</h6></div>
                             <div class="card-body">
                                 <canvas id="productsChart"></canvas>
                             </div>
@@ -160,8 +164,8 @@
             
             <!-- SECCIÓN: PEDIDOS -->
             <div id="pedidos" class="content-section">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Gestión de Pedidos</h2>
+                <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Gestión de
+                    Pedidos</h2>
                     <button class="btn btn-info" onclick="generarPedidoDemo()"><i class="fas fa-magic me-2"></i>Generar
                         Pedido Demo
                     </button>
@@ -171,10 +175,9 @@
             
             <!-- Sección: Mis Puestos -->
             <div id="mis-puestos" class="content-section">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Mis Puestos</h2>
-                    <button class="btn btn-primary" onclick="mostrarModalPuesto()">
-                        <i class="fas fa-plus me-2"></i>Nuevo Puesto
+                <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Mis Puestos</h2>
+                    <button class="btn btn-primary" onclick="mostrarModalPuesto()"><i class="fas fa-plus me-2"></i>Nuevo
+                        Puesto
                     </button>
                 </div>
                 <div id="listaPuestos" class="row"></div>
@@ -182,139 +185,179 @@
             
             <!-- Sección: Productos -->
             <div id="productos" class="content-section">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Productos</h2>
-                    <button class="btn btn-primary" onclick="mostrarModalProducto()">
-                        <i class="fas fa-plus me-2"></i>Nuevo Producto
+                <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Productos</h2>
+                    <button class="btn btn-primary" onclick="mostrarModalProducto()"><i class="fas fa-plus me-2"></i>Nuevo
+                        Producto
                     </button>
                 </div>
-                <div id="alertNoPuestosParaProductos" class="alert alert-warning" style="display: none;">
-                    Debes crear al menos un puesto para poder agregar productos.
+                <div id="alertNoPuestosParaProductos" class="alert alert-warning" style="display: none;">Debes crear al
+                    menos un puesto para poder agregar productos.
                 </div>
                 <div id="listaProductos" class="row"></div>
             </div>
             
             <!-- Sección: Ofertas -->
             <div id="ofertas" class="content-section">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Ofertas</h2>
-                    <button class="btn btn-primary" onclick="mostrarModalOferta()">
-                        <i class="fas fa-plus me-2"></i>Nueva Oferta
+                <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Ofertas</h2>
+                    <button class="btn btn-primary" onclick="mostrarModalOferta()"><i class="fas fa-plus me-2"></i>Nueva
+                        Oferta
                     </button>
                 </div>
-                <div id="alertNoProductosParaOfertas" class="alert alert-warning" style="display: none;">
-                    Debes crear al menos un producto para poder agregar ofertas.
+                <div id="alertNoProductosParaOfertas" class="alert alert-warning" style="display: none;">Debes crear al
+                    menos un producto para poder agregar ofertas.
                 </div>
                 <div id="listaOfertas" class="row"></div>
+            </div>
+            
+            <!-- SECCIÓN DE PERFIL -->
+            <div id="perfil" class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Mi Perfil</h2></div>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center"><h5
+                        class="mb-0">Mis Datos Personales</h5>
+                        <button id="btnEditarPerfil" class="btn btn-primary btn-sm"><i
+                            class="fas fa-pencil-alt me-2"></i>Editar Perfil
+                        </button>
+                    </div>
+                    <div id="perfilDisplay" class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><strong>Nombres:</strong>
+                                <p id="perfilNombres" class="text-muted">Cargando...</p></div>
+                            <div class="col-md-6 mb-3"><strong>Apellidos:</strong>
+                                <p id="perfilApellidos" class="text-muted">Cargando...</p></div>
+                            <div class="col-md-6 mb-3"><strong>Documento:</strong>
+                                <p id="perfilDocumento" class="text-muted">Cargando...</p></div>
+                            <div class="col-md-6 mb-3"><strong>Teléfono:</strong>
+                                <p id="perfilTelefono" class="text-muted">Cargando...</p></div>
+                            <div class="col-md-12"><strong>Correo Electrónico:</strong>
+                                <p id="perfilCorreo" class="text-muted">Cargando...</p></div>
+                        </div>
+                    </div>
+                    <div id="perfilEditForm" class="card-body" style="display: none;">
+                        <form id="formActualizarPerfil"><h6 class="mt-2">Información Personal</h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 mb-3"><label class="form-label"
+                                                                  for="editNombres">Nombres</label><input id="editNombres"
+                                                                                                           class="form-control"
+                                                                                                           type="text"
+                                                                                                           required>
+                                </div>
+                                <div class="col-md-6 mb-3"><label class="form-label"
+                                                                  for="editApellidos">Apellidos</label><input id="editApellidos"
+                                                                                                             class="form-control"
+                                                                                                             type="text"
+                                                                                                             required>
+                                </div>
+                                <div class="col-md-6 mb-3"><label class="form-label"
+                                                                  for="editDocumento">Documento</label><input id="editDocumento"
+                                                                                                             class="form-control"
+                                                                                                             type="text"
+                                                                                                             required>
+                                </div>
+                                <div class="col-md-6 mb-3"><label class="form-label" for="editTelefono">Teléfono</label><input
+                                    id="editTelefono" class="form-control" type="text" required></div>
+                            </div>
+                            <h6 class="mt-4">Cambiar Contraseña (opcional)</h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 mb-3"><label class="form-label" for="editPassActual">Contraseña
+                                    Actual</label><input id="editPassActual" class="form-control" type="password"
+                                                         placeholder="Ingresa tu contraseña actual"></div>
+                                <div class="col-md-6 mb-3"><label class="form-label" for="editPassNueva">Nueva
+                                    Contraseña</label><input id="editPassNueva" class="form-control" type="password"
+                                                             placeholder="Ingresa la nueva contraseña"></div>
+                            </div>
+                            <div class="mt-3 text-end">
+                                <button id="btnCancelarEdicion" class="btn btn-secondary" type="button">Cancelar
+                                </button>
+                                <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer bg-light text-end">
+                        <button id="btnEliminarCuenta" class="btn btn-danger"><i class="fas fa-trash-alt me-2"></i>Eliminar
+                            mi Cuenta
+                        </button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 </div>
 
-<!-- Modales (sin cambios estructurales) -->
+<!-- Modal: Crear/Editar Puesto -->
 <div id="modalPuesto" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <form id="formPuesto" onsubmit="guardarPuesto(event)">
-                <div class="modal-header">
-                    <h5 id="modalPuestoTitle" class="modal-title">Nuevo Puesto</h5>
+                <div class="modal-header"><h5 id="modalPuestoTitle" class="modal-title">Nuevo Puesto</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <input id="puestoId" type="hidden">
+                <div class="modal-body"><input id="puestoId" type="hidden">
                     <div class="row">
-                        <!-- Columna del Formulario -->
-                        <div class="col-lg-7">
-                            <h6><i class="fas fa-edit me-2"></i>Información del Puesto</h6>
+                        <div class="col-lg-7"><h6><i class="fas fa-edit me-2"></i>Información del Puesto</h6>
                             <hr class="mt-2 mb-4">
-                            
-                            <!-- Área para subir imagen -->
-                            <div class="mb-4">
-                                <label class="form-label">Imagen principal *</label>
+                            <div class="mb-4"><label class="form-label">Imagen principal *</label>
                                 <div id="imageUploadArea" class="image-upload-area"
                                      onclick="document.getElementById('puestoImagenInput').click()">
-                                    <div id="imageUploadContent" class="text-center">
-                                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i>
-                                        <p class="text-muted mb-0">Haz clic para subir una imagen</p>
-                                        <small class="text-muted">Recomendado: 800x600px</small>
-                                    </div>
+                                    <div id="imageUploadContent" class="text-center"><i
+                                        class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i>
+                                        <p class="text-muted mb-0">Haz clic para subir una imagen</p><small
+                                            class="text-muted">Recomendado: 800x600px</small></div>
                                 </div>
-                                <input id="puestoImagenInput" class="d-none" type="file" accept="image/*">
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label" for="puestoNombre">Nombre del puesto *</label>
-                                <input id="puestoNombre" class="form-control" type="text" required
-                                       oninput="actualizarVistaPrevia()">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="puestoDescripcion">Descripción breve *</label>
-                                <textarea id="puestoDescripcion" class="form-control" rows="3" required
-                                          oninput="actualizarVistaPrevia()"></textarea>
+                                <input id="puestoImagenInput" class="d-none" type="file" accept="image/*"></div>
+                            <div class="mb-3"><label class="form-label" for="puestoNombre">Nombre del puesto
+                                *</label><input id="puestoNombre" class="form-control" type="text" required
+                                                oninput="actualizarVistaPrevia()"></div>
+                            <div class="mb-3"><label class="form-label" for="puestoDescripcion">Descripción breve
+                                *</label><textarea id="puestoDescripcion" class="form-control" rows="3" required
+                                                   oninput="actualizarVistaPrevia()"></textarea></div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3"><label class="form-label" for="puestoUbicacion">Ubicación
+                                    (Localidad/Barrio) *</label><input id="puestoUbicacion" class="form-control"
+                                                                       type="text" required
+                                                                       oninput="actualizarVistaPrevia()"></div>
+                                <div class="col-md-6 mb-3"><label class="form-label" for="puestoCategoria">Tipo de
+                                    negocio (Categoría) *</label><select id="puestoCategoria" class="form-select"
+                                                                         required onchange="actualizarVistaPrevia()">
+                                    <option value="Comida Rápida">Comida Rápida</option>
+                                    <option value="Comida Criolla">Comida Criolla</option>
+                                    <option value="Postres">Postres</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Desayunos">Desayunos</option>
+                                </select></div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="puestoUbicacion">Ubicación (Localidad/Barrio)
-                                        *</label>
-                                    <input id="puestoUbicacion" class="form-control" type="text" required
-                                           oninput="actualizarVistaPrevia()">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="puestoCategoria">Tipo de negocio (Categoría)
-                                        *</label>
-                                    <select id="puestoCategoria" class="form-select" required
-                                            onchange="actualizarVistaPrevia()">
-                                        <option value="Comida Rápida">Comida Rápida</option>
-                                        <option value="Comida Criolla">Comida Criolla</option>
-                                        <option value="Postres">Postres</option>
-                                        <option value="Bebidas">Bebidas</option>
-                                        <option value="Desayunos">Desayunos</option>
-                                    </select>
-                                </div>
+                                <div class="col-md-6 mb-3"><label class="form-label" for="puestoEmail">Email de
+                                    contacto</label><input id="puestoEmail" class="form-control" type="email"></div>
+                                <div class="col-md-6 mb-3"><label class="form-label" for="puestoEstado">Estado del
+                                    puesto</label><select id="puestoEstado" class="form-select">
+                                    <option value="activo">Activo (Visible)</option>
+                                    <option value="inactivo">Inactivo (Oculto)</option>
+                                </select></div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="puestoEmail">Email de contacto</label>
-                                    <input id="puestoEmail" class="form-control" type="email">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="puestoEstado">Estado del puesto</label>
-                                    <select id="puestoEstado" class="form-select">
-                                        <option value="activo">Activo (Visible para clientes)</option>
-                                        <option value="inactivo">Inactivo (Oculto)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-check">
-                                <input id="puestoLegalizado" class="form-check-input" type="checkbox" required>
-                                <label class="form-check-label" for="puestoLegalizado">
-                                    Declaro que mi negocio cumple con las normativas locales.
-                                </label>
-                            </div>
+                            <div class="form-check"><input id="puestoLegalizado" class="form-check-input"
+                                                           type="checkbox" required><label class="form-check-label"
+                                                                                           for="puestoLegalizado">Declaro
+                                que mi negocio cumple con las normativas locales.</label></div>
                         </div>
-                        
-                        <!-- Columna de la Vista Previa -->
-                        <div class="col-lg-5">
-                            <h6><i class="fas fa-eye me-2"></i>Así lo verán tus clientes</h6>
+                        <div class="col-lg-5"><h6><i class="fas fa-eye me-2"></i>Así lo verán tus clientes</h6>
                             <hr class="mt-2 mb-4">
                             <div class="preview-container">
                                 <div class="preview-card">
-                                    <div class="preview-image">
-                                        <img id="previewImagen"
-                                             src="https://via.placeholder.com/400x300/e9ecef/6c757d?text=Sube+una+imagen"
-                                             alt="Vista previa del puesto">
-                                    </div>
-                                    <div class="preview-content">
-                                        <h5 id="previewNombre" class="preview-title">Nombre de tu Puesto</h5>
-                                        <div class="preview-category">
-                                            <span>Categoría:</span>
-                                            <span id="previewCategoriaBadge" class="preview-category-badge">Comida Rápida</span>
-                                        </div>
+                                    <div class="preview-image"><img id="previewImagen"
+                                                                    src="https://via.placeholder.com/400x300/e9ecef/6c757d?text=Sube+una+imagen"
+                                                                    alt="Vista previa"></div>
+                                    <div class="preview-content"><h5 id="previewNombre" class="preview-title">Nombre de
+                                        tu Puesto</h5>
+                                        <div class="preview-category"><span>Categoría:</span><span
+                                            id="previewCategoriaBadge"
+                                            class="preview-category-badge">Comida Rápida</span></div>
                                         <p id="previewUbicacion" class="preview-location mt-2"><i
                                             class="fas fa-map-marker-alt me-1"></i> Tu ubicación</p>
                                         <p id="previewDescripcion" class="preview-description mt-2">Aquí aparecerá la
-                                            descripción de tu negocio.</p>
-                                    </div>
+                                            descripción.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -329,6 +372,7 @@
     </div>
 </div>
 
+<!-- Modal: Crear/Editar Producto -->
 <div id="modalProducto" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -336,8 +380,7 @@
                 <div class="modal-header"><h5 id="modalProductoTitle" class="modal-title">Nuevo Producto</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <input id="productoId" type="hidden">
+                <div class="modal-body"><input id="productoId" type="hidden">
                     <div class="mb-3"><label class="form-label" for="productoPuestoId">Puesto al que pertenece *</label><select
                         id="productoPuestoId" class="form-select" required></select></div>
                     <div class="mb-3"><label class="form-label" for="productoNombre">Nombre del producto *</label><input
@@ -349,15 +392,13 @@
                             id="productoPrecio" class="form-control" type="number" step="0.01" min="0" required></div>
                         <div class="col-md-4 mb-3"><label class="form-label" for="productoStock">Stock *</label><input
                             id="productoStock" class="form-control" type="number" min="0" required></div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="productoCategoria">Categoría *</label>
-                            <select id="productoCategoria" class="form-select" required>
-                                <option value="Platos Fuertes">Platos Fuertes</option>
-                                <option value="Entradas">Entradas</option>
-                                <option value="Bebidas">Bebidas</option>
-                                <option value="Postres">Postres</option>
-                            </select>
-                        </div>
+                        <div class="col-md-4 mb-3"><label class="form-label" for="productoCategoria">Categoría *</label><select
+                            id="productoCategoria" class="form-select" required>
+                            <option value="Platos Fuertes">Platos Fuertes</option>
+                            <option value="Entradas">Entradas</option>
+                            <option value="Bebidas">Bebidas</option>
+                            <option value="Postres">Postres</option>
+                        </select></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -368,6 +409,8 @@
         </div>
     </div>
 </div>
+
+<!-- Modal: Crear/Editar Oferta -->
 <div id="modalOferta" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -375,8 +418,7 @@
                 <div class="modal-header"><h5 id="modalOfertaTitle" class="modal-title">Nueva Oferta</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <input id="ofertaId" type="hidden">
+                <div class="modal-body"><input id="ofertaId" type="hidden">
                     <div class="mb-3"><label class="form-label" for="ofertaProductoId">Producto en oferta
                         *</label><select id="ofertaProductoId" class="form-select" required></select></div>
                     <div class="mb-3"><label class="form-label" for="ofertaTitulo">Título de la oferta *</label><input
@@ -398,6 +440,40 @@
                     <button class="btn btn-primary" type="submit">Guardar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación para Eliminación Definitiva -->
+<div id="modalConfirmarEliminacion" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white"><h5 id="modalLabel" class="modal-title"><i
+                class="fas fa-exclamation-triangle me-2"></i>¡Acción Irreversible!</h5>
+                <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body"><p class="fs-5">Estás a punto de <strong>eliminar permanentemente</strong> tu
+                cuenta.</p>
+                <p>Esta acción no se puede deshacer. Toda tu información será borrada, incluyendo:</p>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item list-group-item-danger"><i class="fas fa-user-slash me-2"></i>Tus datos
+                        personales.
+                    </li>
+                    <li class="list-group-item list-group-item-danger"><i class="fas fa-store-slash me-2"></i><strong>Todos</strong>
+                        tus negocios creados.
+                    </li>
+                    <li class="list-group-item list-group-item-danger"><i
+                        class="fas fa-box-open me-2"></i><strong>Todos</strong> los productos y ofertas asociados.
+                    </li>
+                </ul>
+                <p class="fw-bold text-center mt-3">¿Estás absolutamente seguro de que deseas continuar?</p></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No, conservar mi cuenta</button>
+                <button id="btnConfirmarEliminacionDefinitiva" class="btn btn-danger" type="button">Sí, entiendo y
+                    quiero eliminar todo
+                </button>
+            </div>
         </div>
     </div>
 </div>

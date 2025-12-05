@@ -20,13 +20,13 @@ public class Negocio {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "vendedor_id", nullable = false)
-    @JsonIgnoreProperties("negocios")
+//    @JsonIgnoreProperties("negocios")
     private Vendedor vendedor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "admin_id")
-    @JsonIgnoreProperties("negocios")
+//    @JsonIgnoreProperties("negocios")
     private Admin admin;
 
     @Column(name = "nombre_negocio", nullable = false, length = 100)
@@ -60,11 +60,16 @@ public class Negocio {
 
     @ColumnDefault("'pendiente'")
     @Lob
-    @Column(name = "aprobado", nullable = false)
-    private String aprobado = "pendiente";
+    @Column(name = "estado", nullable = false)
+    private String estado = "pendiente";
 
     @Column(name = "fecha_aprobacion")
     private Instant fechaAprobacion;
+
+    // ⭐ CAMPO AÑADIDO: fecha_creacion
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "fecha_creacion")
+    private Instant fechaCreacion;
 
     @Lob
     @Column(name = "motivo_rechazo")
@@ -162,12 +167,12 @@ public class Negocio {
         this.estaLegalizado = estaLegalizado;
     }
 
-    public String getAprobado() {
-        return aprobado;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setAprobado(String aprobado) {
-        this.aprobado = aprobado;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Instant getFechaAprobacion() {
@@ -176,6 +181,14 @@ public class Negocio {
 
     public void setFechaAprobacion(Instant fechaAprobacion) {
         this.fechaAprobacion = fechaAprobacion;
+    }
+
+    public Instant getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Instant fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public String getMotivoRechazo() {

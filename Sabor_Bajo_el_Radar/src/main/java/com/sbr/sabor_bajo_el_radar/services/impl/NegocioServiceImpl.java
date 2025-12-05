@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,16 +45,26 @@ public class NegocioServiceImpl implements NegocioService {
         negocio.setDescripcionNegocio(negocioDTO.getDescripcionNegocio());
         negocio.setUbicacionNegocio(negocioDTO.getUbicacionNegocio());
 
-        // --- LÍNEA CLAVE ---
-        // Asigna el nombre del propietario basándose en el usuario autenticado.
+        // Asigna el nombre del propietario basándose en el usuario autenticado
         String propietario = vendedor.getUsuario().getNombres() + " " + vendedor.getUsuario().getApellidos();
         negocio.setPropietarioNegocio(propietario);
 
         negocio.setTipoNegocio(negocioDTO.getTipoNegocio());
         negocio.setEmailNegocio(negocioDTO.getEmailNegocio());
-        negocio.setEstadoNegocio(negocioDTO.getEstadoNegocio() != null ? negocioDTO.getEstadoNegocio() : "inactivo");
+
+        // ⭐ CAMBIO IMPORTANTE: Siempre crear en estado inactivo
+        negocio.setEstadoNegocio("inactivo");
+
         negocio.setImagenUrl(negocioDTO.getImagenUrl());
-        negocio.setEstaLegalizado("no");
+        negocio.setEstaLegalizado(negocioDTO.getEstaLegalizado() != null ? negocioDTO.getEstaLegalizado() : "no");
+
+        // ⭐ LÍNEAS CRÍTICAS AÑADIDAS:
+        // Todo negocio nuevo debe estar pendiente de aprobación por el admin
+        negocio.setEstado("pendiente");
+        negocio.setFechaCreacion(Instant.now());
+        negocio.setMotivoRechazo(null);
+        negocio.setFechaAprobacion(null);
+        negocio.setAdmin(null);
 
         return negocioRepository.save(negocio);
     }
@@ -68,8 +79,15 @@ public class NegocioServiceImpl implements NegocioService {
                     negocio.setUbicacionNegocio(negocioDTO.getUbicacionNegocio());
                     negocio.setTipoNegocio(negocioDTO.getTipoNegocio());
                     negocio.setEmailNegocio(negocioDTO.getEmailNegocio());
-                    negocio.setEstadoNegocio(negocioDTO.getEstadoNegocio());
                     negocio.setImagenUrl(negocioDTO.getImagenUrl());
+                    negocio.setEstaLegalizado(negocioDTO.getEstaLegalizado());
+
+                    // ⭐ SOLO permitir cambiar el estado si el negocio está APROBADO
+                    // Si está pendiente o rechazado, el vendedor no puede activarlo por su cuenta
+                    if ("aprobado".equals(negocio.getEstado()) && negocioDTO.getEstadoNegocio() != null) {
+                        negocio.setEstadoNegocio(negocioDTO.getEstadoNegocio());
+                    }
+
                     return negocioRepository.save(negocio);
                 });
     }
