@@ -1,5 +1,6 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -9,6 +10,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "admin")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +21,6 @@ public class Admin {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
-    @ColumnDefault("'moderador'")
-    @Column(name = "cargo", nullable = false, length = 50)
-    private String cargo;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "fecha_asignacion", nullable = false)
@@ -44,13 +42,6 @@ public class Admin {
         this.usuario = usuario;
     }
 
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
 
     public Instant getFechaAsignacion() {
         return fechaAsignacion;

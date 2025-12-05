@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-// Hace referencia que esta clase va a maneja peticiones HTTP y devolvera datos directamente, no paginas HTML
-// Ademas combina dos cosas: @Controller que indica que es un controlador y @ResponseBody para que todos los metodos devuelvan datos formato JSON automaticamente
+/// / Hace referencia que esta clase va a maneja peticiones HTTP y devolvera datos directamente, no paginas HTML
+/// / Ademas combina dos cosas: @Controller que indica que es un controlador y @ResponseBody para que todos los metodos devuelvan datos formato JSON automaticamente
 @RestController
 
 // Anotacion de ruta base, siempre empezara por /api/dashboard

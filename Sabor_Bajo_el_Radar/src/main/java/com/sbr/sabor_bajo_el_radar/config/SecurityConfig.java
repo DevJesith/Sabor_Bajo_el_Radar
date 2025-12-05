@@ -38,33 +38,42 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas públicas
-                        .requestMatchers(
-                                "/",
-                                "/registro/**",
-                                "/login**",
-                                "/css/**",
-                                "/js/**",
-                                "/img/**",
-                                "/img/Quienes_Somos/**",
-                                "/img/testimonio/**",
-                                "/mapa-navegacion/**",
-                                "/terminos-y-condiciones/**",
-                                "/como-funciona/**",
-                                "/mantenimiento/**",
-                                "/quienes-somos/**",
-                                "/muro-social/**",
-                                "/productos/**",
-                                "/usuarios/**"
-                                //"/perfil/**"
-                        ).permitAll()
+                                // Rutas públicas
 
 
-                        // Solo el admin puede ver el Dashboard
-                        .requestMatchers("/Administrador/**").hasRole("ADMINISTRADOR")
+                                .requestMatchers(
+                                        "/",
+                                        "/registro/**",
+                                        "/login**",
+                                        "/css/**",
+                                        "/js/**",
+                                        "/img/**",
+                                        "/img/Quienes_Somos/**",
+                                        "/img/testimonio/**",
+                                        "/mapa-navegacion/**",
+                                        "/terminos-y-condiciones/**",
+                                        "/como-funciona/**",
+                                        "/mantenimiento/**",
+                                        "/quienes-somos/**",
+                                        "/muro-social/**",
+                                        "/productos/**",
+                                        "/usuarios/**"
+                                        //"/perfil/**"
+                                ).permitAll()
 
-                        // Las demás necesitan autenticación
-                        .anyRequest().authenticated()
+
+//                        // Solo el admin puede ver el Dashboard
+//                        .requestMatchers("/Administrador/**", "/admin/**").hasRole("ADMINISTRADOR")
+                                .requestMatchers(
+                                        "/dashboard/admin/**", // La página del panel
+                                        "/usuarios/**",       // Las páginas de formularios de usuario
+                                        "/api/admin/**",    // TODAS las APIs del administrador,
+                                        "/api/dashboard"
+                                ).hasRole("ADMINISTRADOR")
+
+
+                                // Las demás necesitan autenticación
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -81,10 +90,10 @@ public class SecurityConfig {
                                     .anyMatch(b -> b.getAuthority().equals("ROLE_CLIENTE"))) {
                                 response.sendRedirect("/cliente");
                             } else if (authentication.getAuthorities().stream()
-                                    .anyMatch(c -> c.getAuthority().equals("ROLE_VENDEDOR"))){
+                                    .anyMatch(c -> c.getAuthority().equals("ROLE_VENDEDOR"))) {
                                 response.sendRedirect("/vendedor");
-                            } else if(authentication.getAuthorities().stream()
-                                    .anyMatch(d -> d.getAuthority().equals("ROLE_DOMICILIARIO"))){
+                            } else if (authentication.getAuthorities().stream()
+                                    .anyMatch(d -> d.getAuthority().equals("ROLE_DOMICILIARIO"))) {
                                 response.sendRedirect("/domiciliario/panel-pedidos");
                             }
                         })

@@ -95,7 +95,7 @@ public class DashboardService {
             - Se almacena en resumen
         */
         long nPendientes = negociorp.negociosPendiente();
-        resumen.put("negociosPendiente", nPendientes);
+        resumen.put("negociosPendientes", nPendientes);
 
         //-------------------------------------------
 
@@ -147,10 +147,10 @@ public class DashboardService {
             Map<String, Object> item = new HashMap<>();
 
             //Guarda el estado del negocio como activo, pendiente
-            item.put("estado", fila[0]);
+            item.put("estado_negocio", fila[0]);
 
             //Guarda si el negocio esta aprobado o no
-            item.put("aprobado", fila[1]);
+            item.put("estado_aprobacion", fila[1]);
 
             // Convierte la cantidad a numero largo y la guarda
             item.put("cantidad", ((Number) fila[2]).longValue());

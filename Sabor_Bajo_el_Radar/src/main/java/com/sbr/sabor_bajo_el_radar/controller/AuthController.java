@@ -1,8 +1,7 @@
 package com.sbr.sabor_bajo_el_radar.controller;
 
-import com.sbr.sabor_bajo_el_radar.model.Usuario;
-import com.sbr.sabor_bajo_el_radar.services.UsuarioService;
 import com.sbr.sabor_bajo_el_radar.dtos.RegistroDTO;
+import com.sbr.sabor_bajo_el_radar.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,6 +28,7 @@ public class AuthController {
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
             @RequestParam(value = "registro", required = false) String registro,
+            @RequestParam(value = "eliminado", required = false) String eliminado,
             Model model) {
 
         if (error != null) {
@@ -39,6 +39,10 @@ public class AuthController {
         }
         if (registro != null) {
             model.addAttribute("exito", "Registro exitoso!, ya puedes iniciar sesion");
+        }
+
+        if (eliminado != null) { // <-- AÑADE ESTE BLOQUE IF
+            model.addAttribute("mensaje", "Tu cuenta ha sido eliminada correctamente.");
         }
         return "Login/login";
     }
@@ -64,11 +68,12 @@ public class AuthController {
             usuarioService.registrar(registroDTO);
             redirectAttributes.addFlashAttribute("exito", "Registro exitoso!, ya puedes iniciar sesion");
             return "redirect:/login?registro=exitoso";
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "Login/registro";
         }
     }
+
     // Redirección después del login según rol
     @GetMapping("/home")
     public String home(Authentication authentication) {
