@@ -62,8 +62,8 @@ public class AuthController {
 
         try {
             usuarioService.registrar(registroDTO);
-            redirectAttributes.addFlashAttribute("Exito", "Registro exitoso!, ya puedes iniciar sesion");
-            return "redirect:/login?reistro=exitoso";
+            redirectAttributes.addFlashAttribute("exito", "Registro exitoso!, ya puedes iniciar sesion");
+            return "redirect:/login?registro=exitoso";
         }catch (IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
             return "Login/registro";
