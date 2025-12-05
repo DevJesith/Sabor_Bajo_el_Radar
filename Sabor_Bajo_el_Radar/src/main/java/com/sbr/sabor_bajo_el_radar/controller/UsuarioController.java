@@ -72,7 +72,6 @@ public class UsuarioController {
         urp.save(usuario);
         return esNuevo ? "redirect:/usuarios/lista?creado=true" : "redirect:/usuarios/lista?actualizado=true";
 
-
     }
 
     @GetMapping("/eliminar/{id}")
