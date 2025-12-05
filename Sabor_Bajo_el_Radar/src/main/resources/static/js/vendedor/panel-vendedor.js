@@ -1,19 +1,22 @@
 // =================================================================================
-// Sabor Bajo el Radar - Panel de Vendedor v2.8 (Versión Final Completa y Verificada)
+// Sabor Bajo el Radar - Panel de Vendedor v4.1 (COMPLETO con Eliminación Directa)
 // =================================================================================
 
 // ========== VARIABLES GLOBALES ==========
 let puestos = [], productos = [], ofertas = [], pedidos = [];
-let modalPuesto, modalProducto, modalOferta;
+let perfilVendedor = null;
+let modalPuesto, modalProducto, modalOferta, modalEliminarCuenta;
 let salesChartInstance, productsChartInstance;
 let imagenPuestoTemporal = null;
+let dashboardFiltroPuestoId = 'todos';
 
-// ========== FORMATEADOR DE MONEDA ==========
+// ========== FORMATEADOR DE MONEDA Y API HELPER ==========
 const formatCurrency = (value) => new Intl.NumberFormat('es-CO', {
-    style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
 }).format(value || 0);
-
-// ========== HELPER PARA LLAMADAS A LA API ==========
 const getApiHeaders = (includeContentType = true) => {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const headerName = document.querySelector('meta[name="_csrf_header"]').content;
@@ -21,7 +24,6 @@ const getApiHeaders = (includeContentType = true) => {
     if (includeContentType) headers['Content-Type'] = 'application/json';
     return headers;
 };
-
 const api = {
     get: (endpoint) => fetch(endpoint, {method: 'GET', headers: getApiHeaders(false)}),
     post: (endpoint, body) => fetch(endpoint, {method: 'POST', headers: getApiHeaders(), body: JSON.stringify(body)}),
@@ -34,38 +36,48 @@ document.addEventListener('DOMContentLoaded', () => {
     modalPuesto = new bootstrap.Modal(document.getElementById('modalPuesto'));
     modalProducto = new bootstrap.Modal(document.getElementById('modalProducto'));
     modalOferta = new bootstrap.Modal(document.getElementById('modalOferta'));
+    modalEliminarCuenta = new bootstrap.Modal(document.getElementById('modalConfirmarEliminacion'));
 
-    // Asignar el escuchador de eventos al input de la imagen
     const imagenInput = document.getElementById('puestoImagenInput');
-    if (imagenInput) {
-        imagenInput.addEventListener('change', previewImagen);
-    }
+    if (imagenInput) imagenInput.addEventListener('change', previewImagen);
 
     cargarDatosIniciales();
     initNavigation();
+    initPerfilEventListeners();
 });
 
 async function cargarDatosIniciales() {
     showLoader();
     try {
-        const [puestosRes, productosRes, ofertasRes] = await Promise.all([
-            api.get('/api/negocios'), api.get('/api/productos'), api.get('/api/ofertas')
+        const [puestosRes, productosRes, ofertasRes, perfilRes] = await Promise.all([
+            api.get('/api/negocios'),
+            api.get('/api/productos'),
+            api.get('/api/ofertas'),
+            api.get('/api/perfil/vendedor')
         ]);
-        if (!puestosRes.ok || !productosRes.ok || !ofertasRes.ok) throw new Error('Error de conexión.');
+
+        if (!puestosRes.ok || !productosRes.ok || !ofertasRes.ok || !perfilRes.ok) {
+            throw new Error('Error de conexión al cargar datos iniciales.');
+        }
+
         puestos = await puestosRes.json();
         productos = await productosRes.json();
         ofertas = await ofertasRes.json();
+        perfilVendedor = await perfilRes.json();
+
         if (pedidos.length === 0 && productos.length > 0) generarPedidoDemo(3);
         renderizarTodo();
     } catch (error) {
         console.error('Error al cargar datos:', error);
-        showNotification('Error al conectar con el servidor.', 'error');
+        showNotification(error.message, 'error');
     } finally {
         hideLoader();
     }
 }
 
 function renderizarTodo() {
+    renderizarPerfil();
+    setupDashboardFiltro();
     actualizarDashboard();
     renderizarPedidos();
     renderizarPuestos();
@@ -73,34 +85,140 @@ function renderizarTodo() {
     renderizarOfertas();
 }
 
-// ========== DASHBOARD Y PEDIDOS ==========
-function actualizarDashboard() {
-    const hoy = new Date().toISOString().slice(0, 10);
-    const pedidosDeHoy = pedidos.filter(p => p.fecha.startsWith(hoy));
-    const totalVentas = pedidosDeHoy.reduce((sum, p) => sum + p.total, 0);
-    const totalPedidos = pedidosDeHoy.length;
-    const ticketPromedio = totalPedidos > 0 ? totalVentas / totalPedidos : 0;
-    const pedidosPendientes = pedidos.filter(p => p.estado === 'Pendiente').length;
-    document.getElementById('totalVentas').textContent = formatCurrency(totalVentas);
-    document.getElementById('totalPedidos').textContent = totalPedidos;
-    document.getElementById('ticketPromedio').textContent = formatCurrency(ticketPromedio);
-    document.getElementById('pedidosPendientes').textContent = pedidosPendientes;
-    crearGraficoVentas();
-    crearGraficoProductos();
+
+// ===============================================
+//          LÓGICA DE PERFIL
+// ===============================================
+function initPerfilEventListeners() {
+    document.getElementById('btnEditarPerfil').addEventListener('click', mostrarFormularioEdicion);
+    document.getElementById('btnCancelarEdicion').addEventListener('click', cancelarEdicion);
+    document.getElementById('formActualizarPerfil').addEventListener('submit', guardarPerfil);
+    document.getElementById('btnEliminarCuenta').addEventListener('click', () => modalEliminarCuenta.show());
+    document.getElementById('btnConfirmarEliminacionDefinitiva').addEventListener('click', confirmarEliminacionDefinitiva);
 }
 
-function crearGraficoVentas() {
+function renderizarPerfil() {
+    if (!perfilVendedor) return;
+    document.getElementById('vendorNameSidebar').textContent = perfilVendedor.nombres;
+    document.getElementById('perfilNombres').textContent = perfilVendedor.nombres;
+    document.getElementById('perfilApellidos').textContent = perfilVendedor.apellidos;
+    document.getElementById('perfilDocumento').textContent = perfilVendedor.documento;
+    document.getElementById('perfilTelefono').textContent = perfilVendedor.telefono;
+    document.getElementById('perfilCorreo').textContent = perfilVendedor.correo;
+}
+
+function mostrarFormularioEdicion() {
+    document.getElementById('perfilDisplay').style.display = 'none';
+    document.getElementById('perfilEditForm').style.display = 'block';
+    document.getElementById('btnEditarPerfil').style.display = 'none';
+    document.getElementById('editNombres').value = perfilVendedor.nombres;
+    document.getElementById('editApellidos').value = perfilVendedor.apellidos;
+    document.getElementById('editDocumento').value = perfilVendedor.documento;
+    document.getElementById('editTelefono').value = perfilVendedor.telefono;
+    document.getElementById('editPassActual').value = '';
+    document.getElementById('editPassNueva').value = '';
+}
+
+function cancelarEdicion() {
+    document.getElementById('perfilDisplay').style.display = 'block';
+    document.getElementById('perfilEditForm').style.display = 'none';
+    document.getElementById('btnEditarPerfil').style.display = 'block';
+}
+
+async function guardarPerfil(event) {
+    event.preventDefault();
+    showLoader();
+    const data = {
+        nombres: document.getElementById('editNombres').value,
+        apellidos: document.getElementById('editApellidos').value,
+        documento: document.getElementById('editDocumento').value,
+        telefono: document.getElementById('editTelefono').value,
+        contrasenaActual: document.getElementById('editPassActual').value,
+        nuevaContrasena: document.getElementById('editPassNueva').value
+    };
+    try {
+        const response = await api.put('/api/perfil/vendedor', data);
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Error al actualizar.');
+        perfilVendedor = result;
+        renderizarPerfil();
+        cancelarEdicion();
+        showNotification('Perfil actualizado con éxito.', 'success');
+    } catch (error) {
+        showNotification(error.message, 'error');
+    } finally {
+        hideLoader();
+    }
+}
+
+async function confirmarEliminacionDefinitiva() {
+    showLoader();
+    modalEliminarCuenta.hide();
+    try {
+        const response = await api.delete('/api/perfil/vendedor');
+        if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.error || 'No se pudo eliminar la cuenta.');
+        }
+        showNotification('Tu cuenta ha sido eliminada. Serás redirigido.', 'success');
+        setTimeout(() => {
+            window.location.href = '/login?eliminado=true';
+        }, 2500);
+    } catch (error) {
+        showNotification(error.message, 'error');
+        hideLoader();
+    }
+}
+
+
+// ===============================================
+//          DASHBOARD Y GRÁFICOS
+// ===============================================
+function setupDashboardFiltro() {
+    const filtroContainer = document.getElementById('dashboardFiltroContainer');
+    const filtroSelect = document.getElementById('dashboardPuestoFiltro');
+    if (puestos.length > 1) {
+        filtroContainer.style.display = 'flex';
+        filtroSelect.innerHTML = `<option value="todos">Todos los Puestos</option>${puestos.map(p => `<option value="${p.id}">${p.nombreNegocio}</option>`).join('')}`;
+        filtroSelect.value = dashboardFiltroPuestoId;
+        filtroSelect.addEventListener('change', (e) => {
+            dashboardFiltroPuestoId = e.target.value;
+            actualizarDashboard();
+        });
+    } else {
+        filtroContainer.style.display = 'none';
+    }
+}
+
+function actualizarDashboard() {
+    const pedidosFiltrados = dashboardFiltroPuestoId === 'todos' ? pedidos : pedidos.filter(p => String(p.puestoId) === String(dashboardFiltroPuestoId));
+    const hoy = new Date().toISOString().slice(0, 10);
+    const pedidosDeHoy = pedidosFiltrados.filter(p => p.fecha.startsWith(hoy));
+    const totalVentas = pedidosDeHoy.reduce((sum, p) => sum + p.total, 0);
+    const totalPedidos = pedidosDeHoy.length;
+    document.getElementById('totalVentas').textContent = formatCurrency(totalVentas);
+    document.getElementById('totalPedidos').textContent = totalPedidos;
+    document.getElementById('ticketPromedio').textContent = formatCurrency(totalPedidos > 0 ? totalVentas / totalPedidos : 0);
+    document.getElementById('pedidosPendientes').textContent = pedidosFiltrados.filter(p => p.estado === 'Pendiente').length;
+    crearGraficoVentas(pedidosFiltrados);
+    crearGraficoProductos(pedidosFiltrados);
+}
+
+function crearGraficoVentas(pedidosData) {
     const ctx = document.getElementById('salesChart')?.getContext('2d');
     if (!ctx) return;
-    const labels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    const ventasPorDia = Array(7).fill(0);
+    pedidosData.forEach(p => {
+        ventasPorDia[new Date(p.fecha).getDay()] += p.total;
+    });
     if (salesChartInstance) salesChartInstance.destroy();
     salesChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-            labels,
+            labels: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
             datasets: [{
                 label: "Ventas",
-                data: labels.map(() => Math.random() * 200000 + 50000),
+                data: ventasPorDia,
                 backgroundColor: "rgba(78, 115, 223, 0.05)",
                 borderColor: "rgba(78, 115, 223, 1)",
                 tension: 0.3
@@ -108,23 +226,27 @@ function crearGraficoVentas() {
         },
         options: {
             maintainAspectRatio: false,
-            scales: {y: {beginAtZero: true, ticks: {callback: (value) => formatCurrency(value)}}},
-            plugins: {tooltip: {callbacks: {label: (context) => formatCurrency(context.raw)}}}
+            scales: {y: {beginAtZero: true, ticks: {callback: (v) => formatCurrency(v)}}},
+            plugins: {tooltip: {callbacks: {label: (c) => formatCurrency(c.raw)}}}
         }
     });
 }
 
-function crearGraficoProductos() {
+function crearGraficoProductos(pedidosData) {
     const ctx = document.getElementById('productsChart')?.getContext('2d');
     if (!ctx) return;
-    const topProductos = productos.slice(0, 5);
+    const conteo = {};
+    pedidosData.forEach(p => p.productos.forEach(item => {
+        conteo[item.nombre] = (conteo[item.nombre] || 0) + item.cantidad;
+    }));
+    const sorted = Object.entries(conteo).sort((a, b) => b[1] - a[1]).slice(0, 5);
     if (productsChartInstance) productsChartInstance.destroy();
     productsChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: topProductos.length > 0 ? topProductos.map(p => p.nombre) : ['Sin productos'],
+            labels: sorted.length > 0 ? sorted.map(p => p[0]) : ['Sin ventas'],
             datasets: [{
-                data: topProductos.length > 0 ? topProductos.map(() => Math.random() * 50 + 10) : [1],
+                data: sorted.length > 0 ? sorted.map(p => p[1]) : [1],
                 backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
             }]
         },
@@ -132,27 +254,18 @@ function crearGraficoProductos() {
     });
 }
 
+
+// ===============================================
+//          LÓGICA DE PEDIDOS (DEMO)
+// ===============================================
 function renderizarPedidos() {
     const container = document.getElementById('listaPedidos');
     if (pedidos.length === 0) {
-        container.innerHTML = `<div class="col-12"><div class="alert alert-info">No hay pedidos para mostrar. Genera uno de demostración.</div></div>`;
+        container.innerHTML = `<div class="col-12"><div class="alert alert-info">No hay pedidos para mostrar.</div></div>`;
         return;
     }
-    pedidos.sort((a, b) => (a.estado === 'Pendiente' && b.estado !== 'Pendiente') ? -1 : (a.estado !== 'Pendiente' && b.estado === 'Pendiente') ? 1 : new Date(b.fecha) - new Date(a.fecha));
-    container.innerHTML = pedidos.map(pedido => `
-        <div class="col-lg-6">
-            <div class="order-card">
-                <div class="order-card-header"><h5>Pedido #${pedido.id}</h5><span class="badge ${getStatusBadge(pedido.estado)}">${pedido.estado}</span></div>
-                <p class="order-card-customer"><strong>Cliente:</strong> ${pedido.cliente}</p>
-                <div class="order-card-products"><strong>Productos:</strong><ul>${pedido.productos.map(p => `<li>${p.cantidad}x ${p.nombre}</li>`).join('')}</ul></div>
-                <p class="order-card-total">Total: ${formatCurrency(pedido.total)}</p>
-                <div class="order-card-actions text-end">
-                    ${pedido.estado === 'Pendiente' ? `<button class="btn btn-primary btn-sm" onclick="cambiarEstadoPedido('${pedido.id}', 'Preparando')">Aceptar y Preparar</button>` : ''}
-                    ${pedido.estado === 'Preparando' ? `<button class="btn btn-success btn-sm" onclick="cambiarEstadoPedido('${pedido.id}', 'Listo para Recoger')">Marcar como Listo</button>` : ''}
-                    ${pedido.estado !== 'Entregado' && pedido.estado !== 'Cancelado' ? `<button class="btn btn-danger btn-sm ms-2" onclick="cambiarEstadoPedido('${pedido.id}', 'Cancelado')">Cancelar</button>` : ''}
-                </div>
-            </div>
-        </div>`).join('');
+    pedidos.sort((a, b) => (a.estado === 'Pendiente' && b.estado !== 'Pendiente') ? -1 : 0);
+    container.innerHTML = pedidos.map(p => `<div class="col-lg-6"><div class="order-card"><div class="order-card-header"><h5>Pedido #${p.id}</h5><span class="badge ${getStatusBadge(p.estado)}">${p.estado}</span></div><p class="order-card-customer"><strong>Cliente:</strong> ${p.cliente}</p><div class="order-card-products"><strong>Productos:</strong><ul>${p.productos.map(item => `<li>${item.cantidad}x ${item.nombre}</li>`).join('')}</ul></div><p class="order-card-total">Total: ${formatCurrency(p.total)}</p><div class="order-card-actions text-end">${p.estado === 'Pendiente' ? `<button class="btn btn-primary btn-sm" onclick="cambiarEstadoPedido('${p.id}', 'Preparando')">Aceptar</button>` : ''}${p.estado === 'Preparando' ? `<button class="btn btn-success btn-sm" onclick="cambiarEstadoPedido('${p.id}', 'Listo para Recoger')">Marcar Listo</button>` : ''}${p.estado !== 'Entregado' && p.estado !== 'Cancelado' ? `<button class="btn btn-danger btn-sm ms-2" onclick="cambiarEstadoPedido('${p.id}', 'Cancelado')">Cancelar</button>` : ''}</div></div></div>`).join('');
 }
 
 function cambiarEstadoPedido(pedidoId, nuevoEstado) {
@@ -176,26 +289,22 @@ function getStatusBadge(estado) {
 }
 
 function generarPedidoDemo(cantidad = 1) {
-    if (productos.length === 0) {
-        showNotification('Crea al menos un producto para generar pedidos de demostración.', 'warning');
+    if (productos.length === 0 || puestos.length === 0) {
+        if (cantidad === 1) showNotification('Crea un puesto y un producto para generar pedidos.', 'warning');
         return;
     }
-    const clientesDemo = ['Ana García', 'Carlos Rodriguez', 'Luisa Martinez', 'Javier Gomez', 'Sofia Lopez'];
+    const clientes = ['Ana García', 'Carlos Rodriguez', 'Luisa Martinez'];
     for (let i = 0; i < cantidad; i++) {
-        const productosPedido = [];
-        let total = 0;
-        const numProductos = Math.floor(Math.random() * 3) + 1;
-        for (let j = 0; j < numProductos; j++) {
-            const productoRandom = productos[Math.floor(Math.random() * productos.length)];
-            const cantidadProducto = Math.floor(Math.random() * 2) + 1;
-            productosPedido.push({nombre: productoRandom.nombre, cantidad: cantidadProducto});
-            total += productoRandom.precio * cantidadProducto;
-        }
+        const puesto = puestos[Math.floor(Math.random() * puestos.length)];
+        const prodsPuesto = productos.filter(p => p.negocio.id === puesto.id);
+        if (prodsPuesto.length === 0) continue;
+        const prod = prodsPuesto[Math.floor(Math.random() * prodsPuesto.length)];
         pedidos.push({
             id: String(Math.floor(Math.random() * 9000) + 1000),
-            cliente: clientesDemo[Math.floor(Math.random() * clientesDemo.length)],
-            productos: productosPedido,
-            total,
+            puestoId: puesto.id,
+            cliente: clientes[Math.floor(Math.random() * clientes.length)],
+            productos: [{nombre: prod.nombre, cantidad: 1}],
+            total: prod.precio,
             estado: 'Pendiente',
             fecha: new Date().toISOString()
         });
@@ -204,30 +313,46 @@ function generarPedidoDemo(cantidad = 1) {
     renderizarTodo();
 }
 
-// ========== RENDERIZADO CRUD ==========
+
+// ===============================================
+//          RENDERIZADO Y MODALES CRUD
+// ===============================================
 function renderizarPuestos() {
     const container = document.getElementById('listaPuestos');
     if (puestos.length === 0) {
         container.innerHTML = `<div class="col-12"><div class="alert alert-info">Aún no has creado ningún puesto.</div></div>`;
         return;
     }
-    container.innerHTML = puestos.map(puesto => `
+    container.innerHTML = puestos.map(puesto => {
+        let statusBadge;
+        switch (puesto.aprobado) {
+            case 'aprobado':
+                statusBadge = `<span class="badge bg-success">Aprobado</span>`;
+                break;
+            case 'rechazado':
+                statusBadge = `<span class="badge bg-danger">Rechazado</span>`;
+                break;
+            default:
+                statusBadge = `<span class="badge bg-warning text-dark">Pendiente</span>`;
+        }
+        const rejectionReason = puesto.aprobado === 'rechazado' && puesto.motivoRechazo ? `<div class="alert alert-danger p-2 mt-2 small"><strong>Motivo:</strong> ${puesto.motivoRechazo}</div>` : '';
+        return `
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
                 <img src="${puesto.imagenUrl || 'https://via.placeholder.com/400x300/e9ecef/6c757d?text=Sin+Imagen'}" class="card-img-top" alt="${puesto.nombreNegocio}" style="height: 180px; object-fit: cover;">
                 <div class="card-body d-flex flex-column">
                     <div>
-                        <h5 class="card-title">${puesto.nombreNegocio}</h5><h6 class="card-subtitle mb-2 text-muted">${puesto.tipoNegocio}</h6>
-                        <p class="card-text small">${puesto.descripcionNegocio}</p>
+                        <div class="d-flex justify-content-between align-items-center"><h5 class="card-title mb-0">${puesto.nombreNegocio}</h5>${statusBadge}</div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">${puesto.tipoNegocio}</h6>${rejectionReason}
                     </div>
-                    <div class="mt-auto"><span class="badge bg-${puesto.estadoNegocio === 'activo' ? 'success' : 'secondary'}">${puesto.estadoNegocio}</span></div>
-                </div>
-                <div class="card-footer bg-transparent border-top-0">
-                    <button class="btn btn-sm btn-outline-primary" onclick="mostrarModalPuesto(${puesto.id})">Editar</button>
-                    <button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarPuesto(${puesto.id})">Eliminar</button>
+                    <div class="mt-auto pt-2">
+                        <button class="btn btn-sm btn-outline-primary" onclick="mostrarModalPuesto(${puesto.id})">Editar</button>
+                        <button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarPuesto(${puesto.id})">Eliminar</button>
+                    </div>
                 </div>
             </div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
 }
 
 function renderizarProductos() {
@@ -237,14 +362,7 @@ function renderizarProductos() {
         container.innerHTML = '';
         return;
     }
-    if (productos.length === 0) {
-        container.innerHTML = `<div class="col-12"><div class="alert alert-info">No tienes productos registrados.</div></div>`;
-        return;
-    }
-    container.innerHTML = productos.map(producto => {
-        const negocioAsociado = puestos.find(p => p.id === producto.negocio.id);
-        return `<div class="col-md-6 col-lg-4 mb-4"><div class="card h-100"><div class="card-body"><h5 class="card-title">${producto.nombre}</h5><h6 class="card-subtitle mb-2 text-muted">${negocioAsociado?.nombreNegocio || 'N/A'}</h6><p class="card-text"><strong>Precio:</strong> ${formatCurrency(producto.precio)}</p><p class="card-text"><strong>Stock:</strong> ${producto.stock} uds.</p></div><div class="card-footer"><button class="btn btn-sm btn-outline-primary" onclick="mostrarModalProducto(${producto.id})">Editar</button><button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarProducto(${producto.id})">Eliminar</button></div></div></div>`;
-    }).join('');
+    container.innerHTML = productos.length === 0 ? `<div class="col-12"><div class="alert alert-info">No tienes productos registrados.</div></div>` : productos.map(p => `<div class="col-md-6 col-lg-4 mb-4"><div class="card h-100"><div class="card-body"><h5 class="card-title">${p.nombre}</h5><h6 class="card-subtitle mb-2 text-muted">${puestos.find(n => n.id === p.negocio.id)?.nombreNegocio || 'N/A'}</h6><p class="card-text"><strong>Precio:</strong> ${formatCurrency(p.precio)}</p><p class="card-text"><strong>Stock:</strong> ${p.stock} uds.</p></div><div class="card-footer"><button class="btn btn-sm btn-outline-primary" onclick="mostrarModalProducto(${p.id})">Editar</button><button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarProducto(${p.id})">Eliminar</button></div></div></div>`).join('');
 }
 
 function renderizarOfertas() {
@@ -254,22 +372,26 @@ function renderizarOfertas() {
         container.innerHTML = '';
         return;
     }
-    if (ofertas.length === 0) {
-        container.innerHTML = `<div class="col-12"><div class="alert alert-info">No tienes ofertas activas.</div></div>`;
-        return;
-    }
-    container.innerHTML = ofertas.map(oferta => `<div class="col-md-6 col-lg-4 mb-4"><div class="card h-100 border-primary"><div class="card-header bg-primary text-white">${oferta.titulo} - ${oferta.descuento}% OFF</div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">Producto: ${oferta.producto.nombre}</h6><p class="card-text">${oferta.descripcion || ''}</p><p class="card-text"><small class="text-muted">Válido del ${oferta.fechaInicio} al ${oferta.fechaExpiracion}</small></p></div><div class="card-footer"><button class="btn btn-sm btn-outline-primary" onclick="mostrarModalOferta(${oferta.id})">Editar</button><button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarOferta(${oferta.id})">Eliminar</button></div></div></div>`).join('');
+    container.innerHTML = ofertas.length === 0 ? `<div class="col-12"><div class="alert alert-info">No tienes ofertas activas.</div></div>` : ofertas.map(o => `<div class="col-md-6 col-lg-4 mb-4"><div class="card h-100 border-primary"><div class="card-header bg-primary text-white">${o.titulo} - ${o.descuento}% OFF</div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">Producto: ${o.producto.nombre}</h6><p class="card-text">${o.descripcion || ''}</p><p class="card-text"><small class="text-muted">Válido del ${o.fechaInicio} al ${o.fechaExpiracion}</small></p></div><div class="card-footer"><button class="btn btn-sm btn-outline-primary" onclick="mostrarModalOferta(${o.id})">Editar</button><button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarOferta(${o.id})">Eliminar</button></div></div></div>`).join('');
 }
 
-// ========== LÓGICA DE MODALES (CRUD) ==========
+// Lógica de Modales (Mostrar, Guardar, Eliminar)
 function mostrarModalPuesto(id = null) {
+    // 1. Resetea el formulario a su estado inicial
     document.getElementById('formPuesto').reset();
     document.getElementById('puestoId').value = '';
     imagenPuestoTemporal = null;
-    resetearVistaPrevia();
+    resetearVistaPrevia(); // Limpia la imagen y textos de la vista previa
+
+    // 2. Por defecto, el título es para un nuevo puesto
     document.getElementById('modalPuestoTitle').textContent = 'Nuevo Puesto';
+
+    // 3. Si se proporciona un 'id', significa que estamos EDITANDO
     if (id) {
+        // Buscamos el puesto en nuestra lista de puestos ya cargada
         const puesto = puestos.find(p => p.id === id);
+
+        // Si lo encontramos, rellenamos el formulario con sus datos
         if (puesto) {
             document.getElementById('modalPuestoTitle').textContent = 'Editar Puesto';
             document.getElementById('puestoId').value = puesto.id;
@@ -280,14 +402,20 @@ function mostrarModalPuesto(id = null) {
             document.getElementById('puestoCategoria').value = puesto.tipoNegocio;
             document.getElementById('puestoEstado').value = puesto.estadoNegocio;
             document.getElementById('puestoLegalizado').checked = puesto.estaLegalizado === 'si';
+
+            // Si el puesto tiene una imagen, la mostramos
             if (puesto.imagenUrl) {
                 imagenPuestoTemporal = puesto.imagenUrl;
                 document.getElementById('previewImagen').src = puesto.imagenUrl;
                 document.getElementById('imageUploadArea').innerHTML = `<img src="${puesto.imagenUrl}" alt="Imagen actual">`;
             }
+
+            // Actualizamos la vista previa con los datos cargados
             actualizarVistaPrevia();
         }
     }
+
+    // 4. Finalmente, mostramos el modal (ya sea vacío o con los datos cargados)
     modalPuesto.show();
 }
 
@@ -314,9 +442,20 @@ async function guardarPuesto(event) {
     try {
         const response = await (id ? api.put(`/api/negocios/${id}`, data) : api.post('/api/negocios', data));
         if (!response.ok) throw new Error(`Error ${response.status}`);
-        showNotification(`Puesto ${id ? 'actualizado' : 'creado'} con éxito.`, 'success');
+
         modalPuesto.hide();
-        await cargarDatosIniciales();
+        await cargarDatosIniciales(); // Recargamos datos para ver el nuevo puesto
+
+        if (id) {
+            showNotification(`Puesto actualizado con éxito.`, 'success');
+        } else {
+            Swal.fire({
+                title: '¡Puesto Creado!',
+                text: 'Tu puesto ha sido registrado y ahora está pendiente de aprobación por un administrador.',
+                icon: 'success',
+                confirmButtonText: 'Entendido'
+            });
+        }
     } catch (error) {
         showNotification('No se pudo guardar el puesto.', 'error');
     } finally {
@@ -328,11 +467,11 @@ async function eliminarPuesto(id) {
     if (!confirm('¿Seguro que quieres eliminar este puesto?')) return;
     showLoader();
     try {
-        const response = await api.delete(`/api/negocios/${id}`);
-        if (!response.ok) throw new Error();
+        const res = await api.delete(`/api/negocios/${id}`);
+        if (!res.ok) throw new Error();
         showNotification('Puesto eliminado con éxito.', 'success');
         await cargarDatosIniciales();
-    } catch (error) {
+    } catch (e) {
         showNotification('No se pudo eliminar el puesto.', 'error');
     } finally {
         hideLoader();
@@ -342,20 +481,19 @@ async function eliminarPuesto(id) {
 function mostrarModalProducto(id = null) {
     document.getElementById('formProducto').reset();
     document.getElementById('productoId').value = '';
-    const selectPuesto = document.getElementById('productoPuestoId');
-    selectPuesto.innerHTML = puestos.map(p => `<option value="${p.id}">${p.nombreNegocio}</option>`).join('');
+    document.getElementById('productoPuestoId').innerHTML = puestos.map(p => `<option value="${p.id}">${p.nombreNegocio}</option>`).join('');
     document.getElementById('modalProductoTitle').textContent = 'Nuevo Producto';
     if (id) {
-        const producto = productos.find(p => p.id === id);
-        if (producto) {
+        const p = productos.find(p => p.id === id);
+        if (p) {
             document.getElementById('modalProductoTitle').textContent = 'Editar Producto';
-            document.getElementById('productoId').value = producto.id;
-            selectPuesto.value = producto.negocio.id;
-            document.getElementById('productoNombre').value = producto.nombre;
-            document.getElementById('productoDescripcion').value = producto.descripcion;
-            document.getElementById('productoPrecio').value = producto.precio;
-            document.getElementById('productoStock').value = producto.stock;
-            document.getElementById('productoCategoria').value = producto.categoria;
+            document.getElementById('productoId').value = p.id;
+            document.getElementById('productoPuestoId').value = p.negocio.id;
+            document.getElementById('productoNombre').value = p.nombre;
+            document.getElementById('productoDescripcion').value = p.descripcion;
+            document.getElementById('productoPrecio').value = p.precio;
+            document.getElementById('productoStock').value = p.stock;
+            document.getElementById('productoCategoria').value = p.categoria;
         }
     }
     modalProducto.show();
@@ -374,12 +512,12 @@ async function guardarProducto(event) {
         categoria: document.getElementById('productoCategoria').value,
     };
     try {
-        const response = await (id ? api.put(`/api/productos/${id}`, data) : api.post('/api/productos', data));
-        if (!response.ok) throw new Error();
+        const res = await (id ? api.put(`/api/productos/${id}`, data) : api.post('/api/productos', data));
+        if (!res.ok) throw new Error();
         showNotification(`Producto ${id ? 'actualizado' : 'creado'} con éxito.`, 'success');
         modalProducto.hide();
         await cargarDatosIniciales();
-    } catch (error) {
+    } catch (e) {
         showNotification('No se pudo guardar el producto.', 'error');
     } finally {
         hideLoader();
@@ -390,11 +528,11 @@ async function eliminarProducto(id) {
     if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
     showLoader();
     try {
-        const response = await api.delete(`/api/productos/${id}`);
-        if (!response.ok) throw new Error();
+        const res = await api.delete(`/api/productos/${id}`);
+        if (!res.ok) throw new Error();
         showNotification('Producto eliminado con éxito.', 'success');
         await cargarDatosIniciales();
-    } catch (error) {
+    } catch (e) {
         showNotification('No se pudo eliminar el producto.', 'error');
     } finally {
         hideLoader();
@@ -404,20 +542,19 @@ async function eliminarProducto(id) {
 function mostrarModalOferta(id = null) {
     document.getElementById('formOferta').reset();
     document.getElementById('ofertaId').value = '';
-    const selectProducto = document.getElementById('ofertaProductoId');
-    selectProducto.innerHTML = productos.map(p => `<option value="${p.id}">${p.nombre} (${puestos.find(n => n.id === p.negocio.id)?.nombreNegocio})</option>`).join('');
+    document.getElementById('ofertaProductoId').innerHTML = productos.map(p => `<option value="${p.id}">${p.nombre} (${puestos.find(n => n.id === p.negocio.id)?.nombreNegocio})</option>`).join('');
     document.getElementById('modalOfertaTitle').textContent = 'Nueva Oferta';
     if (id) {
-        const oferta = ofertas.find(o => o.id === id);
-        if (oferta) {
+        const o = ofertas.find(o => o.id === id);
+        if (o) {
             document.getElementById('modalOfertaTitle').textContent = 'Editar Oferta';
-            document.getElementById('ofertaId').value = oferta.id;
-            selectProducto.value = oferta.producto.id;
-            document.getElementById('ofertaTitulo').value = oferta.titulo;
-            document.getElementById('ofertaDescripcion').value = oferta.descripcion;
-            document.getElementById('ofertaDescuento').value = oferta.descuento;
-            document.getElementById('ofertaFechaInicio').value = oferta.fechaInicio;
-            document.getElementById('ofertaFechaFin').value = oferta.fechaExpiracion;
+            document.getElementById('ofertaId').value = o.id;
+            document.getElementById('ofertaProductoId').value = o.producto.id;
+            document.getElementById('ofertaTitulo').value = o.titulo;
+            document.getElementById('ofertaDescripcion').value = o.descripcion;
+            document.getElementById('ofertaDescuento').value = o.descuento;
+            document.getElementById('ofertaFechaInicio').value = o.fechaInicio;
+            document.getElementById('ofertaFechaFin').value = o.fechaExpiracion;
         }
     }
     modalOferta.show();
@@ -436,12 +573,12 @@ async function guardarOferta(event) {
         fechaExpiracion: document.getElementById('ofertaFechaFin').value,
     };
     try {
-        const response = await (id ? api.put(`/api/ofertas/${id}`, data) : api.post('/api/ofertas', data));
-        if (!response.ok) throw new Error();
+        const res = await (id ? api.put(`/api/ofertas/${id}`, data) : api.post('/api/ofertas', data));
+        if (!res.ok) throw new Error();
         showNotification(`Oferta ${id ? 'actualizada' : 'creada'} con éxito.`, 'success');
         modalOferta.hide();
         await cargarDatosIniciales();
-    } catch (error) {
+    } catch (e) {
         showNotification('No se pudo guardar la oferta.', 'error');
     } finally {
         hideLoader();
@@ -452,18 +589,21 @@ async function eliminarOferta(id) {
     if (!confirm('¿Seguro que quieres eliminar esta oferta?')) return;
     showLoader();
     try {
-        const response = await api.delete(`/api/ofertas/${id}`);
-        if (!response.ok) throw new Error();
+        const res = await api.delete(`/api/ofertas/${id}`);
+        if (!res.ok) throw new Error();
         showNotification('Oferta eliminada con éxito.', 'success');
         await cargarDatosIniciales();
-    } catch (error) {
+    } catch (e) {
         showNotification('No se pudo eliminar la oferta.', 'error');
     } finally {
         hideLoader();
     }
 }
 
-// ========== VISTA PREVIA DEL PUESTO ==========
+
+// ===============================================
+//          VISTA PREVIA Y UTILIDADES
+// ===============================================
 function previewImagen(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -471,8 +611,7 @@ function previewImagen(event) {
     reader.onload = function (e) {
         imagenPuestoTemporal = e.target.result;
         document.getElementById('previewImagen').src = e.target.result;
-        const uploadArea = document.getElementById('imageUploadArea');
-        uploadArea.innerHTML = `<img src="${e.target.result}" alt="Previsualización">`;
+        document.getElementById('imageUploadArea').innerHTML = `<img src="${e.target.result}" alt="Previsualización">`;
     };
     reader.readAsDataURL(file);
 }
@@ -486,17 +625,10 @@ function actualizarVistaPrevia() {
 
 function resetearVistaPrevia() {
     document.getElementById('previewImagen').src = 'https://via.placeholder.com/400x300/e9ecef/6c757d?text=Sube+una+imagen';
-    const uploadArea = document.getElementById('imageUploadArea');
-    uploadArea.innerHTML = `
-        <div id="imageUploadContent" class="text-center">
-            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i>
-            <p class="text-muted mb-0">Haz clic para subir una imagen</p>
-            <small class="text-muted">Recomendado: 800x600px</small>
-        </div>`;
+    document.getElementById('imageUploadArea').innerHTML = `<div id="imageUploadContent" class="text-center"><i class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i><p class="text-muted mb-0">Haz clic para subir una imagen</p><small class="text-muted">Recomendado: 800x600px</small></div>`;
     actualizarVistaPrevia();
 }
 
-// ========== UTILIDADES ==========
 function showLoader() {
     document.getElementById('loader').style.display = 'flex';
 }
@@ -527,8 +659,7 @@ function initNavigation() {
             sidebarLinks.forEach(l => l.classList.remove('active'));
             contentSections.forEach(s => s.classList.remove('active'));
             this.classList.add('active');
-            const activeSection = document.getElementById(sectionId);
-            if (activeSection) activeSection.classList.add('active');
+            document.getElementById(sectionId)?.classList.add('active');
         });
     });
 }

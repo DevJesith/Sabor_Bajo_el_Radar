@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const response = await fetch("/api/dashboard/negocios-por-estado");
         const data = await response.json();
 
-        const labels = data.map(item => `${item.estado} - ${item.aprobado}`);
+        const labels = data.map(item => `${item.estado_negocio} - ${item.estado_aprobacion}`);
         const valores = data.map(item => item.cantidad);
 
         const ctx = document.getElementById("estadoNegocios").getContext("2d");

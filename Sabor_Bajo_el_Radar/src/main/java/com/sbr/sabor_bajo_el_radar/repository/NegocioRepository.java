@@ -9,30 +9,31 @@ import java.util.Optional;
 
 public interface NegocioRepository extends JpaRepository<Negocio, Long> {
 
-    // Ejecuta una consulta JPQL sobre la entidad Negocio.
-    // Cuenta cuántos negocios hay en cada combinación de estado y aprobación
-    @Query("SELECT n.estadoNegocio, n.aprobado, COUNT(n) FROM Negocio n GROUP BY n.estadoNegocio, n.aprobado")
-    /*
-        Una lista de arreglos (List<Object[]>), donde cada arreglo contiene:
-            - Object[0]: el estado del negocio.
-            - Object[1]: el estado de aprobación.
-            - Object[2]: la cantidad de negocios en esa combinación.
-     */
+    // Encuentra todos los negocios ordenados por estado (pendiente primero)
+    @Query("SELECT n FROM Negocio n LEFT JOIN FETCH n.vendedor v LEFT JOIN FETCH v.usuario ORDER BY " +
+            "CASE n.estado " +
+            "WHEN 'pendiente' THEN 1 " +
+            "WHEN 'rechazado' THEN 2 " +
+            "WHEN 'aprobado' THEN 3 " +
+            "ELSE 4 END")
+    List<Negocio> findAllByOrderByAprobadoAsc();
+
+    // Encuentra negocios por vendedor
+    List<Negocio> findByVendedorId(Long vendedorId);
+
+    // Encuentra negocios por estado de aprobación
+    List<Negocio> findByEstado(String estado);
+
+    // Encuentra negocios activos y aprobados
+    List<Negocio> findByEstadoNegocioAndEstado(String estadoNegocio, String aprobado);
+
+    @Query("SELECT n.estadoNegocio, n.estado, COUNT(n) FROM Negocio n GROUP BY n.estadoNegocio, n.estado")
     List<Object[]> countEstadosNegocio();
 
-    /*
-
-      Ejecuta una consulta JPQL que busca negocios con:
-        - estadoNegocio = 'pendiente'
-        - aprobado = 'pendiente'
-      Cuenta cuántos negocios cumplen ambas condiciones.
-    */
-    @Query("SELECT COUNT(n) FROM Negocio n WHERE n.estadoNegocio = 'pendiente' AND n.aprobado = 'pendiente'")
-
-    // Un número entero (long) con la cantidad total de negocios que están pendientes de aprobación.
+    @Query("SELECT COUNT(n) FROM Negocio n WHERE n.estado = 'pendiente'")
     long negociosPendiente();
 
-    List<Negocio> findByVendedorId(Long vendedorId);
+//    List<Negocio> findByVendedorId(Long vendedorId);
 
     Optional<Negocio> findById(Long id);
 }

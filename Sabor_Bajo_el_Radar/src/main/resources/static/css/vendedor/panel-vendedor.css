@@ -13,6 +13,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: var(--light-gray);
+    overflow-x: hidden;
 }
 
 .main-content {
@@ -46,16 +47,15 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    backdrop-filter: blur(3px);
 }
 
-/* --- NUEVOS ESTILOS PARA EL MODAL Y VISTA PREVIA --- */
-
-/* Área para subir imagen */
+/* ========== ÁREA DE SUBIDA DE IMAGEN ========== */
 .image-upload-area {
     border: 2px dashed var(--border-color);
     border-radius: .5rem;
@@ -86,7 +86,7 @@ body {
     object-fit: cover;
 }
 
-/* Contenedor de la vista previa */
+/* ========== VISTA PREVIA ========== */
 .preview-container {
     background-color: #e9ecef;
     padding: 1.5rem;
@@ -136,6 +136,7 @@ body {
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+    margin-left: 0.5rem;
 }
 
 .preview-location {
@@ -146,18 +147,23 @@ body {
 .preview-description {
     font-size: 0.85rem;
     color: #6c757d;
-    height: 50px; /* Altura fija para evitar saltos */
+    height: 50px;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* --- FIN DE NUEVOS ESTILOS --- */
-
-/* Tarjetas de Estadísticas */
+/* ========== TARJETAS DE ESTADÍSTICAS ========== */
 .stat-card {
     background-color: #fff;
     border: 1px solid var(--border-color);
-    border-radius: .35rem;
+    border-radius: .5rem;
     box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 .25rem 2rem 0 rgba(58, 59, 69, .2);
 }
 
 .stat-card-body {
@@ -165,23 +171,25 @@ body {
 }
 
 .border-left-primary {
-    border-left: .25rem solid var(--primary) !important;
+    border-left: .35rem solid var(--primary) !important;
 }
 
 .border-left-success {
-    border-left: .25rem solid var(--success) !important;
+    border-left: .35rem solid var(--success) !important;
 }
 
 .border-left-info {
-    border-left: .25rem solid var(--info) !important;
+    border-left: .35rem solid var(--info) !important;
 }
 
 .border-left-warning {
-    border-left: .25rem solid var(--warning) !important;
+    border-left: .35rem solid var(--warning) !important;
 }
 
 .text-xs {
     font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .text-gray-300 {
@@ -196,24 +204,30 @@ body {
     font-weight: 700 !important;
 }
 
-/* Gráficos */
+/* ========== GRÁFICOS ========== */
 .card.shadow {
     box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15) !important;
+    border-radius: .5rem;
 }
 
-/* Tarjetas de Pedidos */
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ========== TARJETAS DE PEDIDOS ========== */
 .order-card {
     background: #fff;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 10px;
     margin-bottom: 1rem;
     padding: 1rem;
     transition: all 0.2s ease-in-out;
 }
 
 .order-card:hover {
-    box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
-    transform: translateY(-2px);
+    box-shadow: 0 .25rem 2rem 0 rgba(58, 59, 69, .2);
+    transform: translateY(-3px);
 }
 
 .order-card-header {
@@ -223,6 +237,8 @@ body {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.75rem;
     margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .order-card-header h5 {
@@ -233,6 +249,7 @@ body {
 
 .order-card-customer {
     font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 .order-card-products ul {
@@ -247,19 +264,24 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     color: var(--success);
+    margin-top: 0.5rem;
 }
 
 .order-card-actions {
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .badge.bg-warning {
     color: #000 !important;
 }
 
-/* Modales */
+/* ========== MODALES ========== */
 .modal-content {
     border-radius: 15px;
     border: none;
@@ -268,14 +290,303 @@ body {
 .modal-header {
     background: var(--sidebar-bg);
     color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .modal-header .btn-close {
     filter: brightness(0) invert(1);
 }
 
-/* Formularios */
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* ========== FORMULARIOS ========== */
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-orange);
     box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+}
+
+/* ========== BOTONES ========== */
+.btn {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* ========== RESPONSIVE - TABLETS (768px - 991px) ========== */
+@media (min-width: 768px) and (max-width: 991px) {
+    .main-content {
+        padding: 1.5rem;
+    }
+
+    .stat-card-body {
+        padding: 1rem;
+    }
+
+    .text-xs {
+        font-size: 0.75rem;
+    }
+
+    .h5 {
+        font-size: 1rem;
+    }
+
+    .order-card-header h5 {
+        font-size: 1rem;
+    }
+
+    .preview-container {
+        margin-top: 2rem;
+    }
+}
+
+/* ========== RESPONSIVE - MÓVILES (< 768px) ========== */
+@media (max-width: 767px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    /* Ajustar encabezados de sección */
+    .content-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .d-flex.justify-content-between > button {
+        width: 100%;
+    }
+
+    /* Tarjetas de estadísticas */
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+
+    .stat-card-body {
+        padding: 1rem;
+    }
+
+    .text-xs {
+        font-size: 0.7rem;
+    }
+
+    .h5 {
+        font-size: 0.9rem;
+    }
+
+    .fa-2x {
+        font-size: 1.5em;
+    }
+
+    /* Gráficos */
+    .card-body canvas {
+        max-height: 250px;
+    }
+
+    /* Pedidos */
+    .order-card {
+        padding: 0.8rem;
+    }
+
+    .order-card-header h5 {
+        font-size: 0.95rem;
+    }
+
+    .order-card-total {
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .order-card-actions {
+        justify-content: stretch;
+    }
+
+    .order-card-actions .btn {
+        flex: 1;
+    }
+
+    /* Modales */
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-dialog.modal-xl,
+    .modal-dialog.modal-lg {
+        max-width: calc(100% - 1rem);
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    /* Vista previa en modal de puesto */
+    .preview-container {
+        margin-top: 1.5rem;
+        padding: 1rem;
+    }
+
+    .preview-card {
+        border-radius: 10px;
+    }
+
+    .preview-image {
+        height: 150px;
+    }
+
+    .preview-title {
+        font-size: 1.1rem;
+    }
+
+    /* Formularios */
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 0.9rem;
+    }
+
+    /* Tarjetas de productos/ofertas/puestos */
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .card-text {
+        font-size: 0.85rem;
+    }
+
+    .card-footer .btn {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    /* Filtro del dashboard */
+    #dashboardFiltroContainer {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    #dashboardFiltroContainer label {
+        margin-bottom: 0.5rem;
+    }
+
+    #dashboardPuestoFiltro {
+        width: 100% !important;
+    }
+}
+
+/* ========== RESPONSIVE - MÓVILES PEQUEÑOS (< 576px) ========== */
+@media (max-width: 575px) {
+    .main-content {
+        padding: 0.75rem;
+    }
+
+    .content-section h2 {
+        font-size: 1.3rem;
+    }
+
+    /* Hacer columnas full-width */
+    .row > [class*="col-"] {
+        margin-bottom: 1rem;
+    }
+
+    /* Estadísticas */
+    .col-xl-3,
+    .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Botones más grandes para mejor touch */
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    /* Modal footer */
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+
+    /* Tablas responsive */
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+
+    /* Perfil */
+    .dl-horizontal dt {
+        font-size: 0.85rem;
+    }
+
+    .dl-horizontal dd {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========== MEJORAS DE ACCESIBILIDAD ========== */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 2px solid var(--primary-orange);
+    outline-offset: 2px;
+}
+
+/* ========== ANIMACIONES SUAVES ========== */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.card,
+.stat-card,
+.order-card {
+    will-change: transform;
+}
+
+/* ========== IMPRESIÓN ========== */
+@media print {
+    .sidebar,
+    .sidebar-toggle,
+    .btn,
+    .order-card-actions {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 0;
+    }
+
+    .card,
+    .stat-card,
+    .order-card {
+        break-inside: avoid;
+    }
 }

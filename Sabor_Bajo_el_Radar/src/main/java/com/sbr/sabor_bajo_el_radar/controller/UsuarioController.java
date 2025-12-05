@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,10 +23,9 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/lista")
-    public String lista(Model model) {
-        model.addAttribute("usuarios", urp.findAll());
-        return "Administrador/CRUD/usuarios";
+    @GetMapping({"/lista", "/"})
+    public String redirirAlPanel() {
+        return "redirect:/dashboard/admin";
     }
 
     @GetMapping
@@ -33,10 +33,11 @@ public class UsuarioController {
         return "redirect:usuarios/lista";
     }
 
+
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("usuario", new Usuario());
-        model.addAttribute("roles", List.of("administrador", "cliente", "domiciliario", "vendedor"));
+        model.addAttribute("roles", List.of("ADMINISTRADOR", "CLIENTE", "DOMICILIARIO", "VENDEDOR"));
         return "Administrador/CRUD/usuario_form";
     }
 
@@ -44,12 +45,12 @@ public class UsuarioController {
     public String editar(@PathVariable Integer id, Model model) {
         Optional<Usuario> usuario = urp.findById(id);
         usuario.ifPresent(u -> model.addAttribute("usuario", u));
-        model.addAttribute("roles", List.of("administrador", "cliente", "domiciliario", "vendedor"));
+        model.addAttribute("roles", List.of("ADMINISTRADOR", "CLIENTE", "DOMICILIARIO", "VENDEDOR"));
         return "Administrador/CRUD/usuario_form";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Usuario usuario) {
+    public String guardar(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttributes) {
         boolean esNuevo = usuario.getId() == null;
 
         if (esNuevo) {
@@ -60,7 +61,7 @@ public class UsuarioController {
             if (existente.isPresent()) {
                 Usuario original = existente.get();
 
-                usuario.setFechaRegistro(LocalDate.now());
+                usuario.setFechaRegistro(original.getFechaRegistro());
                 if (usuario.getContrasena() == null || usuario.getContrasena().isBlank()) {
                     usuario.setContrasena(original.getContrasena());
                 } else {
@@ -69,15 +70,20 @@ public class UsuarioController {
             }
         }
 
+        usuario.setRol(usuario.getRol().toUpperCase());
         urp.save(usuario);
-        return esNuevo ? "redirect:/usuarios/lista?creado=true" : "redirect:/usuarios/lista?actualizado=true";
+
+        String mensaje = esNuevo ? "Usuario creado exitosamente" : "Usuario actualziado exitosamente";
+        redirectAttributes.addFlashAttribute("successMessage", mensaje);
+        return "redirect:/dashboard/admin";
 
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Integer id) {
+    public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         urp.deleteById(id);
-        return "redirect:/usuarios/lista?eliminado=true";
+        redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado exitosamente");
+        return "redirect:/dashboard/admin";
     }
 
 
