@@ -325,7 +325,7 @@ function renderizarPuestos() {
     }
     container.innerHTML = puestos.map(puesto => {
         let statusBadge;
-        switch (puesto.aprobado) {
+        switch (puesto.estado) {
             case 'aprobado':
                 statusBadge = `<span class="badge bg-success">Aprobado</span>`;
                 break;
@@ -335,6 +335,13 @@ function renderizarPuestos() {
             default:
                 statusBadge = `<span class="badge bg-warning text-dark">Pendiente</span>`;
         }
+
+        if (puesto.estado === 'aprobado') {
+            visibilidadBadge = (puesto.estadoNegocio === 'activo')
+                ? `<span class="badge bg-primary ms-1">Visible</span>`
+                : `<span class="badge bg-secondary ms-1">Oculto</span>`;
+        }
+        
         const rejectionReason = puesto.aprobado === 'rechazado' && puesto.motivoRechazo ? `<div class="alert alert-danger p-2 mt-2 small"><strong>Motivo:</strong> ${puesto.motivoRechazo}</div>` : '';
         return `
         <div class="col-md-6 col-lg-4 mb-4">
