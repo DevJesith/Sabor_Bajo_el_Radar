@@ -2,7 +2,7 @@
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig" newRepositoryParent="org.springframework.data.jpa.repository.JpaRepository">
     <option name="newEntityIdStrategy" />
-    <option name="reLastEntityCreationPackage" value="src/main/java/com/sbr/sabor_bajo_el_radar/repository" />
-    <option name="reverseEngineeringLastDbConnectionId" value="59b8f0ce-972a-48be-aa83-c4ba441398bb" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/sbr/sabor_bajo_el_radar/model" />
+    <option name="reverseEngineeringLastDbConnectionId" value="f4510211-c109-4fc8-9576-ff2d944af978" />
   </component>
 </project>

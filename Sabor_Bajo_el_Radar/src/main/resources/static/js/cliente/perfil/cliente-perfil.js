@@ -247,3 +247,193 @@ function showNotification(message, type = 'success') {
         notification.remove();
     }, 4000);
 }
+
+// --- LÓGICA DE MÉTODOS DE PAGO ---
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Cargar métodos al iniciar si la sección está activa, o cuando se haga clic en el link
+    const linkPagos = document.querySelector('[data-section="metodos-pago"]');
+    if (linkPagos) {
+        linkPagos.addEventListener('click', cargarMetodosPago);
+    }
+});
+
+// Cambiar campos visibles según el tipo (Tarjeta o Billetera)
+function toggleCamposPago() {
+    const tipo = document.getElementById('tipoMetodo').value;
+    const camposTarjeta = document.getElementById('camposTarjeta');
+    const camposBilletera = document.getElementById('camposBilletera');
+
+    if (tipo === 'TARJETA') {
+        camposTarjeta.style.display = 'block';
+        camposBilletera.style.display = 'none';
+        document.getElementById('pagoNumero').setAttribute('required', 'true');
+        document.getElementById('pagoCelular').removeAttribute('required');
+    } else {
+        camposTarjeta.style.display = 'none';
+        camposBilletera.style.display = 'block';
+        document.getElementById('pagoNumero').removeAttribute('required');
+        document.getElementById('pagoCelular').setAttribute('required', 'true');
+    }
+}
+
+async function cargarMetodosPago() {
+    const container = document.getElementById('lista-metodos-pago');
+    container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>';
+
+    try {
+        const response = await fetch('/api/metodos-pago');
+        if (!response.ok) throw new Error('Error al cargar métodos');
+        const metodos = await response.json();
+
+        if (metodos.length === 0) {
+            container.innerHTML = '<div class="alert alert-info">No tienes métodos de pago guardados.</div>';
+            return;
+        }
+
+        let html = '';
+        metodos.forEach(m => {
+            let icono = 'fa-credit-card';
+            let color = 'text-primary';
+            let titulo = m.franquicia || 'Método de pago';
+
+            if (m.tipo === 'NEQUI') {
+                icono = 'fa-mobile-alt';
+                color = 'text-purple'; // Definir estilo o usar text-dark
+                titulo = 'Nequi';
+            } else if (m.tipo === 'DAVIPLATA') {
+                icono = 'fa-home';
+                color = 'text-danger';
+                titulo = 'DaviPlata';
+            }
+
+            html += `
+                <div class="card profile-card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas ${icono} fs-2 ${color}"></i>
+                                <div>
+                                    <h6 class="mb-0">${m.numeroMascara}</h6>
+                                    <small class="text-muted">${titulo} - ${m.titular}</small>
+                                    ${m.fechaVencimiento ? `<small class="d-block text-muted">Vence: ${m.fechaVencimiento}</small>` : ''}
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminarMetodoPago(${m.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<div class="alert alert-danger">Error cargando la información.</div>';
+    }
+}
+
+async function guardarMetodoPago() {
+    const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
+
+    const tipo = document.getElementById('tipoMetodo').value;
+    const titular = document.getElementById('pagoTitular').value;
+    let numero = '';
+    let vencimiento = null;
+    let franquicia = null;
+
+    if (tipo === 'TARJETA') {
+        numero = document.getElementById('pagoNumero').value.replace(/\s/g, ''); // Quitar espacios
+        vencimiento = document.getElementById('pagoVencimiento').value;
+        // Lógica simple para detectar franquicia
+        franquicia = numero.startsWith('4') ? 'Visa' : 'Mastercard';
+
+        if (numero.length < 13 || !vencimiento) {
+            showNotification('Por favor completa los datos de la tarjeta', 'error');
+            return;
+        }
+    } else {
+        numero = document.getElementById('pagoCelular').value;
+        franquicia = tipo; // NEQUI o DAVIPLATA
+        if (!numero) {
+            showNotification('Ingresa el número de celular', 'error');
+            return;
+        }
+    }
+
+    const data = {
+        tipo: tipo,
+        titular: titular,
+        numero: numero,
+        fechaVencimiento: vencimiento,
+        franquicia: franquicia
+    };
+
+    try {
+        const response = await fetch('/api/metodos-pago', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            showNotification('Método agregado exitosamente', 'success');
+            // Cerrar modal
+            const modalEl = document.getElementById('modalAgregarTarjeta');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+
+            // Limpiar form
+            document.getElementById('formAgregarTarjeta').reset();
+
+            // Recargar lista
+            cargarMetodosPago();
+        } else {
+            const err = await response.json();
+            showNotification(err.error || 'Error al guardar', 'error');
+        }
+    } catch (error) {
+        showNotification('Error de conexión', 'error');
+    }
+}
+
+async function eliminarMetodoPago(id) {
+    const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
+
+    const confirmacion = await Swal.fire({
+        title: '¿Eliminar método?',
+        text: "No podrás revertir esto",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar'
+    });
+
+    if (confirmacion.isConfirmed) {
+        try {
+            const response = await fetch(`/api/metodos-pago/${id}`, {
+                method: 'DELETE',
+                headers: {[csrfHeader]: csrfToken}
+            });
+
+            if (response.ok) {
+                Swal.fire('Eliminado', 'El método ha sido eliminado.', 'success');
+                cargarMetodosPago();
+            } else {
+                Swal.fire('Error', 'No se pudo eliminar.', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}

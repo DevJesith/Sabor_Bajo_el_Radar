@@ -137,47 +137,15 @@
             <div id="metodos-pago" class="content-section">
                 <h2 class="mb-4">Métodos de pago</h2>
                 
-                <div class="card profile-card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-credit-card fs-2 text-primary"></i>
-                                <div>
-                                    <h6 class="mb-0">•••• •••• •••• 4567</h6>
-                                    <small class="text-muted">Visa - Vence 12/25</small>
-                                </div>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div id="lista-metodos-pago">
+                    <p class="text-center text-muted">Cargando metodos de pago</p>
                 </div>
                 
-                <div class="card profile-card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-credit-card fs-2 text-warning"></i>
-                                <div>
-                                    <h6 class="mb-0">•••• •••• •••• 8901</h6>
-                                    <small class="text-muted">Mastercard - Vence 08/24</small>
-                                </div>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarTarjeta">
-                    <i class="fas fa-plus me-2"></i>Agregar nuevo método de pago
+                <button class="btn btn-outline-primary mt-3" data-bs-toggle="modal"
+                        data-bs-target="#modalAgregarTarjeta">
+                    <i class="fas fa-plus me-2"></i> Agregar metodo de pago
                 </button>
+            
             </div>
             
             <!-- Sección: Mis pedidos -->
@@ -286,19 +254,65 @@
     </div>
 </div>
 
-<!-- Modal Agregar Tarjeta (AHORA LIMPIO) -->
+<!-- Modal Agregar Método de Pago (ACTUALIZADO) -->
 <div id="modalAgregarTarjeta" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header"><h5 class="modal-title">Agregar método de pago</h5>
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar método de pago</h5>
                 <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="formAgregarTarjeta"><!-- ... (inputs de la tarjeta) ... --></form>
+                <form id="formAgregarTarjeta">
+                    <!-- Selección de Tipo -->
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de medio</label>
+                        <select id="tipoMetodo" class="form-select" required onchange="toggleCamposPago()">
+                            <option value="TARJETA">Tarjeta de Crédito / Débito</option>
+                            <option value="NEQUI">Nequi</option>
+                            <option value="DAVIPLATA">DaviPlata</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Titular</label>
+                        <input id="pagoTitular" class="form-control" type="text" placeholder="Como aparece en la cuenta"
+                               required>
+                    </div>
+                    
+                    <!-- Campos Tarjeta -->
+                    <div id="camposTarjeta">
+                        <div class="mb-3">
+                            <label class="form-label">Número de Tarjeta</label>
+                            <input id="pagoNumero" class="form-control" type="text" placeholder="0000 0000 0000 0000"
+                                   maxlength="19">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Vencimiento</label>
+                                <input id="pagoVencimiento" class="form-control" type="text" placeholder="MM/AA"
+                                       maxlength="5">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">CVV</label>
+                                <input class="form-control" type="password" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Campos Billetera (Nequi/Daviplata) -->
+                    <div id="camposBilletera" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Número de Celular</label>
+                            <input id="pagoCelular" class="form-control" type="tel" placeholder="300 123 4567"
+                                   maxlength="10">
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary" type="button">Agregar</button>
+                <button class="btn btn-primary" type="button" onclick="guardarMetodoPago()">Guardar</button>
             </div>
         </div>
     </div>
