@@ -48,7 +48,7 @@
                 <!-- Acciones -->
                 <div class="nav-actions d-flex align-items-center gap-3">
                     <!-- Ubicación -->
-                    <a class="nav-link d-flex align-items-center" href="#">
+                    <a class="nav-link d-flex align-items-center" th:href="@{/ubicacion}">
                         <i class="fas fa-map-marker-alt text-danger me-2"></i>
                         <span class="d-none d-lg-inline">Agrega tu ubicación</span>
                     </a>
@@ -68,10 +68,12 @@
                             <i class="fas fa-user-circle fs-4" style="color: var(--primary-orange)"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="perfil.html"><i class="fas fa-user me-2"></i>Ver
+                            <li><a class="dropdown-item" th:href="@{/perfil-cliente}"><i class="fas fa-user me-2"></i>Ver
                                 perfil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i>Mis pedidos</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Favoritos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/mis-pedidos}"><i class="fas fa-box me-2"></i>Mis
+                                pedidos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/favoritos}"><i class="fas fa-heart me-2"></i>Favoritos</a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

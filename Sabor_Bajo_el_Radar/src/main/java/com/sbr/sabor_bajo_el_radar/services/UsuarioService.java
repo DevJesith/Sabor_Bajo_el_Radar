@@ -1,9 +1,11 @@
 package com.sbr.sabor_bajo_el_radar.services;
 
+import com.sbr.sabor_bajo_el_radar.dtos.PerfilUpdateDTO;
 import com.sbr.sabor_bajo_el_radar.dtos.RegistroDTO;
 import com.sbr.sabor_bajo_el_radar.model.Usuario;
 import com.sbr.sabor_bajo_el_radar.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -111,6 +113,35 @@ public class UsuarioService implements UserDetailsService {
     public void eliminarCuentaDefinitivamente(String correo) {
         Usuario usuario = usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new UsernameNotFoundException("No se pudo encontrar el usuario para eliminar"));
+
         usuarioRepository.delete(usuario);
+    }
+
+    public Usuario actualizarPerfil(String correo, @Valid PerfilUpdateDTO updateDTO) {
+
+        Usuario usuario = findByCorreo(correo);
+        usuario.setNombres(updateDTO.getNombres());
+        usuario.setApellidos(updateDTO.getApellidos());
+        usuario.setDocumento(updateDTO.getDocumento());
+        usuario.setTelefono(updateDTO.getTelefono());
+
+        boolean quiereCambiarPass = updateDTO.getContrasenaActual() != null && !updateDTO.getContrasenaActual().isEmpty() && updateDTO.getNuevaContrasena() != null && !updateDTO.getNuevaContrasena().isEmpty();
+
+        if (quiereCambiarPass) {
+
+            if (!passwordEncoder.matches(updateDTO.getContrasenaActual(), usuario.getContrasena())) {
+                throw new IllegalArgumentException("La contraseña actual es incorrecta");
+            }
+
+            if (passwordEncoder.matches(updateDTO.getContrasenaActual(), usuario.getContrasena())) {
+                throw new IllegalArgumentException("La nueva contraseña no puede ser igual a la actual");
+            }
+
+            usuario.setContrasena(passwordEncoder.encode(updateDTO.getNuevaContrasena()));
+
+        }
+
+        return usuarioRepository.save(usuario);
+        
     }
 }

@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('mainSearchInput');
     const searchResults = document.getElementById('searchResults');
 
+    cargarDatosUsuario();
+
     if (searchInput) {
         searchInput.addEventListener('input', function (e) {
             const searchTerm = e.target.value.trim().toLowerCase();
@@ -447,3 +449,28 @@ function showNotification(message, type = 'success') {
 document.addEventListener('DOMContentLoaded', function () {
     // Puedes agregar el botón de ver carrito aquí si lo necesitas
 });
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) {
+            // Si no está autorizado (401) o no se encuentra (404), no hacemos nada
+            return;
+        }
+
+        const usuario = await response.json();
+
+        // Buscamos todos los lugares donde se debe mostrar el nombre del usuario
+        const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+
+        if (usuario && usuario.nombres) {
+            // Actualizamos el texto en el navbar
+            userSpans.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres}`;
+            });
+        }
+
+    } catch (error) {
+        console.error("Error al cargar los datos del usuario:", error);
+    }
+}
