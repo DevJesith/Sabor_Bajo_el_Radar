@@ -25,7 +25,7 @@ public interface NegocioRepository extends JpaRepository<Negocio, Long> {
     List<Negocio> findByEstado(String estado);
 
     // Encuentra negocios activos y aprobados
-    List<Negocio> findByEstadoNegocioAndEstado(String estadoNegocio, String aprobado);
+    List<Negocio> findByEstadoAndEstadoNegocio(String estado, String estadoNegocio);
 
     @Query("SELECT n.estadoNegocio, n.estado, COUNT(n) FROM Negocio n GROUP BY n.estadoNegocio, n.estado")
     List<Object[]> countEstadosNegocio();
