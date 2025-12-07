@@ -1,103 +1,88 @@
-// Obtener favoritos del localStorage
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+// ==========================================
+// VARIABLES GLOBALES
+// ==========================================
 
-// Vendors de ejemplo para demostración
-const allVendors = [
-    {
-        id: 1,
-        name: 'El Buen Sabor Urbano',
-        category: 'Comida Rápida',
-        image: 'landscape',
-        discount: '20% OFF',
-        rating: 4.5,
-        totalOrders: 127,
-        deliveryTime: '25-35 min'
-    },
-    {
-        id: 2,
-        name: 'Sabores de la Calle',
-        category: 'Comida Criolla',
-        image: 'landscape',
-        discount: '15% OFF',
-        rating: 4.8,
-        totalOrders: 203,
-        deliveryTime: '30-40 min'
-    },
-    {
-        id: 3,
-        name: 'Rincón Urbano',
-        category: 'Desayunos',
-        image: 'landscape',
-        discount: '10% OFF',
-        rating: 4.3,
-        totalOrders: 89,
-        deliveryTime: '20-30 min'
-    },
-    {
-        id: 4,
-        name: 'La Esquina del Sabor',
-        category: 'Antojitos',
-        image: 'landscape',
-        discount: '25% OFF',
-        rating: 4.6,
-        totalOrders: 156,
-        deliveryTime: '15-25 min'
-    },
-    {
-        id: 5,
-        name: 'Dulce Tentación',
-        category: 'Postres',
-        image: 'landscape',
-        discount: '30% OFF',
-        rating: 4.9,
-        totalOrders: 342,
-        deliveryTime: '20-30 min'
-    },
-    {
-        id: 6,
-        name: 'Express Gourmet',
-        category: 'Comida Internacional',
-        image: 'landscape',
-        discount: '20% OFF',
-        rating: 4.7,
-        totalOrders: 178,
-        deliveryTime: '35-45 min'
+// Formateador de moneda (Igual que en home)
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value);
+};
+
+// Obtener IDs de favoritos del localStorage
+let favoritesIds = JSON.parse(localStorage.getItem('favorites')) || [];
+
+// Aquí guardaremos los datos reales traídos del backend
+let allVendors = [];
+
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+document.addEventListener('DOMContentLoaded', function () {
+    updateCartCount();
+    cargarFavoritosBackend(); // <--- Cargar datos reales
+
+    // Configurar el buscador
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filtrarFavoritosVisualmente(searchTerm);
+        });
     }
-];
 
-// Inicializar favoritos de ejemplo si está vacío
-if (favorites.length === 0) {
-    favorites = [1, 2, 5]; // IDs de vendors favoritos
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    // Filtros de categoría
+    const categoryButtons = document.querySelectorAll('.category-filter-btn');
+    categoryButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            categoryButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const category = this.getAttribute('data-category');
+            renderFavorites(category);
+        });
+    });
+});
+
+// ==========================================
+// LÓGICA DE BACKEND
+// ==========================================
+
+async function cargarFavoritosBackend() {
+    const favoritesList = document.getElementById('favoritesList');
+    favoritesList.innerHTML = '<div class="w-100 text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>';
+
+    try {
+        // Reutilizamos el endpoint del home para obtener la info actualizada de los negocios
+        const response = await fetch('/api/cliente/home/negocios');
+
+        if (!response.ok) throw new Error('Error al cargar datos');
+
+        allVendors = await response.json();
+
+        updateStats();
+        renderFavorites();
+
+    } catch (error) {
+        console.error(error);
+        favoritesList.innerHTML = '<div class="col-12 text-center text-muted">No se pudo cargar la información de los favoritos.</div>';
+    }
 }
 
-// Actualizar contador del carrito
-function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cartCount').textContent = totalItems;
-}
+// ==========================================
+// RENDERIZADO
+// ==========================================
 
-// Actualizar estadísticas
-function updateStats() {
-    const favoriteVendors = allVendors.filter(v => favorites.includes(v.id));
-    const categories = [...new Set(favoriteVendors.map(v => v.category))];
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
-
-    document.getElementById('totalFavorites').textContent = favorites.length;
-    document.getElementById('totalCategories').textContent = categories.length;
-    document.getElementById('totalOrders').textContent = orders.length;
-}
-
-// Renderizar favoritos
 function renderFavorites(categoryFilter = 'todos') {
     const favoritesList = document.getElementById('favoritesList');
     const emptyState = document.getElementById('emptyState');
 
-    // Obtener vendors favoritos
-    let favoriteVendors = allVendors.filter(v => favorites.includes(v.id));
+    // 1. Filtrar los negocios que están en la lista de IDs guardados en localStorage
+    let favoriteVendors = allVendors.filter(v => favoritesIds.includes(v.id));
 
-    // Filtrar por categoría
+    // 2. Filtrar por categoría seleccionada
     if (categoryFilter !== 'todos') {
         favoriteVendors = favoriteVendors.filter(v => v.category === categoryFilter);
     }
@@ -112,32 +97,49 @@ function renderFavorites(categoryFilter = 'todos') {
     emptyState.style.display = 'none';
 
     // Renderizar cards
-    favoritesList.innerHTML = favoriteVendors.map(vendor => `
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="favorite-card" onclick="openVendor(${vendor.id})">
+    favoritesList.innerHTML = favoriteVendors.map(vendor => {
+        // Manejo de imagen
+        let imageSrc = vendor.image;
+        if (!imageSrc || imageSrc.trim() === '') {
+            imageSrc = 'https://via.placeholder.com/300x200/ff6b35/ffffff?text=' + encodeURIComponent(vendor.name);
+        }
+
+        // Datos simulados para completar la tarjeta visualmente (ya que el backend aún no los manda todos)
+        const deliveryTime = "30-45 min";
+
+        // String seguro para redirección
+        const vendorString = JSON.stringify(vendor).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+
+        return `
+        <div class="col-md-4 col-sm-6 mb-4 favorite-card-item">
+            <div class="favorite-card" onclick="irAlHomeConVendor(${vendor.id})" style="cursor: pointer;">
                 <div class="favorite-image-container">
-                    <div class="favorite-image"></div>
+                    <img src="${imageSrc}" class="favorite-image" alt="${vendor.name}">
+                    
                     ${vendor.discount ? `<span class="badge-discount">${vendor.discount}</span>` : ''}
+                    
                     <button class="favorite-heart favorited" onclick="event.stopPropagation(); toggleFavorite(${vendor.id})">
                         <i class="fas fa-heart"></i>
                     </button>
                 </div>
                 <div class="favorite-info">
                     <div class="favorite-header">
-                        <h5 class="favorite-name">${vendor.name}</h5>
+                        <h5 class="favorite-name text-truncate">${vendor.name}</h5>
                     </div>
-                    <p class="favorite-category">${vendor.category}</p>
-                    <div class="favorite-rating">
-                        <i class="fas fa-star"></i>
+                    <div class="mb-2">
+                        <span class="badge bg-danger rounded-pill">${vendor.category}</span>
+                    </div>
+                    <div class="favorite-rating mb-2">
+                        <i class="fas fa-star text-warning"></i>
                         <span>${vendor.rating}</span>
-                        <span class="text-muted">(${vendor.totalOrders} pedidos)</span>
+                        <span class="text-muted ms-1 small"><i class="fas fa-map-marker-alt ms-2 me-1"></i>${vendor.location || 'Bogotá'}</span>
                     </div>
                     <div class="favorite-stats">
                         <span>
                             <i class="fas fa-clock"></i>
-                            ${vendor.deliveryTime}
+                            ${deliveryTime}
                         </span>
-                        <span>
+                        <span class="text-success">
                             <i class="fas fa-motorcycle"></i>
                             Envío gratis
                         </span>
@@ -145,73 +147,94 @@ function renderFavorites(categoryFilter = 'todos') {
                 </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
-// Toggle favorito
+// ==========================================
+// FUNCIONALIDAD
+// ==========================================
+
 function toggleFavorite(vendorId) {
-    const index = favorites.indexOf(vendorId);
+    const index = favoritesIds.indexOf(vendorId);
 
     if (index > -1) {
         // Remover de favoritos
-        favorites.splice(index, 1);
+        favoritesIds.splice(index, 1);
         showNotification('Eliminado de favoritos', 'info');
     } else {
-        // Agregar a favoritos
-        favorites.push(vendorId);
+        // Agregar a favoritos (por si acaso, aunque en esta pantalla usualmente se quitan)
+        favoritesIds.push(vendorId);
         showNotification('Agregado a favoritos', 'success');
     }
 
     // Guardar en localStorage
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    localStorage.setItem('favorites', JSON.stringify(favoritesIds));
 
-    // Actualizar vista
+    // Actualizar estadísticas y vista
     updateStats();
 
-    // Re-renderizar solo si estamos en la página de favoritos
+    // Re-renderizar respetando el filtro actual
     const activeFilter = document.querySelector('.category-filter-btn.active');
-    if (activeFilter) {
-        renderFavorites(activeFilter.getAttribute('data-category'));
+    const category = activeFilter ? activeFilter.getAttribute('data-category') : 'todos';
+    renderFavorites(category);
+}
+
+function updateStats() {
+    // Calculamos estadísticas basadas en los favoritos reales
+    const favoriteVendors = allVendors.filter(v => favoritesIds.includes(v.id));
+    const categories = [...new Set(favoriteVendors.map(v => v.category))];
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+    document.getElementById('totalFavorites').textContent = favoritesIds.length;
+    document.getElementById('totalCategories').textContent = categories.length;
+    document.getElementById('totalOrders').textContent = orders.length;
+}
+
+// Redirigir al usuario al home (ya que el modal de menú está allá)
+function irAlHomeConVendor(vendorId) {
+    // Podrías implementar lógica para abrir el modal automáticamente al llegar al home
+    // Por ahora, redirigimos simple
+    window.location.href = '/cliente';
+}
+
+function filtrarFavoritosVisualmente(searchTerm) {
+    const cards = document.querySelectorAll('.favorite-card-item');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const name = card.querySelector('.favorite-name').textContent.toLowerCase();
+        const category = card.querySelector('.badge').textContent.toLowerCase();
+
+        if (name.includes(searchTerm) || category.includes(searchTerm)) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    const emptyState = document.getElementById('emptyState');
+    if (visibleCount === 0 && cards.length > 0) {
+        // Si hay cartas pero ninguna coincide con la búsqueda
+        // Opcional: mostrar mensaje de "no coincidencias"
     }
 }
 
-// Abrir vendor
-function openVendor(vendorId) {
-    // Redirigir al home y abrir el modal del vendor
-    window.location.href = `cliente-home.html?vendor=${vendorId}`;
+// ==========================================
+// UTILIDADES
+// ==========================================
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cartCount');
+    if (badge) badge.textContent = totalItems;
 }
 
-// Buscar en favoritos
-document.querySelector('.search-input').addEventListener('input', function (e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const favoriteCards = document.querySelectorAll('.favorite-card');
-
-    favoriteCards.forEach(card => {
-        const name = card.querySelector('.favorite-name').textContent.toLowerCase();
-        const category = card.querySelector('.favorite-category').textContent.toLowerCase();
-
-        if (name.includes(searchTerm) || category.includes(searchTerm)) {
-            card.parentElement.style.display = 'block';
-        } else {
-            card.parentElement.style.display = 'none';
-        }
-    });
-});
-
-// Mostrar notificación
 function showNotification(message, type = 'success') {
-    const colors = {
-        success: 'bg-success',
-        error: 'bg-danger',
-        info: 'bg-info'
-    };
-
-    const icons = {
-        success: 'check-circle',
-        error: 'exclamation-circle',
-        info: 'info-circle'
-    };
-
+    const colors = {success: 'bg-success', error: 'bg-danger', info: 'bg-info'};
+    const icons = {success: 'check-circle', error: 'exclamation-circle', info: 'info-circle'};
     const bgColor = colors[type] || colors.success;
     const icon = icons[type] || icons.success;
 
@@ -225,29 +248,6 @@ function showNotification(message, type = 'success') {
             </div>
         </div>
     `;
-
     document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    setTimeout(() => notification.remove(), 3000);
 }
-
-// Event listeners
-document.addEventListener('DOMContentLoaded', function () {
-    updateCartCount();
-    updateStats();
-    renderFavorites();
-
-    // Filtros de categoría
-    const categoryButtons = document.querySelectorAll('.category-filter-btn');
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            categoryButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-
-            const category = this.getAttribute('data-category');
-            renderFavorites(category);
-        });
-    });
-});
