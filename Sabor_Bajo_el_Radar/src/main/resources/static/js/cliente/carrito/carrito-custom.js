@@ -1,71 +1,116 @@
-// Obtener carrito del localStorage
+// ==========================================
+// VARIABLES GLOBALES
+// ==========================================
+
+// Formateador de moneda (COP)
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value);
+};
+
+// Estado del carrito
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Actualizar contador del carrito en el navbar
-function updateCartCount() {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cartCount').textContent = totalItems;
-}
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+document.addEventListener('DOMContentLoaded', function () {
+    updateCartCount();
+    renderCartItems();
+    // NOTA: Eliminamos la carga de notas aquí porque se movió a finalizar-compra
+});
 
-// Renderizar items del carrito
+// ==========================================
+// RENDERIZADO
+// ==========================================
+
 function renderCartItems() {
     const cartItemsContainer = document.getElementById('cartItemsPage');
 
+    // Caso: Carrito Vacío
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
-            <div class="empty-cart">
-                <i class="fas fa-shopping-cart"></i>
-                <h3>Tu carrito está vacío</h3>
-                <p>Agrega productos desde nuestro menú</p>
-                <a href="cliente-home.html" class="btn btn-primary btn-lg">
+            <div class="empty-cart text-center py-5">
+                <i class="fas fa-shopping-basket mb-3" style="font-size: 4rem; color: #dee2e6;"></i>
+                <h3 class="text-muted">Tu carrito está vacío</h3>
+                <p class="text-muted mb-4">¿Tienes hambre? Explora los mejores puestos de tu zona.</p>
+                <a href="/cliente" class="btn btn-primary btn-lg rounded-pill px-5">
                     <i class="fas fa-utensils me-2"></i>Ver menú
                 </a>
             </div>
         `;
+        // Ocultar resumen si está vacío
+        document.querySelector('.summary-section').style.opacity = '0.5';
+        document.querySelector('.summary-section button').disabled = true;
         updateSummary();
         return;
     }
 
-    cartItemsContainer.innerHTML = cart.map((item, index) => `
+    // Habilitar resumen
+    document.querySelector('.summary-section').style.opacity = '1';
+    document.querySelector('.summary-section button').disabled = false;
+
+    // Caso: Carrito con productos
+    cartItemsContainer.innerHTML = cart.map((item, index) => {
+        // Lógica de Imagen
+        let imageHtml = '';
+        if (item.image && item.image.trim() !== "") {
+            imageHtml = `<img src="${item.image}" alt="${item.name}" class="cart-item-image">`;
+        } else {
+            imageHtml = `
+                <div class="cart-item-image d-flex align-items-center justify-content-center bg-light text-muted">
+                    <i class="fas fa-utensils fa-lg"></i>
+                </div>
+            `;
+        }
+
+        return `
         <div class="cart-item-page">
-            <img src="https://via.placeholder.com/80x80/ff6b35/FFFFFF?text=${encodeURIComponent(item.name.substring(0, 1))}" 
-                 alt="${item.name}" 
-                 class="cart-item-image">
+            ${imageHtml}
+            
             <div class="cart-item-details">
-                <h5 class="cart-item-name">${item.name}</h5>
-                <p class="cart-item-price">$ ${item.price.toFixed(2)}</p>
-                <div class="cart-item-actions">
+                <div class="d-flex justify-content-between">
+                    <h5 class="cart-item-name mb-1">${item.name}</h5>
+                    <button class="btn-remove-item text-danger border-0 bg-transparent" onclick="removeItem(${index})" title="Eliminar">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                
+                <small class="text-muted d-block mb-2">Vendido por: <strong>${item.vendorName}</strong></small>
+                <p class="cart-item-price mb-2 text-primary fw-bold">${formatCurrency(item.price)}</p>
+                
+                <div class="cart-item-actions d-flex justify-content-between align-items-center mt-auto">
                     <div class="quantity-controls">
-                        <button onclick="decreaseQuantity(${index})">
-                            <i class="fas fa-minus"></i>
-                        </button>
+                        <button onclick="decreaseQuantity(${index})"><i class="fas fa-minus"></i></button>
                         <span>${item.quantity}</span>
-                        <button onclick="increaseQuantity(${index})">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                        <button onclick="increaseQuantity(${index})"><i class="fas fa-plus"></i></button>
                     </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="cart-item-total">$ ${(item.price * item.quantity).toFixed(2)}</span>
-                        <button class="btn-remove-item" onclick="removeItem(${index})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
+                    <span class="cart-item-total fw-bold text-dark">
+                        Sub: ${formatCurrency(item.price * item.quantity)}
+                    </span>
                 </div>
             </div>
         </div>
-    `).join('');
+    `
+    }).join('');
 
     updateSummary();
 }
 
-// Aumentar cantidad
+// ==========================================
+// LÓGICA DE ACTUALIZACIÓN
+// ==========================================
+
 function increaseQuantity(index) {
     cart[index].quantity += 1;
     saveCart();
     renderCartItems();
 }
 
-// Disminuir cantidad
 function decreaseQuantity(index) {
     if (cart[index].quantity > 1) {
         cart[index].quantity -= 1;
@@ -74,96 +119,83 @@ function decreaseQuantity(index) {
     }
 }
 
-// Eliminar item
 function removeItem(index) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-        cart.splice(index, 1);
-        saveCart();
-        renderCartItems();
-        showNotification('Producto eliminado del carrito', 'error');
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: '¿Eliminar producto?',
+            text: "Se quitará de tu carrito",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                executeRemove(index);
+            }
+        });
+    } else {
+        if (confirm('¿Eliminar producto?')) executeRemove(index);
     }
 }
 
-// Actualizar resumen
-function updateSummary() {
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 0; // GRATIS
-    const total = subtotal + shipping;
-
-    document.getElementById('subtotal').textContent = `$ ${subtotal.toFixed(2)}`;
-    document.getElementById('totalPrice').textContent = `$ ${total.toFixed(2)}`;
+function executeRemove(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCartItems();
+    showNotification('Producto eliminado', 'info');
 }
 
-// Guardar carrito en localStorage
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 }
 
-// Mostrar sección de código promocional
-function showPromoCode() {
-    const section = document.getElementById('promoCodeSection');
-    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+function updateCartCount() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cartCount');
+    if (badge) badge.textContent = totalItems;
 }
 
-// Aplicar código promocional
-function applyPromoCode() {
-    const code = document.getElementById('promoCodeInput').value.trim();
-    if (code === '') {
-        showNotification('Por favor ingresa un código', 'error');
-        return;
-    }
+// ==========================================
+// RESUMEN
+// ==========================================
 
-    // Aquí iría la lógica para validar el código
-    // Por ahora solo mostramos un mensaje
-    showNotification('Código aplicado correctamente', 'success');
+function updateSummary() {
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shipping = 0;
+    const total = subtotal + shipping;
+
+    document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+    document.getElementById('totalPrice').textContent = formatCurrency(total);
 }
 
-// Mostrar sección de notas
-function showNoteSection() {
-    const section = document.getElementById('noteSection');
-    section.style.display = section.style.display === 'none' ? 'block' : 'none';
-}
+// ==========================================
+// NAVEGACIÓN Y UTILIDADES
+// ==========================================
 
-// Ir al checkout
 function goToCheckout() {
     if (cart.length === 0) {
         showNotification('Tu carrito está vacío', 'error');
         return;
     }
 
-    // Guardar nota si existe
-    const note = document.getElementById('orderNote').value;
-    if (note) {
-        localStorage.setItem('orderNote', note);
-    }
-
-    window.location.href = 'checkout.html';
+    // CORRECCIÓN: Ya no intentamos leer 'orderNote' porque no existe en el HTML de esta página.
+    // Simplemente redirigimos.
+    window.location.href = '/finalizar-compra';
 }
 
-// Mostrar notificación
 function showNotification(message, type = 'success') {
-    const bgColor = type === 'success' ? 'bg-success' : 'bg-danger';
+    const colors = {success: 'bg-success', error: 'bg-danger', info: 'bg-info', warning: 'bg-warning text-dark'};
     const notification = document.createElement('div');
     notification.className = 'position-fixed top-0 end-0 p-3';
     notification.style.zIndex = '9999';
     notification.innerHTML = `
-        <div class="toast show" role="alert">
-            <div class="toast-body ${bgColor} text-white rounded">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>${message}
-            </div>
-        </div>
-    `;
-
+        <div class="toast show align-items-center text-white ${colors[type] || 'bg-primary'} border-0">
+            <div class="d-flex"><div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
+        </div>`;
     document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    setTimeout(() => notification.remove(), 3000);
 }
-
-// Inicializar página
-document.addEventListener('DOMContentLoaded', function () {
-    updateCartCount();
-    renderCartItems();
-});

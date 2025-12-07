@@ -90,6 +90,7 @@ public class ClienteHomeDTO {
         private String name;
         private BigDecimal price;
         private String description;
+        private String image;
 
         // Constructores, Getters y Setters
         public MenuDTO() {
@@ -125,6 +126,14 @@ public class ClienteHomeDTO {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 }

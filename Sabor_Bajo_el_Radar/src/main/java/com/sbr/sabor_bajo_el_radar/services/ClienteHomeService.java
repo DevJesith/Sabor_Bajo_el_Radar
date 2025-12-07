@@ -53,6 +53,9 @@ public class ClienteHomeService {
                 m.setName(p.getNombre());
                 m.setDescription(p.getDescripcion());
                 m.setPrice(p.getPrecio());
+
+                m.setImage(p.getImagenUrl());
+                
                 return m;
             }).collect(Collectors.toList());
 
