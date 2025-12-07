@@ -229,6 +229,83 @@
     font-size: 0.85rem;
 }
 
+/* ========== TIMELINE (Línea de Tiempo) ========== */
+.timeline-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 20px 10px;
+}
+
+/* Línea gris de fondo */
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+/* Línea de progreso (se llenará con JS) */
+.timeline-progress {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    height: 3px;
+    background: #28a745;
+    z-index: 1;
+    transition: width 0.3s ease;
+}
+
+.timeline-step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    background: white; /* Para tapar la línea */
+    padding: 0 5px;
+}
+
+.step-icon {
+    width: 35px;
+    height: 35px;
+    background: white;
+    border: 3px solid #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    color: #ccc;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.timeline-step.active .step-icon {
+    border-color: #28a745;
+    background: #28a745;
+    color: white;
+}
+
+.timeline-step.completed .step-icon {
+    border-color: #28a745;
+    background: #28a745;
+    color: white;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.timeline-step.active .step-label,
+.timeline-step.completed .step-label {
+    color: #28a745;
+}
+
 /* ========== DELIVERY INFO ========== */
 .delivery-info {
     padding: 1rem;
