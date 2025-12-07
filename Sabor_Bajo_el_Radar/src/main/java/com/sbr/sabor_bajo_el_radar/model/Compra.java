@@ -38,6 +38,10 @@ public class Compra {
     @Column(name = "fecha", nullable = false)
     private Instant fecha;
 
+    @Lob
+    @Column(name = "nota")
+    private String nota;
+
     public Integer getId() {
         return id;
     }
@@ -86,4 +90,11 @@ public class Compra {
         this.fecha = fecha;
     }
 
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
 }

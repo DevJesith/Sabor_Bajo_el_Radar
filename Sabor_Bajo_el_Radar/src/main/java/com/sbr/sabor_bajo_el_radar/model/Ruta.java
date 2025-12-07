@@ -20,9 +20,9 @@ public class Ruta {
     @JoinColumn(name = "compra_id_compra", nullable = false)
     private Compra compraIdCompra;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "domiciliario_id", nullable = false)
+    @JoinColumn(name = "domiciliario_id", nullable = true)
     private Domiciliario domiciliario;
 
     @ColumnDefault("'pendiente'")

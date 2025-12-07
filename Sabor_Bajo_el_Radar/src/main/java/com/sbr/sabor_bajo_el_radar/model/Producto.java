@@ -39,6 +39,10 @@ public class Producto {
     @Column(name = "categoria", nullable = false, length = 100)
     private String categoria;
 
+    @Lob
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
     public Long getId() {
         return id;
     }
@@ -95,4 +99,11 @@ public class Producto {
         this.categoria = categoria;
     }
 
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
+    }
 }
