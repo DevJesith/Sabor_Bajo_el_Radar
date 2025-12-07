@@ -1,5 +1,6 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -9,33 +10,40 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Direccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id; // Cambié a Long por estándar
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Usuario usuario;
 
-    @Column(name = "Barrio", nullable = false, length = 70)
+    @Column(nullable = false)
+    private String direccion; // "Calle 123..."
+
+    @Column(length = 70)
     private String barrio;
 
-    @Lob
-    @Column(name = "Localidad", nullable = false)
+    @Column(nullable = false)
     private String localidad;
 
-    @Column(name = "Direccion", nullable = false)
-    private String direccion;
+    @Column(columnDefinition = "TEXT")
+    private String especificacion; // Detalles adicionales
 
-    @Lob
-    @Column(name = "Especificacion")
-    private String especificacion;
+    // --- NUEVOS CAMPOS ---
+    private Double latitud;
+    private Double longitud;
+    private String etiqueta; // Casa, Trabajo, Otro
+    private String nombreContacto;
+    private String telefonoContacto;
+    private Boolean esPredeterminada = false;
 
-    public Integer getId() {
+    // Getters y Setters
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,6 +53,14 @@ public class Direccion {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getBarrio() {
@@ -63,14 +79,6 @@ public class Direccion {
         this.localidad = localidad;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
     public String getEspecificacion() {
         return especificacion;
     }
@@ -79,4 +87,51 @@ public class Direccion {
         this.especificacion = especificacion;
     }
 
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
+    }
+
+    public String getNombreContacto() {
+        return nombreContacto;
+    }
+
+    public void setNombreContacto(String nombreContacto) {
+        this.nombreContacto = nombreContacto;
+    }
+
+    public String getTelefonoContacto() {
+        return telefonoContacto;
+    }
+
+    public void setTelefonoContacto(String telefonoContacto) {
+        this.telefonoContacto = telefonoContacto;
+    }
+
+    public Boolean getEsPredeterminada() {
+        return esPredeterminada;
+    }
+
+    public void setEsPredeterminada(Boolean esPredeterminada) {
+        this.esPredeterminada = esPredeterminada;
+    }
 }

@@ -86,21 +86,30 @@
     border: 1px solid #6c757d;
 }
 
+/* ========== ESTILOS TARJETA PREDETERMINADA (CORREGIDO) ========== */
 .address-card.default-address {
-    border-color: #28a745;
+    border: 2px solid #28a745; /* Borde verde completo */
+    background-color: #f0fff4; /* Fondo verde muy suave */
 }
 
-.address-card.default-address::before {
-    content: 'Predeterminada';
+/* El badge ahora estará DENTRO de la tarjeta, en la esquina superior derecha */
+.address-card.default-address::after {
+    content: 'En uso';
     position: absolute;
-    top: -10px;
-    right: 10px;
+    top: 0;
+    right: 0;
     background: #28a745;
     color: white;
-    padding: 2px 10px;
-    border-radius: 10px;
+    padding: 4px 12px;
+    border-radius: 0 10px 0 10px; /* Esquina redondeada opuesta */
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Eliminamos el estilo anterior ::before que se cortaba */
+.address-card.default-address::before {
+    display: none;
 }
 
 .address-text {

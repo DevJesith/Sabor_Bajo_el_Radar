@@ -8,7 +8,7 @@ import java.util.List;
 
 //
 
-public interface DireccionRepository extends JpaRepository<Direccion, Integer> {
+public interface DireccionRepository extends JpaRepository<Direccion, Long> {
 
     // Consulta JPQL que agrupa todas las direcciones por su campo localidad
     @Query("SELECT d.localidad, COUNT(d) FROM Direccion d GROUP BY d.localidad")
@@ -18,5 +18,7 @@ public interface DireccionRepository extends JpaRepository<Direccion, Integer> {
         - Object[1] es la cantidad de direcciones en esa localidad.
     */
     List<Object[]> countLocalidad();
+
+    List<Direccion> findByUsuarioCorreo(String correo);
 
 }

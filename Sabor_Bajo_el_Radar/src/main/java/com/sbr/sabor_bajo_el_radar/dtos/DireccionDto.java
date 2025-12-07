@@ -1,81 +1,104 @@
 package com.sbr.sabor_bajo_el_radar.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+public class DireccionDTO {
+    private Long id;
+    private String tag; // etiqueta
+    private String fullAddress; // direccion
+    private String city; // No se guarda en BD por ahora, se asume Bogotá
+    private String locality; // localidad
+    private String details; // especificacion
+    private String contactName;
+    private String contactPhone;
+    private Double lat;
+    private Double lng;
+    private Boolean isDefault;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-/**
- * DTO for {@link com.sbr.sabor_bajo_el_radar.model.Direccion}
- */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class DireccionDto implements Serializable {
-    private final Integer id;
-    private final UsuarioDto usuario;
-    private final String barrio;
-    private final String localidad;
-    private final String direccion;
-    private final String especificacion;
-
-    public DireccionDto(Integer id, UsuarioDto usuario, String barrio, String localidad, String direccion, String especificacion) {
-        this.id = id;
-        this.usuario = usuario;
-        this.barrio = barrio;
-        this.localidad = localidad;
-        this.direccion = direccion;
-        this.especificacion = especificacion;
-    }
-
-    public Integer getId() {
+    // Getters y Setters (Genéralos o usa Lombok)
+    public Long getId() {
         return id;
     }
 
-    public UsuarioDto getUsuario() {
-        return usuario;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getBarrio() {
-        return barrio;
+    public String getTag() {
+        return tag;
     }
 
-    public String getLocalidad() {
-        return localidad;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getFullAddress() {
+        return fullAddress;
     }
 
-    public String getEspecificacion() {
-        return especificacion;
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DireccionDto entity = (DireccionDto) o;
-        return Objects.equals(this.id, entity.id) &&
-                Objects.equals(this.usuario, entity.usuario) &&
-                Objects.equals(this.barrio, entity.barrio) &&
-                Objects.equals(this.localidad, entity.localidad) &&
-                Objects.equals(this.direccion, entity.direccion) &&
-                Objects.equals(this.especificacion, entity.especificacion);
+    public String getCity() {
+        return city;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, usuario, barrio, localidad, direccion, especificacion);
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "usuario = " + usuario + ", " +
-                "barrio = " + barrio + ", " +
-                "localidad = " + localidad + ", " +
-                "direccion = " + direccion + ", " +
-                "especificacion = " + especificacion + ")";
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    public Boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 }
