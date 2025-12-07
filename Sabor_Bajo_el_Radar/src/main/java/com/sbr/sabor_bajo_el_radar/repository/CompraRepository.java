@@ -30,4 +30,6 @@ public interface CompraRepository extends JpaRepository<Compra, Integer> {
     @Query("SELECT COUNT(c) FROM Compra c")
     // Un numero entero con la cantidad total de compras registradas.
     long comprasRealizadas();
+
+    List<Compra> findByClienteUsuarioCorreoOrderByFechaDesc(String correo);
 }

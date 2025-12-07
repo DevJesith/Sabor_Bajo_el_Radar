@@ -1,220 +1,242 @@
-// Obtener carrito del localStorage
+// ==========================================
+// VARIABLES GLOBALES
+// ==========================================
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const formatCurrency = (val) => new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+}).format(val);
 
-// Renderizar items del pedido
-function renderOrderItems() {
-    const orderItemsContainer = document.getElementById('orderItems');
+// Headers para peticiones seguras
+const getApiHeaders = () => {
+    const token = document.querySelector('meta[name="_csrf"]')?.content;
+    const headerName = document.querySelector('meta[name="_csrf_header"]')?.content;
+    return {'Content-Type': 'application/json', [headerName]: token};
+};
 
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+document.addEventListener('DOMContentLoaded', function () {
     if (cart.length === 0) {
-        window.location.href = 'cliente-home.html';
+        window.location.href = '/cliente';
         return;
     }
 
-    orderItemsContainer.innerHTML = cart.map(item => `
-        <div class="order-item">
-            <div>
-                <p class="order-item-name">${item.name}</p>
-                <small class="order-item-quantity">x${item.quantity}</small>
-            </div>
-            <span class="order-item-price">$ ${(item.price * item.quantity).toFixed(2)}</span>
-        </div>
-    `).join('');
-
-    updateCheckoutSummary();
-}
-
-// Actualizar resumen del checkout
-function updateCheckoutSummary() {
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 0; // GRATIS
-    const tax = subtotal * 0.19; // 19% IVA
-    const total = subtotal + shipping + tax;
-
-    document.getElementById('checkoutSubtotal').textContent = `$ ${subtotal.toFixed(2)}`;
-    document.getElementById('checkoutTax').textContent = `$ ${tax.toFixed(2)}`;
-    document.getElementById('checkoutTotal').textContent = `$ ${total.toFixed(2)}`;
-}
-
-// Manejar cambio de método de pago
-document.addEventListener('DOMContentLoaded', function () {
-    const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
-    const cardDetails = document.getElementById('cardDetails');
-
-    paymentMethods.forEach(method => {
-        method.addEventListener('change', function () {
-            if (this.value === 'card') {
-                cardDetails.style.display = 'block';
-            } else {
-                cardDetails.style.display = 'none';
-            }
-        });
-    });
-
-    // Formatear número de tarjeta
-    const cardNumberInput = document.getElementById('cardNumber');
-    if (cardNumberInput) {
-        cardNumberInput.addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\s/g, '');
-            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
-            e.target.value = formattedValue;
-        });
-    }
-
-    // Formatear fecha de expiración
-    const cardExpiryInput = document.getElementById('cardExpiry');
-    if (cardExpiryInput) {
-        cardExpiryInput.addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
-            }
-            e.target.value = value;
-        });
-    }
-
-    renderOrderItems();
+    renderOrderSummary();
+    loadUserInfo();
+    loadAddresses();
+    loadPaymentMethods();
 });
 
-// Validar formulario
-function validateForm() {
-    const requiredFields = {
-        fullName: 'Nombre completo',
-        email: 'Correo electrónico',
-        phone: 'Teléfono',
-        idDocument: 'Documento de identidad',
-        address: 'Dirección',
-        city: 'Ciudad',
-        locality: 'Localidad'
-    };
+// ==========================================
+// CARGA DE DATOS (APIs)
+// ==========================================
 
-    for (const [fieldId, fieldName] of Object.entries(requiredFields)) {
-        const field = document.getElementById(fieldId);
-        if (!field.value.trim()) {
-            showNotification(`Por favor completa el campo: ${fieldName}`, 'error');
-            field.focus();
-            return false;
+// 1. Cargar Info del Usuario
+async function loadUserInfo() {
+    try {
+        const res = await fetch('/api/perfil-cliente');
+        if (res.ok) {
+            const user = await res.json();
+            document.getElementById('userInfoContainer').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6 mb-2"><strong>Nombre:</strong> ${user.nombres} ${user.apellidos}</div>
+                    <div class="col-md-6 mb-2"><strong>Correo:</strong> ${user.correo}</div>
+                    <div class="col-md-6"><strong>Teléfono:</strong> ${user.telefono}</div>
+                    <div class="col-md-6"><strong>Documento:</strong> ${user.documento}</div>
+                </div>
+            `;
         }
+    } catch (e) {
+        document.getElementById('userInfoContainer').innerHTML = '<p class="text-danger">Error cargando información.</p>';
     }
-
-    // Validar email
-    const email = document.getElementById('email').value;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showNotification('Por favor ingresa un correo válido', 'error');
-        return false;
-    }
-
-    // Validar método de pago
-    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-
-    if (paymentMethod === 'card') {
-        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-        const cardExpiry = document.getElementById('cardExpiry').value;
-        const cardCVV = document.getElementById('cardCVV').value;
-        const cardName = document.getElementById('cardName').value;
-
-        if (!cardNumber || cardNumber.length < 13) {
-            showNotification('Número de tarjeta inválido', 'error');
-            return false;
-        }
-
-        if (!cardExpiry || cardExpiry.length !== 5) {
-            showNotification('Fecha de expiración inválida', 'error');
-            return false;
-        }
-
-        if (!cardCVV || cardCVV.length < 3) {
-            showNotification('CVV inválido', 'error');
-            return false;
-        }
-
-        if (!cardName.trim()) {
-            showNotification('Por favor ingresa el nombre del titular', 'error');
-            return false;
-        }
-    }
-
-    return true;
 }
 
-// Procesar pago
-function processPayment() {
-    if (!validateForm()) {
+// 2. Cargar Direcciones
+async function loadAddresses() {
+    const container = document.getElementById('addressesContainer');
+    try {
+        const res = await fetch('/api/direcciones');
+        const addresses = await res.json();
+
+        if (addresses.length === 0) {
+            container.innerHTML = `<div class="alert alert-warning">No tienes direcciones guardadas. <a href="/ubicacion">Agrega una aquí</a></div>`;
+            return;
+        }
+
+        container.innerHTML = addresses.map((addr, index) => `
+            <div class="form-check address-option-card">
+                <input class="form-check-input" type="radio" name="selectedAddress" id="addr_${addr.id}" value="${addr.id}" ${addr.isDefault ? 'checked' : ''}>
+                <label class="form-check-label w-100" for="addr_${addr.id}">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-${getIcon(addr.tag)} fs-4 me-3 text-secondary"></i>
+                        <div>
+                            <strong>${addr.tag}</strong> (${addr.fullAddress})
+                            <small class="d-block text-muted">${addr.locality}, ${addr.city}</small>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        `).join('');
+
+        // Si ninguna es default, marcar la primera
+        if (!document.querySelector('input[name="selectedAddress"]:checked')) {
+            const first = document.querySelector('input[name="selectedAddress"]');
+            if (first) first.checked = true;
+        }
+
+    } catch (e) {
+        container.innerHTML = '<p class="text-danger">Error cargando direcciones.</p>';
+    }
+}
+
+// 3. Cargar Métodos de Pago
+async function loadPaymentMethods() {
+    const container = document.getElementById('paymentMethodsContainer');
+    try {
+        const res = await fetch('/api/metodos-pago');
+        const methods = await res.json();
+
+        let html = methods.map(m => `
+            <div class="form-check payment-option-card">
+                <input class="form-check-input" type="radio" name="selectedPayment" id="pay_${m.id}" value="${m.id}">
+                <label class="form-check-label w-100" for="pay_${m.id}">
+                    <div class="d-flex align-items-center">
+                        <i class="fas ${m.tipo === 'NEQUI' ? 'fa-mobile-alt' : 'fa-credit-card'} fs-4 me-3 text-primary"></i>
+                        <div>
+                            <strong>${m.tipo}</strong> ${m.franquicia ? `(${m.franquicia})` : ''}
+                            <small class="d-block text-muted">${m.numeroMascara} - ${m.titular}</small>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        `).join('');
+
+        container.innerHTML = html;
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// ==========================================
+// LÓGICA DE PEDIDO
+// ==========================================
+
+function renderOrderSummary() {
+    const container = document.getElementById('orderItems');
+    let subtotal = 0;
+
+    container.innerHTML = cart.map(item => {
+        const totalItem = item.price * item.quantity;
+        subtotal += totalItem;
+        return `
+            <div class="order-item">
+                <div>
+                    <h6 class="mb-0 fw-bold">${item.name}</h6>
+                    <small class="text-muted">x${item.quantity} - ${item.vendorName}</small>
+                </div>
+                <span class="fw-bold text-dark">${formatCurrency(totalItem)}</span>
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById('checkoutSubtotal').textContent = formatCurrency(subtotal);
+    document.getElementById('checkoutTotal').textContent = formatCurrency(subtotal);
+}
+
+async function processOrder() {
+    // 1. Obtener Dirección Seleccionada
+    const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
+    if (!selectedAddressRadio) {
+        Swal.fire('Falta información', 'Por favor selecciona una dirección de entrega.', 'warning');
         return;
     }
 
+    // 2. Obtener Método de Pago Seleccionado
+    const selectedPaymentRadio = document.querySelector('input[name="selectedPayment"]:checked');
+    if (!selectedPaymentRadio) {
+        Swal.fire('Falta información', 'Por favor selecciona un método de pago.', 'warning');
+        return;
+    }
+
+    // 3. Confirmación
+    const result = await Swal.fire({
+        title: '¿Confirmar pedido?',
+        text: "Tu pedido será enviado al restaurante.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b35',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, pedir ahora'
+    });
+
+    if (result.isConfirmed) {
+        enviarPedidoAlBackend({
+            addressId: selectedAddressRadio.value,
+            paymentData: selectedPaymentRadio.value, // Puede ser ID (Long) o "EFECTIVO" (String)
+            note: document.getElementById('orderNote').value,
+            items: cart
+        });
+    }
+}
+
+async function enviarPedidoAlBackend(orderData) {
     // Mostrar loading
-    const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
+    Swal.fire({
+        title: 'Procesando...',
+        text: 'Estamos enviando tu pedido a los restaurantes',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
 
-    // Recopilar datos del pedido
-    const orderData = {
-        customer: {
-            name: document.getElementById('fullName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            idDocument: document.getElementById('idDocument').value
-        },
-        address: {
-            street: document.getElementById('address').value,
-            city: document.getElementById('city').value,
-            locality: document.getElementById('locality').value,
-            reference: document.getElementById('addressReference').value
-        },
-        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-        items: cart,
-        subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        tax: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.19,
-        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.19,
-        note: localStorage.getItem('orderNote') || '',
-        timestamp: new Date().toISOString()
-    };
+    try {
+        // Preparar el cuerpo para el DTO de Java
+        const payload = {
+            addressId: orderData.addressId,
+            paymentMethod: orderData.paymentData,
+            note: orderData.note,
+            items: orderData.items.map(i => ({
+                id: i.id, // ID del producto
+                quantity: i.quantity
+            }))
+        };
 
-    // Simular procesamiento de pago
-    setTimeout(() => {
-        // Aquí iría la integración con la pasarela de pago real
-        console.log('Orden procesada:', orderData);
+        const response = await fetch('/api/pedidos', {
+            method: 'POST',
+            headers: getApiHeaders(),
+            body: JSON.stringify(payload)
+        });
 
-        // Guardar orden en localStorage (temporal)
-        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-        const orderId = 'ORD-' + Date.now();
-        orders.push({id: orderId, ...orderData});
-        localStorage.setItem('orders', JSON.stringify(orders));
+        if (!response.ok) throw new Error('Error al procesar el pedido');
 
-        // Limpiar carrito
+        // Éxito
         localStorage.removeItem('cart');
         localStorage.removeItem('orderNote');
 
-        // Redirigir a página de confirmación
-        showNotification('¡Pedido realizado con éxito!', 'success');
+        await Swal.fire({
+            title: '¡Pedido Exitoso!',
+            text: 'Tu pedido ha sido recibido. Te redirigiremos a tus pedidos.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        });
 
-        setTimeout(() => {
-            window.location.href = 'confirmacion.html?order=' + orderId;
-        }, 2000);
-    }, 2000);
+        window.location.href = '/mis-pedidos';
+
+    } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'No se pudo realizar el pedido. Intenta nuevamente.', 'error');
+    }
 }
 
-// Mostrar notificación
-function showNotification(message, type = 'success') {
-    const bgColor = type === 'success' ? 'bg-success' : 'bg-danger';
-    const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
-
-    const notification = document.createElement('div');
-    notification.className = 'position-fixed top-0 end-0 p-3';
-    notification.style.zIndex = '9999';
-    notification.innerHTML = `
-        <div class="toast show" role="alert">
-            <div class="toast-body ${bgColor} text-white rounded">
-                <i class="fas fa-${icon} me-2"></i>${message}
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+// Helper para iconos
+function getIcon(tag) {
+    if (!tag) return 'map-marker-alt';
+    const t = tag.toLowerCase();
+    if (t.includes('casa')) return 'home';
+    if (t.includes('trabajo')) return 'briefcase';
+    return 'map-marker-alt';
 }
