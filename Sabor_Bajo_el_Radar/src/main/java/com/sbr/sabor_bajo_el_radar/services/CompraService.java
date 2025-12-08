@@ -38,6 +38,9 @@ public class CompraService {
     @Autowired
     private DireccionRepository direccionRepository;
 
+    @Autowired
+    private FacturaRepository facturaRepository;
+
     @Transactional
     public void procesarPedido(PedidoRequestDTO request, String emailCliente) {
         Usuario usuario = usuarioRepository.findByCorreo(emailCliente)
@@ -81,6 +84,7 @@ public class CompraService {
             Compra compraGuardada = compraRepository.save(compra);
             BigDecimal totalCompra = BigDecimal.ZERO;
 
+
             // 3. GUARDAR DETALLES
             for (PedidoRequestDTO.ItemPedidoDTO item : items) {
                 Producto prod = productoRepository.findById(item.getId()).get();
@@ -99,9 +103,21 @@ public class CompraService {
                 detalleCompraRepository.save(detalle);
             }
 
+
             // Actualizar total
             compraGuardada.setTotal(totalCompra);
             compraRepository.save(compraGuardada);
+
+            Factura factura = new Factura();
+            factura.setCompraIdCompra(compraGuardada);
+            factura.setMetodoPago(request.getPaymentMethod());
+            factura.setFechaPago(Instant.now());
+
+            //Generar codigo unico: FAC + AñoMesDia + HoraMinuto + Random
+            String codigoUnico = generarNumeroFacturaUnico(usuario.getId(), compraGuardada.getId());
+            factura.setNumeroFactura(codigoUnico);
+
+            facturaRepository.save(factura);
 
             // 4. Crear registro en ruta (logistica) con la direccion
             Ruta ruta = new Ruta();
@@ -112,6 +128,14 @@ public class CompraService {
             // Nota: El domiciliario se asigna despues, aqui queda null
             rutaRepository.save(ruta);
         }
+    }
+
+    private String generarNumeroFacturaUnico(Integer userioId, Integer compraId) {
+
+        // Ejemplo resultado: FAC-105-2458
+        // Usamos el ID de compra y un timestamp corto para garantizar unicidad
+        Long timestamp = System.currentTimeMillis() % 10000;
+        return "FAC- " + userioId + "-" + compraId + timestamp;
     }
 
     public List<Map<String, Object>> listarPedidosCliente(String email) {
@@ -129,15 +153,25 @@ public class CompraService {
                 nombreNegocio = detalles.get(0).getProducto().getNegocio().getNombreNegocio();
             }
 
+            String numeroFacturaVisual = "ORD-" + c.getId();
+            var facturaOpt = facturaRepository.findByCompraIdCompraId(c.getId());
+
+            if (facturaOpt.isPresent()) {
+                numeroFacturaVisual = facturaOpt.get().getNumeroFactura();
+            }
+
             // 3. Armamos el DTO
             Map<String, Object> dto = new HashMap<>();
-            dto.put("id", "ORD-" + c.getId());
+            dto.put("id", c.getId());
+            dto.put("invoiceNumber", numeroFacturaVisual);
+
             dto.put("date", c.getFecha());
             dto.put("vendorName", nombreNegocio); // Nombre del negocio real
             dto.put("status", c.getEstado());
             dto.put("total", c.getTotal());
 
             dto.put("note", c.getNota());
+
 
             // --- NUEVO: AGREGAMOS DATOS DEL CLIENTE ---
             Usuario u = c.getCliente().getUsuario();
