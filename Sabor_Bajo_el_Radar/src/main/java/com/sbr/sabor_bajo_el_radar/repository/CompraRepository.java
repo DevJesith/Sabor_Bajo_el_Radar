@@ -32,4 +32,7 @@ public interface CompraRepository extends JpaRepository<Compra, Integer> {
     long comprasRealizadas();
 
     List<Compra> findByClienteUsuarioCorreoOrderByFechaDesc(String correo);
+
+    List<Compra> findByVendedorUsuarioCorreoOrderByFechaDesc(String correo);
+
 }

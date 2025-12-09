@@ -2,8 +2,10 @@ package com.sbr.sabor_bajo_el_radar.services;
 
 import com.sbr.sabor_bajo_el_radar.dtos.ClienteHomeDTO;
 import com.sbr.sabor_bajo_el_radar.model.Negocio;
+import com.sbr.sabor_bajo_el_radar.model.Oferta;
 import com.sbr.sabor_bajo_el_radar.model.Producto;
 import com.sbr.sabor_bajo_el_radar.repository.NegocioRepository;
+import com.sbr.sabor_bajo_el_radar.repository.OfertaRepository;
 import com.sbr.sabor_bajo_el_radar.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class ClienteHomeService {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private OfertaRepository ofertaRepository;
 
     public List<ClienteHomeDTO.VendorDTO> obtenerNegociosActivos() {
         //1. Obtener negocios aprobados (admin) y activos (vendedor)
@@ -41,7 +46,23 @@ public class ClienteHomeService {
             dto.setRating(4.5);
 
             //Descuento simulado (o trae de ofertas si tienes logica)
-            dto.setDiscount("");
+//            dto.setDiscount("");
+
+
+            List<Oferta> ofertas = ofertaRepository.findCombosActivosPorNegocio(n.getId());
+            List<ClienteHomeDTO.ComboDTO> combosDto = ofertas.stream().map(o -> {
+                ClienteHomeDTO.ComboDTO combo = new ClienteHomeDTO.ComboDTO();
+                combo.setId(o.getId());
+                combo.setName(o.getTitulo());
+                combo.setDescription(o.getDescripcion());
+                combo.setPrice(o.getPrecioOferta());
+
+                combo.setImage(o.getProducto().getImagenUrl());
+
+                combo.setProductId(o.getProducto().getId());
+                return combo;
+            }).collect(Collectors.toList());
+            dto.setCombos(combosDto);
 
             // 2. Obtener productos de este negocio
             List<Producto> productos = productoRepository.findByNegocioId(n.getId());
@@ -55,7 +76,7 @@ public class ClienteHomeService {
                 m.setPrice(p.getPrecio());
 
                 m.setImage(p.getImagenUrl());
-                
+
                 return m;
             }).collect(Collectors.toList());
 

@@ -195,14 +195,22 @@ async function enviarPedidoAlBackend(orderData) {
     try {
         // Preparar el cuerpo para el DTO de Java
         const payload = {
-            addressId: orderData.addressId,
+            addressId: parseInt(orderData.addressId), // Asegurar número
             paymentMethod: orderData.paymentData,
-            note: orderData.note,
-            items: orderData.items.map(i => ({
-                id: i.id, // ID del producto
-                quantity: i.quantity
-            }))
+            note: orderData.note || "", // Enviar cadena vacía si es null
+            items: orderData.items.map(i => {
+                // Si el item tiene un ID compuesto tipo "COMBO-5", el ID real está en i.id (ya limpio)
+                // o en i.offerId.
+                // Asegurémonos de enviar números
+                return {
+                    id: parseInt(i.id),          // ID del Producto
+                    quantity: parseInt(i.quantity),
+                    offerId: i.offerId ? parseInt(i.offerId) : null // Solo si existe
+                };
+            })
         };
+
+        console.log("Enviando Payload:", JSON.stringify(payload)); // Para depuración
 
         const response = await fetch('/api/pedidos', {
             method: 'POST',
@@ -210,11 +218,17 @@ async function enviarPedidoAlBackend(orderData) {
             body: JSON.stringify(payload)
         });
 
-        if (!response.ok) throw new Error('Error al procesar el pedido');
+        if (!response.ok) {
+            // Intentar leer el error del servidor
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Error al procesar el pedido');
+        }
 
         // Éxito
         localStorage.removeItem('cart');
         localStorage.removeItem('orderNote');
+        // Limpiamos también checkoutData por si acaso
+        localStorage.removeItem('checkoutData');
 
         await Swal.fire({
             title: '¡Pedido Exitoso!',
@@ -228,7 +242,7 @@ async function enviarPedidoAlBackend(orderData) {
 
     } catch (error) {
         console.error(error);
-        Swal.fire('Error', 'No se pudo realizar el pedido. Intenta nuevamente.', 'error');
+        Swal.fire('Error', error.message || 'No se pudo realizar el pedido. Intenta nuevamente.', 'error');
     }
 }
 

@@ -15,6 +15,8 @@ public class ClienteHomeDTO {
         private Double rating;   // Quemado o calculado
         private List<MenuDTO> menu;
 
+        private List<ComboDTO> combos;
+
         // Constructores, Getters y Setters
         public VendorDTO() {
         }
@@ -82,6 +84,14 @@ public class ClienteHomeDTO {
         public void setMenu(List<MenuDTO> menu) {
             this.menu = menu;
         }
+
+        public List<ComboDTO> getCombos() {
+            return combos;
+        }
+
+        public void setCombos(List<ComboDTO> combos) {
+            this.combos = combos;
+        }
     }
 
     // Clase interna para los Productos (Menú)
@@ -134,6 +144,66 @@ public class ClienteHomeDTO {
 
         public void setImage(String image) {
             this.image = image;
+        }
+    }
+
+    // --- NUEVA CLASE PARA COMBOS ---
+    public static class ComboDTO {
+        private Long id;
+        private String name;        // Título del combo
+        private String description; // Qué incluye
+        private BigDecimal price;   // Precio oferta
+        private String image;       // Usaremos la imagen del producto base
+
+        private Long productId;
+
+        // Getters y Setters
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public void setPrice(BigDecimal price) {
+            this.price = price;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public Long getProductId() {
+            return productId;
+        }
+
+        public void setProductId(Long productId) {
+            this.productId = productId;
         }
     }
 }

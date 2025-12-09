@@ -132,8 +132,7 @@ function renderizarSecciones() {
 
     // --- LÓGICA DE VISUALIZACIÓN ---
 
-    // 1. Recomendados: Mostramos todos (o podrías filtrar por rating > 4.5)
-    // Duplicamos el array solo para simular efecto de scroll si hay pocos datos
+    // 1. Recomendados: Mostramos todos
     const displayVendors = vendors.length < 4 ? [...vendors, ...vendors] : vendors;
 
     const recContainer = document.getElementById('recommendedVendors');
@@ -141,13 +140,13 @@ function renderizarSecciones() {
         recContainer.innerHTML = displayVendors.map(createVendorCard).join('');
     }
 
-    // 2. Promociones: (Por ahora mostramos todos, luego puedes filtrar si tienen descuento)
+    // 2. Promociones
     const promoContainer = document.getElementById('promotionVendors');
     if (promoContainer) {
         promoContainer.innerHTML = displayVendors.map(createVendorCard).join('');
     }
 
-    // 3. Desayunos: Filtramos por categoría (insensible a mayúsculas)
+    // 3. Desayunos
     const breakfastContainer = document.getElementById('breakfastVendors');
     if (breakfastContainer) {
         const desayunos = vendors.filter(v => v.category.toLowerCase().includes('desayuno'));
@@ -156,7 +155,7 @@ function renderizarSecciones() {
             : '<p class="text-muted text-center w-100 p-3">No hay puestos de desayunos disponibles.</p>';
     }
 
-    // 4. Postres: Filtramos por categoría
+    // 4. Postres
     const dessertContainer = document.getElementById('dessertVendors');
     if (dessertContainer) {
         const postres = vendors.filter(v => v.category.toLowerCase().includes('postre'));
@@ -167,7 +166,6 @@ function renderizarSecciones() {
 }
 
 // Función para crear el HTML de la tarjeta (Card)
-// Función para crear el HTML de la tarjeta (Card) - DISEÑO ACTUALIZADO
 function createVendorCard(vendor) {
     const isFavorite = favorites.includes(vendor.id);
 
@@ -180,36 +178,25 @@ function createVendorCard(vendor) {
     // String seguro para el onclick
     const vendorString = JSON.stringify(vendor).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
-    // NOTA: Usamos clases de Bootstrap para el Badge rojo (bg-danger)
     return `
         <div class="col-md-3 col-sm-6 mb-4">
             <div class="vendor-card h-100 shadow-sm" onclick='openMenu(${vendorString})' style="cursor: pointer; background: white; border-radius: 15px; overflow: hidden;">
                 <div class="position-relative">
-                    <!-- Imagen -->
                     <img src="${imageSrc}" class="card-img-top" alt="${vendor.name}" style="width: 100%; height: 160px; object-fit: cover;">
-                    
                     ${vendor.discount ? `<span class="badge-discount" style="position: absolute; top: 10px; left: 10px; background: #ff6b35; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${vendor.discount}</span>` : ''}
-                    
-                    <!-- Botón Favorito -->
                     <button class="favorite-heart" 
                             onclick="event.stopPropagation(); toggleFavorite(${vendor.id})"
                             style="position: absolute; top: 10px; right: 10px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display:flex; justify-content:center; align-items:center; transition: transform 0.2s;">
                         <i class="fas fa-heart" style="color: ${isFavorite ? '#ff6b35' : '#ccc'}; font-size: 16px;"></i>
                     </button>
                 </div>
-                
                 <div class="card-body p-3">
-                    <!-- 1. Nombre del Puesto -->
                     <h5 class="card-title fw-bold mb-2 text-dark" style="font-size: 1.1rem;">${vendor.name}</h5>
-                    
-                    <!-- 2. Categoría (Badge Rojo) -->
                     <div class="mb-2">
                         <span class="badge rounded-pill bg-danger" style="font-weight: 500; padding: 0.5em 0.8em;">
                             ${vendor.category}
                         </span>
                     </div>
-
-                    <!-- 3. Ubicación (Icono + Texto) -->
                     <p class="card-text text-muted small mb-0">
                         <i class="fas fa-map-marker-alt me-1 text-secondary"></i> 
                         ${vendor.location || 'Ubicación no disponible'}
@@ -221,49 +208,123 @@ function createVendorCard(vendor) {
 }
 
 // Función para abrir el modal del menú
+// Función para abrir el modal del menú (CORREGIDA - Sin duplicados)
 function openMenu(vendorInput) {
-    // Asegurarnos de que sea un objeto (por si viene como string del HTML)
     let vendor = vendorInput;
     if (typeof vendorInput === 'string') {
-        vendor = JSON.parse(vendorInput);
+        try {
+            vendor = JSON.parse(vendorInput);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
     }
 
     document.getElementById('vendorName').textContent = vendor.name;
     document.getElementById('vendorCategory').textContent = vendor.category;
-
     const menuContainer = document.getElementById('menuItems');
 
-    // Verificar si tiene menú
-    if (!vendor.menu || vendor.menu.length === 0) {
-        menuContainer.innerHTML = `
-            <div class="text-center py-5">
-                <i class="fas fa-utensils text-muted fs-1 mb-3"></i>
-                <p class="text-muted">Este puesto aún no ha publicado productos.</p>
+    // Preparar contenido HTML
+    let contentHTML = '';
+
+    // 1. RENDERIZAR COMBOS (Si existen)
+    if (vendor.combos && vendor.combos.length > 0) {
+
+        // Generamos PRIMERO el HTML de las tarjetas en una variable temporal
+        const combosCardsHTML = vendor.combos.map(combo => {
+            const itemParaCarrito = {
+                id: combo.productId,
+                offerId: combo.id,
+                name: combo.name,
+                price: combo.price,
+                image: combo.image,
+                isCombo: true
+            };
+            // ID único local para el carrito
+            itemParaCarrito._uniqueId = 'COMBO-' + combo.id;
+
+            const safeItem = encodeURIComponent(JSON.stringify(itemParaCarrito));
+            const safeVendorName = encodeURIComponent(vendor.name);
+
+            return `
+            <div class="modal-product border-success bg-light mb-3" style="border-width: 1px; border-style: solid;">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="badge bg-success me-2">OFERTA</span>
+                            <h6 class="fw-bold mb-0 text-success">${combo.name}</h6>
+                        </div>
+                        <p class="text-muted small mb-2 fst-italic">"${combo.description}"</p>
+                        <p class="fw-bold mb-0 text-success fs-5">${formatCurrency(combo.price)}</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <button class="btn btn-success btn-sm rounded-pill px-3" 
+                                onclick="addToCartWrapper('${safeItem}', '${safeVendorName}')">
+                            <i class="fas fa-plus me-1"></i> Agregar
+                        </button>
+                    </div>
+                </div>
             </div>`;
+        }).join('');
+
+        // AHORA construimos el bloque en el orden correcto:
+        // 1. Título -> 2. Tarjetas -> 3. Línea separadora
+        contentHTML += `<h6 class="mb-3 mt-2 fw-bold text-success"><i class="fas fa-tags me-2"></i>Combos y Promociones</h6>`;
+        contentHTML += combosCardsHTML;
+        contentHTML += `<hr class="my-4">`;
+    }
+
+    // 2. RENDERIZAR MENÚ NORMAL
+    if (!vendor.menu || vendor.menu.length === 0) {
+        // Solo mostramos mensaje de "vacío" si tampoco hay combos
+        if (!vendor.combos || vendor.combos.length === 0) {
+            contentHTML += `
+                <div class="text-center py-5">
+                    <i class="fas fa-utensils text-muted fs-1 mb-3"></i>
+                    <p class="text-muted">Este puesto aún no ha publicado productos.</p>
+                </div>`;
+        }
     } else {
-        const menuHTML = vendor.menu.map(item => `
+        contentHTML += `<h6 class="mb-3 fw-bold text-dark"><i class="fas fa-list me-2"></i>Menú</h6>`;
+
+        contentHTML += vendor.menu.map(item => {
+            const safeItem = encodeURIComponent(JSON.stringify(item));
+            const safeVendorName = encodeURIComponent(vendor.name);
+            return `
             <div class="modal-product">
                 <div class="row align-items-center">
-                    <div class="col-md-8 col-8">
+                    <div class="col-8">
                         <h6 class="fw-bold mb-1">${item.name}</h6>
                         <p class="text-muted small mb-2 text-truncate">${item.description || 'Sin descripción'}</p>
-                        <!-- CORREGIDO: USAR formatCurrency -->
                         <p class="fw-bold mb-0 text-primary">${formatCurrency(item.price)}</p>
                     </div>
-                    <div class="col-md-4 col-4 text-end">
-                        <button class="btn btn-add-to-cart btn-sm" 
-                                onclick='addToCart(${JSON.stringify(item).replace(/'/g, "&apos;")}, "${vendor.name.replace(/"/g, '&quot;')}")'>
-                            <i class="fas fa-plus me-1"></i> <span class="d-none d-sm-inline">Agregar</span>
+                    <div class="col-4 text-end">
+                        <button class="btn btn-outline-primary btn-sm rounded-pill px-3" 
+                                onclick="addToCartWrapper('${safeItem}', '${safeVendorName}')">
+                            <i class="fas fa-plus"></i> Agregar
                         </button>
                     </div>
                 </div>
             </div>
-        `).join('');
-        menuContainer.innerHTML = menuHTML;
+            `;
+        }).join('');
     }
 
+    menuContainer.innerHTML = contentHTML;
     const modal = new bootstrap.Modal(document.getElementById('menuModal'));
     modal.show();
+}
+
+// Wrapper para decodificar
+function addToCartWrapper(encodedItem, encodedVendorName) {
+    try {
+        const item = JSON.parse(decodeURIComponent(encodedItem));
+        const vendorName = decodeURIComponent(encodedVendorName);
+        addToCart(item, vendorName);
+    } catch (e) {
+        console.error("Error al agregar al carrito:", e);
+        showNotification("Error al agregar producto", "error");
+    }
 }
 
 // ==========================================
@@ -271,16 +332,12 @@ function openMenu(vendorInput) {
 // ==========================================
 
 function initializeFilters() {
-    // Price range
     const priceRange = document.getElementById('priceRange');
     if (priceRange) {
-        // Configuramos el slider para valores colombianos (ej: 0 a 100.000)
         priceRange.min = 0;
         priceRange.max = 100000;
         priceRange.step = 2000;
         priceRange.value = 20000;
-
-        // Actualizamos el texto inicial
         document.getElementById('priceRangeValue').textContent = formatCurrency(priceRange.value);
 
         priceRange.addEventListener('input', function (e) {
@@ -288,12 +345,10 @@ function initializeFilters() {
         });
     }
 
-    // Category filters UI logic
     document.querySelectorAll('.category-filter-item').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.category-filter-item').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            // Aquí podrías agregar lógica para filtrar `vendors` y llamar a `renderizarSecciones()`
         });
     });
 }
@@ -317,106 +372,136 @@ function clearFilters() {
     showNotification('Filtros limpiados', 'info');
 }
 
-
 // ==========================================
-// CARRITO DE COMPRAS
+// CARRITO DE COMPRAS (CORREGIDO)
 // ==========================================
 
 function addToCart(item, vendorName) {
-    const existingItem = cart.find(cartItem => cartItem.id === item.id);
+
+    // Usamos _uniqueId si existe (combo), sino el id normal (producto)
+    const cartId = item._uniqueId || item.id;
+
+    // Buscamos si ya existe usando el ID compuesto
+    const existingItem = cart.find(cartItem => (cartItem._uniqueId || cartItem.id) === cartId);
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
+        // IMPORTANTE: No guardamos item.image para evitar QuotaExceededError
         cart.push({
-            ...item,
+            id: item.id,
+            offerId: item.offerId,
+            _uniqueId: cartId,
+            name: item.name,
+            price: item.price,
             vendorName: vendorName,
             quantity: 1
+            // image: item.image // OMITIDO INTENCIONALMENTE
         });
     }
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCart();
-    showNotification(`${item.name} agregado al carrito`);
+    try {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        updateCart();
+        showNotification(`${item.name} agregado al carrito`);
+    } catch (e) {
+        console.error("Error storage:", e);
+        showNotification("El carrito está lleno. Intenta borrar algunos items.", "error");
+    }
+}
+
+function updateCartCount() {
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
 }
 
 function updateCart() {
-    const cartCount = document.getElementById('cartCount');
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
 
-    // Actualizar contador
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    if (cartCount) cartCount.textContent = totalItems;
-
-    // Si no estamos en la página que tiene el offcanvas del carrito, salimos
+    // Si no estamos en la vista con el offcanvas, salir
     if (!cartItems) return;
 
-    // Actualizar items del carrito
     if (cart.length === 0) {
         cartItems.innerHTML = '<p class="text-muted text-center py-4">Tu carrito está vacío</p>';
         if (cartTotal) cartTotal.textContent = formatCurrency(0);
         return;
     }
 
-    cartItems.innerHTML = cart.map(item => `
+    cartItems.innerHTML = cart.map(item => {
+        // --- CORRECCIÓN CLAVE AQUÍ ---
+        const identificadorUnico = item._uniqueId || item.id;
+
+        return `
         <div class="cart-item">
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <div>
                     <h6 class="mb-0 fw-bold">${item.name}</h6>
                     <small class="text-muted">${item.vendorName}</small>
                 </div>
-                <i class="fas fa-trash btn-remove" onclick="removeFromCart(${item.id})"></i>
+                <!-- Usamos comillas simples para pasar el string del ID -->
+                <i class="fas fa-trash btn-remove" onclick="removeFromCart('${identificadorUnico}')"></i>
             </div>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="cart-item-quantity">
-                    <button onclick="decreaseQuantity(${item.id})"><i class="fas fa-minus"></i></button>
+                    <button onclick="decreaseQuantity('${identificadorUnico}')"><i class="fas fa-minus"></i></button>
                     <span class="fw-bold">${item.quantity}</span>
-                    <button onclick="increaseQuantity(${item.id})"><i class="fas fa-plus"></i></button>
+                    <button onclick="increaseQuantity('${identificadorUnico}')"><i class="fas fa-plus"></i></button>
                 </div>
                 <span class="fw-bold text-primary">${formatCurrency(item.price * item.quantity)}</span>
             </div>
         </div>
-    `).join('');
+    `
+    }).join('');
 
-    // Actualizar total
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     if (cartTotal) cartTotal.textContent = formatCurrency(total);
 }
 
-function increaseQuantity(itemId) {
-    const item = cart.find(cartItem => cartItem.id === itemId);
+function increaseQuantity(identifier) {
+    const item = cart.find(item => (item._uniqueId || item.id).toString() === identifier.toString());
     if (item) {
         item.quantity += 1;
         localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
         updateCart();
     }
 }
 
-function decreaseQuantity(itemId) {
-    const item = cart.find(cartItem => cartItem.id === itemId);
+function decreaseQuantity(identifier) {
+    const item = cart.find(item => (item._uniqueId || item.id).toString() === identifier.toString());
     if (item && item.quantity > 1) {
         item.quantity -= 1;
         localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
         updateCart();
     }
 }
 
-function removeFromCart(itemId) {
-    cart = cart.filter(item => item.id !== itemId);
+function removeFromCart(identifier) {
+    // Filtramos comparando contra _uniqueId (si existe) o contra id
+    cart = cart.filter(item => {
+        const itemId = (item._uniqueId || item.id).toString();
+        return itemId !== identifier.toString();
+    });
+
     localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
     updateCart();
     showNotification('Item eliminado del carrito', 'info');
 }
 
 function checkout() {
     if (cart.length === 0) {
-        alert('Tu carrito está vacío');
+        showNotification('Tu carrito está vacío', 'warning');
         return;
     }
-    window.location.href = '/finalizar-compra'; // Redirección correcta
+    window.location.href = '/finalizar-compra';
 }
-
 
 // ==========================================
 // FAVORITOS
@@ -434,14 +519,11 @@ function toggleFavorite(vendorId) {
     }
 
     localStorage.setItem('favorites', JSON.stringify(favorites));
-
-    // Re-renderizar tarjetas para actualizar el color del corazón
     renderizarSecciones();
 }
 
-
 // ==========================================
-// UTILIDADES (Scroll, Notificaciones, Usuario)
+// UTILIDADES
 // ==========================================
 
 function scrollSection(sectionId, direction) {
@@ -459,12 +541,14 @@ function showNotification(message, type = 'success') {
     const colors = {
         success: 'bg-success',
         error: 'bg-danger',
-        info: 'bg-info'
+        info: 'bg-info',
+        warning: 'bg-warning text-dark'
     };
     const icons = {
         success: 'check-circle',
         error: 'exclamation-circle',
-        info: 'info-circle'
+        info: 'info-circle',
+        warning: 'exclamation-triangle'
     };
 
     const bgColor = colors[type] || colors.success;
@@ -474,18 +558,12 @@ function showNotification(message, type = 'success') {
     notification.className = 'position-fixed top-0 end-0 p-3';
     notification.style.zIndex = '9999';
     notification.innerHTML = `
-        <div class="toast show" role="alert">
-            <div class="toast-body ${bgColor} text-white rounded">
-                <i class="fas fa-${icon} me-2"></i> ${message}
-            </div>
-        </div>
-    `;
-
+        <div class="toast show align-items-center text-white ${bgColor} border-0">
+            <div class="d-flex"><div class="toast-body"><i class="fas fa-${icon} me-2"></i>${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
+        </div>`;
     document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.remove();
-    }, 2500);
+    setTimeout(() => notification.remove(), 2500);
 }
 
 async function cargarDatosUsuario() {
@@ -502,6 +580,6 @@ async function cargarDatosUsuario() {
             });
         }
     } catch (error) {
-        console.log("Usuario no autenticado o error al cargar perfil");
+        console.log("Usuario no autenticado");
     }
 }
