@@ -51,7 +51,7 @@
                 <a class="sidebar-link" href="#" data-section="productos"><i class="fas fa-box"></i> <span
                     class="sidebar-text">Productos</span></a>
                 <a class="sidebar-link" href="#" data-section="ofertas"><i class="fas fa-tags"></i> <span
-                    class="sidebar-text">Ofertas</span></a>
+                    class="sidebar-text">combos</span></a>
                 <a class="sidebar-link" href="#" data-section="perfil"><i class="fas fa-user-cog"></i> <span
                     class="sidebar-text">Mi Perfil</span></a>
             </div>
@@ -166,9 +166,6 @@
             <div id="pedidos" class="content-section">
                 <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h3">Gestión de
                     Pedidos</h2>
-                    <button class="btn btn-info" onclick="generarPedidoDemo()"><i class="fas fa-magic me-2"></i>Generar
-                        Pedido Demo
-                    </button>
                 </div>
                 <div id="listaPedidos" class="row"></div>
             </div>
@@ -238,22 +235,25 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-6 mb-3"><label class="form-label"
-                                                                  for="editNombres">Nombres</label><input id="editNombres"
-                                                                                                           class="form-control"
-                                                                                                           type="text"
-                                                                                                           required>
+                                                                  for="editNombres">Nombres</label><input
+                                    id="editNombres"
+                                    class="form-control"
+                                    type="text"
+                                    required>
                                 </div>
                                 <div class="col-md-6 mb-3"><label class="form-label"
-                                                                  for="editApellidos">Apellidos</label><input id="editApellidos"
-                                                                                                             class="form-control"
-                                                                                                             type="text"
-                                                                                                             required>
+                                                                  for="editApellidos">Apellidos</label><input
+                                    id="editApellidos"
+                                    class="form-control"
+                                    type="text"
+                                    required>
                                 </div>
                                 <div class="col-md-6 mb-3"><label class="form-label"
-                                                                  for="editDocumento">Documento</label><input id="editDocumento"
-                                                                                                             class="form-control"
-                                                                                                             type="text"
-                                                                                                             required>
+                                                                  for="editDocumento">Documento</label><input
+                                    id="editDocumento"
+                                    class="form-control"
+                                    type="text"
+                                    required>
                                 </div>
                                 <div class="col-md-6 mb-3"><label class="form-label" for="editTelefono">Teléfono</label><input
                                     id="editTelefono" class="form-control" type="text" required></div>
@@ -381,24 +381,65 @@
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body"><input id="productoId" type="hidden">
-                    <div class="mb-3"><label class="form-label" for="productoPuestoId">Puesto al que pertenece *</label><select
-                        id="productoPuestoId" class="form-select" required></select></div>
-                    <div class="mb-3"><label class="form-label" for="productoNombre">Nombre del producto *</label><input
-                        id="productoNombre" class="form-control" type="text" required></div>
-                    <div class="mb-3"><label class="form-label" for="productoDescripcion">Descripción *</label><textarea
-                        id="productoDescripcion" class="form-control" rows="3" required></textarea></div>
+                    <input id="productoId" type="hidden">
+                    
+                    <!-- 1. SELECCIÓN DE PUESTO -->
+                    <div class="mb-3">
+                        <label class="form-label" for="productoPuestoId">Puesto al que pertenece *</label>
+                        <select id="productoPuestoId" class="form-select" required></select>
+                        <div id="msgSinPuestos" class="form-text text-danger" style="display:none;">
+                            No tienes puestos creados. Crea uno primero.
+                        </div>
+                    </div>
+                    
+                    <!-- 2. IMAGEN DEL PRODUCTO (NUEVO) -->
+                    <div class="mb-3">
+                        <label class="form-label">Imagen del producto *</label>
+                        <!-- Reutilizamos la clase CSS image-upload-area que ya tienes -->
+                        <div id="imageUploadAreaProducto" class="image-upload-area"
+                             style="min-height: 150px;"
+                             onclick="document.getElementById('productoImagenInput').click()">
+                            <div id="imageUploadContentProducto" class="text-center">
+                                <i class="fas fa-camera fa-2x text-muted mb-2"></i>
+                                <p class="text-muted mb-0">Subir foto del plato</p>
+                            </div>
+                            <!-- Aquí se mostrará la previsualización -->
+                            <img id="previewImagenProducto"
+                                 style="display:none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;"
+                                 src="">
+                        </div>
+                        <input id="productoImagenInput" class="d-none" type="file" accept="image/*">
+                    </div>
+                    
+                    <!-- 3. CAMPOS DE TEXTO -->
+                    <div class="mb-3">
+                        <label class="form-label" for="productoNombre">Nombre del producto *</label>
+                        <input id="productoNombre" class="form-control" type="text" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="productoDescripcion">Descripción *</label>
+                        <textarea id="productoDescripcion" class="form-control" rows="3" required></textarea>
+                    </div>
                     <div class="row">
-                        <div class="col-md-4 mb-3"><label class="form-label" for="productoPrecio">Precio *</label><input
-                            id="productoPrecio" class="form-control" type="number" step="0.01" min="0" required></div>
-                        <div class="col-md-4 mb-3"><label class="form-label" for="productoStock">Stock *</label><input
-                            id="productoStock" class="form-control" type="number" min="0" required></div>
-                        <div class="col-md-4 mb-3"><label class="form-label" for="productoCategoria">Categoría *</label><select
-                            id="productoCategoria" class="form-select" required>
-                            <option value="Platos Fuertes">Platos Fuertes</option>
-                            <option value="Entradas">Entradas</option>
-                            <option value="Bebidas">Bebidas</option>
-                            <option value="Postres">Postres</option>
-                        </select></div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="productoPrecio">Precio *</label>
+                            <input id="productoPrecio" class="form-control" type="number" step="50" min="0" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="productoStock">Stock *</label>
+                            <input id="productoStock" class="form-control" type="number" min="0" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="productoCategoria">Categoría *</label>
+                            <select id="productoCategoria" class="form-select" required>
+                                <option value="Platos Fuertes">Platos Fuertes</option>
+                                <option value="Comida Rápida">Comida Rápida</option>
+                                <option value="Entradas">Entradas</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Postres">Postres</option>
+                                <option value="Desayunos">Desayunos</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -418,21 +459,61 @@
                 <div class="modal-header"><h5 id="modalOfertaTitle" class="modal-title">Nueva Oferta</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body"><input id="ofertaId" type="hidden">
-                    <div class="mb-3"><label class="form-label" for="ofertaProductoId">Producto en oferta
-                        *</label><select id="ofertaProductoId" class="form-select" required></select></div>
-                    <div class="mb-3"><label class="form-label" for="ofertaTitulo">Título de la oferta *</label><input
-                        id="ofertaTitulo" class="form-control" type="text" required></div>
-                    <div class="mb-3"><label class="form-label" for="ofertaDescripcion">Descripción</label><textarea
-                        id="ofertaDescripcion" class="form-control" rows="2"></textarea></div>
+                <!-- Dentro de id="modalOferta" -->
+                <div class="modal-body">
+                    <input id="ofertaId" type="hidden">
+                    
+                    <div class="alert alert-info small">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Crea un combo atractivo. Ejemplo: "2 Empanadas + Gaseosa".
+                    </div>
+                    
+                    <!-- 1. Producto Base -->
+                    <div class="mb-3">
+                        <label class="form-label" for="ofertaProductoId">Producto Principal *</label>
+                        <select id="ofertaProductoId" class="form-select" required
+                                onchange="calcularAhorroCombo()"></select>
+                        <div class="form-text">Elige el producto base del combo.</div>
+                    </div>
+                    
+                    <!-- 2. Título del Combo -->
+                    <div class="mb-3">
+                        <label class="form-label" for="ofertaTitulo">Nombre del Combo *</label>
+                        <input id="ofertaTitulo" class="form-control" type="text"
+                               placeholder="Ej: Combo Almuerzo Casero" required>
+                    </div>
+                    
+                    <!-- 3. Descripción (Qué incluye) -->
+                    <div class="mb-3">
+                        <label class="form-label" for="ofertaDescripcion">¿Qué incluye? *</label>
+                        <textarea id="ofertaDescripcion" class="form-control" rows="2"
+                                  placeholder="Ej: Incluye sopa, seco y jugo natural." required></textarea>
+                    </div>
+                    
+                    <!-- 4. Precios -->
                     <div class="row">
-                        <div class="col-md-4 mb-3"><label class="form-label" for="ofertaDescuento">Descuento (%)
-                            *</label><input id="ofertaDescuento" class="form-control" type="number" min="1" max="100"
-                                            required></div>
-                        <div class="col-md-4 mb-3"><label class="form-label" for="ofertaFechaInicio">Fecha de inicio
-                            *</label><input id="ofertaFechaInicio" class="form-control" type="date" required></div>
-                        <div class="col-md-4 mb-3"><label class="form-label" for="ofertaFechaFin">Fecha de fin *</label><input
-                            id="ofertaFechaFin" class="form-control" type="date" required></div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Precio Original</label>
+                            <input id="ofertaPrecioOriginal" class="form-control" type="text" disabled value="$ 0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-success fw-bold" for="ofertaPrecio">Precio del Combo *</label>
+                            <input id="ofertaPrecio" class="form-control border-success" type="number" min="500"
+                                   step="50" required oninput="calcularAhorroCombo()">
+                            <div id="msgAhorro" class="form-text text-success fw-bold" style="display:none;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 5. Fechas -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="ofertaFechaInicio">Disponible desde *</label>
+                            <input id="ofertaFechaInicio" class="form-control" type="date" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="ofertaFechaFin">Hasta *</label>
+                            <input id="ofertaFechaFin" class="form-control" type="date" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -473,6 +554,53 @@
                 <button id="btnConfirmarEliminacionDefinitiva" class="btn btn-danger" type="button">Sí, entiendo y
                     quiero eliminar todo
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Detalle Completo del Pedido -->
+<div id="modalDetallePedidoVendedor" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 id="detalleModalLabel" class="modal-title">Detalles del Pedido</h5>
+                <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Info Cliente -->
+                <div class="mb-4">
+                    <h6 class="fw-bold border-bottom pb-2 text-primary"><i class="fas fa-user me-2"></i>Información del
+                        Cliente</h6>
+                    <p class="mb-1"><strong>Nombre:</strong> <span id="detClienteNombre"></span></p>
+                    <p class="mb-1"><strong>Teléfono:</strong> <span id="detClienteTelefono"></span></p>
+                    <p class="mb-0"><strong>Dirección:</strong> <span id="detClienteDireccion"></span></p>
+                </div>
+                
+                <!-- Info Pago -->
+                <div class="mb-4">
+                    <h6 class="fw-bold border-bottom pb-2 text-success"><i class="fas fa-wallet me-2"></i>Método de Pago
+                    </h6>
+                    <p id="detMetodoPago" class="mb-0 fs-5"></p>
+                </div>
+                
+                <!-- Productos -->
+                <div>
+                    <h6 class="fw-bold border-bottom pb-2"><i class="fas fa-box me-2"></i>Productos</h6>
+                    <ul id="detListaProductos" class="list-group list-group-flush">
+                        <!-- Se llena con JS -->
+                    </ul>
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fs-5">Total:</span>
+                    <strong id="detTotal" class="fs-4 text-primary"></strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

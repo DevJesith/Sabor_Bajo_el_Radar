@@ -50,6 +50,8 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setStock(productoDTO.getStock());
         producto.setCategoria(productoDTO.getCategoria());
 
+        producto.setImagenUrl(productoDTO.getImagenUrl());
+
         return productoRepository.save(producto);
     }
 
@@ -70,6 +72,8 @@ public class ProductoServiceImpl implements ProductoService {
                     producto.setPrecio(productoDTO.getPrecio());
                     producto.setStock(productoDTO.getStock());
                     producto.setCategoria(productoDTO.getCategoria());
+
+                    producto.setImagenUrl(productoDTO.getImagenUrl());
 
                     return productoRepository.save(producto);
                 });

@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CompraService {
@@ -41,6 +38,9 @@ public class CompraService {
     @Autowired
     private FacturaRepository facturaRepository;
 
+    @Autowired
+    private OfertaRepository ofertaRepository;
+
     @Transactional
     public void procesarPedido(PedidoRequestDTO request, String emailCliente) {
         Usuario usuario = usuarioRepository.findByCorreo(emailCliente)
@@ -58,7 +58,7 @@ public class CompraService {
 
         for (PedidoRequestDTO.ItemPedidoDTO itemDto : request.getItems()) {
             Producto producto = productoRepository.findById(itemDto.getId())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado" + itemDto.getId()));
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado " + itemDto.getId()));
 
             Vendedor vendedor = producto.getNegocio().getVendedor();
 
@@ -77,34 +77,45 @@ public class CompraService {
             compra.setCliente(cliente);
             compra.setVendedor(vendedor);
             compra.setFecha(Instant.now());
-            compra.setEstado("pendiente"); // Estado inicial
-            compra.setTotal(BigDecimal.ZERO); // Se calculara abajo
+            compra.setEstado("pendiente");
+            compra.setTotal(BigDecimal.ZERO);
             compra.setNota(request.getNote());
 
             Compra compraGuardada = compraRepository.save(compra);
             BigDecimal totalCompra = BigDecimal.ZERO;
-
 
             // 3. GUARDAR DETALLES
             for (PedidoRequestDTO.ItemPedidoDTO item : items) {
                 Producto prod = productoRepository.findById(item.getId()).get();
 
                 DetalleCompra detalle = new DetalleCompra();
-
                 detalle.setCompraIdCompra(compraGuardada);
                 detalle.setProducto(prod);
                 detalle.setCantidad(item.getQuantity());
-                detalle.setPrecioUnitario(prod.getPrecio());
 
-                BigDecimal subtotal = prod.getPrecio().multiply(new BigDecimal(item.getQuantity()));
+                BigDecimal precioFinal = prod.getPrecio(); // Precio base por defecto
+
+                // --- LÓGICA DE COMBOS ---
+                if (item.getOfferId() != null) {
+                    Oferta oferta = ofertaRepository.findById(item.getOfferId()).orElse(null);
+                    if (oferta != null) {
+                        // Usamos el precio del combo
+                        precioFinal = oferta.getPrecioOferta();
+                        // Guardamos la referencia a la oferta para saber el nombre después
+                        detalle.setOferta(oferta);
+                    }
+                }
+                // ------------------------
+
+                detalle.setPrecioUnitario(precioFinal);
+                BigDecimal subtotal = precioFinal.multiply(new BigDecimal(item.getQuantity()));
                 detalle.setSubtotal(subtotal);
 
                 totalCompra = totalCompra.add(subtotal);
                 detalleCompraRepository.save(detalle);
             }
 
-
-            // Actualizar total
+            // Actualizar total y guardar factura, ruta, etc...
             compraGuardada.setTotal(totalCompra);
             compraRepository.save(compraGuardada);
 
@@ -112,20 +123,14 @@ public class CompraService {
             factura.setCompraIdCompra(compraGuardada);
             factura.setMetodoPago(request.getPaymentMethod());
             factura.setFechaPago(Instant.now());
-
-            //Generar codigo unico: FAC + AñoMesDia + HoraMinuto + Random
             String codigoUnico = generarNumeroFacturaUnico(usuario.getId(), compraGuardada.getId());
             factura.setNumeroFactura(codigoUnico);
-
             facturaRepository.save(factura);
 
-            // 4. Crear registro en ruta (logistica) con la direccion
             Ruta ruta = new Ruta();
             ruta.setCompraIdCompra(compraGuardada);
             ruta.setDireccionEntrega(direccion.getDireccion() + ", " + direccion.getBarrio());
             ruta.setEstado("pendiente");
-
-            // Nota: El domiciliario se asigna despues, aqui queda null
             rutaRepository.save(ruta);
         }
     }
@@ -136,68 +141,6 @@ public class CompraService {
         // Usamos el ID de compra y un timestamp corto para garantizar unicidad
         Long timestamp = System.currentTimeMillis() % 10000;
         return "FAC- " + userioId + "-" + compraId + timestamp;
-    }
-
-    public List<Map<String, Object>> listarPedidosCliente(String email) {
-        List<Compra> compras = compraRepository.findByClienteUsuarioCorreoOrderByFechaDesc(email);
-        List<Map<String, Object>> resultado = new ArrayList<>();
-
-        for (Compra c : compras) {
-            // 1. Buscamos los detalles (productos) primero para saber de qué negocio son
-            // CORREGIDO: findByCompraIdCompraId (con 'a' al final de Compra)
-            List<DetalleCompra> detalles = detalleCompraRepository.findByCompraIdCompraId(c.getId());
-
-            // 2. Extraemos el nombre del negocio del primer producto de la lista
-            String nombreNegocio = "Restaurante";
-            if (!detalles.isEmpty()) {
-                nombreNegocio = detalles.get(0).getProducto().getNegocio().getNombreNegocio();
-            }
-
-            String numeroFacturaVisual = "ORD-" + c.getId();
-            var facturaOpt = facturaRepository.findByCompraIdCompraId(c.getId());
-
-            if (facturaOpt.isPresent()) {
-                numeroFacturaVisual = facturaOpt.get().getNumeroFactura();
-            }
-
-            // 3. Armamos el DTO
-            Map<String, Object> dto = new HashMap<>();
-            dto.put("id", c.getId());
-            dto.put("invoiceNumber", numeroFacturaVisual);
-
-            dto.put("date", c.getFecha());
-            dto.put("vendorName", nombreNegocio); // Nombre del negocio real
-            dto.put("status", c.getEstado());
-            dto.put("total", c.getTotal());
-
-            dto.put("note", c.getNota());
-
-
-            // --- NUEVO: AGREGAMOS DATOS DEL CLIENTE ---
-            Usuario u = c.getCliente().getUsuario();
-            dto.put("customerName", u.getNombres() + " " + u.getApellidos());
-            dto.put("customerPhone", u.getTelefono());
-            // -----------------------------------------
-
-            List<Map<String, Object>> itemsDto = new ArrayList<>();
-            for (DetalleCompra d : detalles) {
-                itemsDto.add(Map.of(
-                        "name", d.getProducto().getNombre(),
-                        "quantity", d.getCantidad(),
-                        "price", d.getPrecioUnitario()
-                ));
-            }
-            dto.put("items", itemsDto);
-
-            // Buscar direccion en Ruta
-            Ruta ruta = rutaRepository.findByCompraIdCompraId(c.getId());
-            if (ruta != null) {
-                dto.put("deliveryAddress", ruta.getDireccionEntrega());
-            }
-
-            resultado.add(dto);
-        }
-        return resultado;
     }
 
     @Transactional
@@ -217,6 +160,114 @@ public class CompraService {
 
         // 3. Cancelar
         compra.setEstado("cancelado");
+        compraRepository.save(compra);
+    }
+
+    // --- LISTAR PEDIDOS CLIENTE ---
+    public List<Map<String, Object>> listarPedidosCliente(String email) {
+        List<Compra> compras = compraRepository.findByClienteUsuarioCorreoOrderByFechaDesc(email);
+        return mapearComprasADTO(compras);
+    }
+
+    // --- LISTAR PEDIDOS VENDEDOR ---
+    public List<Map<String, Object>> listarPedidosVendedor(String emailVendedor) {
+        List<Compra> compras = compraRepository.findByVendedorUsuarioCorreoOrderByFechaDesc(emailVendedor);
+        return mapearComprasADTO(compras);
+    }
+
+    // --- MÉTODO AUXILIAR PARA EVITAR REPETIR CÓDIGO ---
+    private List<Map<String, Object>> mapearComprasADTO(List<Compra> compras) {
+        List<Map<String, Object>> resultado = new ArrayList<>();
+
+        for (Compra c : compras) {
+            List<DetalleCompra> detalles = detalleCompraRepository.findByCompraIdCompraId(c.getId());
+            String nombreNegocio = "Restaurante";
+
+            if (!detalles.isEmpty()) {
+                nombreNegocio = detalles.get(0).getProducto().getNegocio().getNombreNegocio();
+            }
+
+            String numeroFacturaVisual = "ORD-" + c.getId();
+            Optional<Factura> fac = facturaRepository.findByCompraIdCompraId(c.getId());
+            String metodoPago = "Desconocido";
+
+            if (fac.isPresent()) {
+                numeroFacturaVisual = fac.get().getNumeroFactura();
+                metodoPago = fac.get().getMetodoPago();
+            }
+
+            Map<String, Object> dto = new HashMap<>();
+            dto.put("id", c.getId());
+            dto.put("visualId", numeroFacturaVisual);
+            dto.put("invoiceNumber", numeroFacturaVisual); // Compatibilidad con ambos fronts
+
+            dto.put("date", c.getFecha());
+            dto.put("status", c.getEstado());
+            dto.put("total", c.getTotal());
+            dto.put("note", c.getNota());
+            dto.put("vendorName", nombreNegocio);
+            dto.put("paymentMethod", metodoPago);
+
+            Usuario u = c.getCliente().getUsuario();
+            dto.put("clientName", u.getNombres() + " " + u.getApellidos());
+            dto.put("customerName", u.getNombres() + " " + u.getApellidos()); // Compatibilidad
+            dto.put("clientPhone", u.getTelefono());
+            dto.put("customerPhone", u.getTelefono()); // Compatibilidad
+
+            // Mapeo de Items (Productos)
+            List<Map<String, Object>> itemsDto = new ArrayList<>();
+            for (DetalleCompra d : detalles) {
+                // --- LÓGICA DE NOMBRE ---
+                // Si tiene oferta asociada, usamos el título de la oferta (Combo)
+                // Si no, usamos el nombre del producto normal
+                String nombreItem = d.getProducto().getNombre();
+                if (d.getOferta() != null) {
+                    nombreItem = d.getOferta().getTitulo(); // Ej: "Descuento por temporada"
+                }
+
+                itemsDto.add(Map.of(
+                        "name", nombreItem,
+                        "quantity", d.getCantidad(),
+                        "price", d.getPrecioUnitario()
+                ));
+            }
+            dto.put("items", itemsDto);     // Para Cliente
+            dto.put("products", itemsDto);  // Para Vendedor
+
+            Ruta ruta = rutaRepository.findByCompraIdCompraId(c.getId());
+            if (ruta != null) {
+                dto.put("deliveryAddress", ruta.getDireccionEntrega());
+            }
+
+            resultado.add(dto);
+        }
+        return resultado;
+    }
+
+    @Transactional
+    public void cambiarEstadoPedidoVendedor(Integer idCompra, String nuevoEstado, String emailVendedor) {
+        Compra compra = compraRepository.findById(idCompra)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        if (!compra.getVendedor().getUsuario().getCorreo().equals(emailVendedor)) {
+            throw new RuntimeException("No tienes permiso para gestionar este pedido");
+        }
+
+        // Lógica de Stock (Solo restar si pasa de pendiente a preparando)
+        if ("preparando".equalsIgnoreCase(nuevoEstado) && "pendiente".equalsIgnoreCase(compra.getEstado())) {
+            List<DetalleCompra> detalles = detalleCompraRepository.findByCompraIdCompraId(idCompra);
+            for (DetalleCompra detalle : detalles) {
+                Producto prod = detalle.getProducto();
+                int cantidadSolicitada = detalle.getCantidad();
+                if (prod.getStock() < cantidadSolicitada) {
+                    throw new RuntimeException("Stock insuficiente para: " + prod.getNombre());
+                }
+                prod.setStock(prod.getStock() - cantidadSolicitada);
+                productoRepository.save(prod);
+            }
+        }
+
+        compra.setEstado(nuevoEstado);
         compraRepository.save(compra);
     }
 }

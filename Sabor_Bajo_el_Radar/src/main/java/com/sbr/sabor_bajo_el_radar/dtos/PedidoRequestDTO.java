@@ -45,6 +45,8 @@ public class PedidoRequestDTO {
         private Long id; // ID del producto
         private Integer quantity;
 
+        private Long offerId;
+
         public Long getId() {
             return id;
         }
@@ -59,6 +61,14 @@ public class PedidoRequestDTO {
 
         public void setQuantity(Integer quantity) {
             this.quantity = quantity;
+        }
+
+        public Long getOfferId() {
+            return offerId;
+        }
+
+        public void setOfferId(Long offerId) {
+            this.offerId = offerId;
         }
     }
 }

@@ -30,4 +30,14 @@ public class ProductoDTO {
 
     @NotBlank(message = "La categoría es obligatoria")
     private String categoria;
+
+    private String imagenUrl;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
