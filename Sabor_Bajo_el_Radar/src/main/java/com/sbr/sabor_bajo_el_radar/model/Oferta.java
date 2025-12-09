@@ -17,21 +17,21 @@ public class Oferta {
     @Column(name = "id", nullable = false)
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
-    // --- AÑADIR ESTOS CAMPOS ---
     @Column(name = "titulo", nullable = false, length = 100)
     private String titulo;
 
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "descuento", nullable = false, precision = 5, scale = 2)
-    private BigDecimal descuento;
+    // --- CAMBIO AQUI ---
+    @Column(name = "precio_oferta", nullable = false, precision = 12, scale = 2)
+    private BigDecimal precioOferta;
+    // -------------------
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDate fechaInicio;
@@ -39,6 +39,7 @@ public class Oferta {
     @Column(name = "fecha_expiracion", nullable = false)
     private LocalDate fechaExpiracion;
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -46,7 +47,6 @@ public class Oferta {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public Producto getProducto() {
         return producto;
@@ -72,12 +72,12 @@ public class Oferta {
         this.descripcion = descripcion;
     }
 
-    public BigDecimal getDescuento() {
-        return descuento;
+    public BigDecimal getPrecioOferta() {
+        return precioOferta;
     }
 
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
+    public void setPrecioOferta(BigDecimal precioOferta) {
+        this.precioOferta = precioOferta;
     }
 
     public LocalDate getFechaInicio() {
@@ -95,5 +95,4 @@ public class Oferta {
     public void setFechaExpiracion(LocalDate fechaExpiracion) {
         this.fechaExpiracion = fechaExpiracion;
     }
-
 }

@@ -33,6 +33,10 @@ public class DetalleCompra {
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "oferta_id") // Puede ser nulo si es compra normal
+    private Oferta oferta;
+
     public Integer getId() {
         return id;
     }
@@ -79,6 +83,14 @@ public class DetalleCompra {
 
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public Oferta getOferta() {
+        return oferta;
+    }
+
+    public void setOferta(Oferta oferta) {
+        this.oferta = oferta;
     }
 
 }

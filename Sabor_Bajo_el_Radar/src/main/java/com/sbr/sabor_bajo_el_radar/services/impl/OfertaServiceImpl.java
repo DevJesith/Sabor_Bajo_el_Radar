@@ -47,7 +47,8 @@ public class OfertaServiceImpl implements OfertaService {
         oferta.setProducto(producto);
         oferta.setTitulo(ofertaDTO.getTitulo());
         oferta.setDescripcion(ofertaDTO.getDescripcion());
-        oferta.setDescuento(ofertaDTO.getDescuento());
+
+        oferta.setPrecioOferta(ofertaDTO.getPrecioOferta());
         oferta.setFechaInicio(ofertaDTO.getFechaInicio());
         oferta.setFechaExpiracion(ofertaDTO.getFechaExpiracion());
 
@@ -69,7 +70,8 @@ public class OfertaServiceImpl implements OfertaService {
 
                     oferta.setTitulo(ofertaDTO.getTitulo());
                     oferta.setDescripcion(ofertaDTO.getDescripcion());
-                    oferta.setDescuento(ofertaDTO.getDescuento());
+
+                    oferta.setPrecioOferta(ofertaDTO.getPrecioOferta());
                     oferta.setFechaInicio(ofertaDTO.getFechaInicio());
                     oferta.setFechaExpiracion(ofertaDTO.getFechaExpiracion());
 
