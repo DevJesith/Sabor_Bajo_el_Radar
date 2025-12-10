@@ -390,6 +390,7 @@ const formatCurrency = (value) => new Intl.NumberFormat('es-CO', {
 document.addEventListener('DOMContentLoaded', function () {
     updateCartCount();
     cargarPedidosBackend();
+    cargarDatosUsuario();
 
     // Filtros
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -686,4 +687,22 @@ function renderTimeline(currentStatus) {
 
     const progressPercent = (currentIndex / (steps.length - 1)) * 100;
     container.innerHTML = `<div class="timeline-progress" style="width: ${progressPercent}%;"></div>${html}`;
+}
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+        const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+
+        if (usuario && usuario.nombres) {
+            userSpans.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+            });
+        }
+    } catch (error) {
+        console.log("Usuario no autenticado");
+    }
 }

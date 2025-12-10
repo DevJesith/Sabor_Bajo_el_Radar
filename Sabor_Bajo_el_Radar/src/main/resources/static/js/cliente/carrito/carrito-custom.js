@@ -21,7 +21,7 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 document.addEventListener('DOMContentLoaded', function () {
     updateCartCount();
     renderCartItems();
-    // NOTA: Eliminamos la carga de notas aquí porque se movió a finalizar-compra
+    cargarDatosUsuario();
 });
 
 // ==========================================
@@ -44,21 +44,30 @@ function renderCartItems() {
             </div>
         `;
         // Ocultar resumen si está vacío
-        document.querySelector('.summary-section').style.opacity = '0.5';
-        document.querySelector('.summary-section button').disabled = true;
+        const summary = document.querySelector('.summary-section');
+        if (summary) {
+            summary.style.opacity = '0.5';
+            summary.querySelector('button').disabled = true;
+        }
         updateSummary();
         return;
     }
 
     // Habilitar resumen
-    document.querySelector('.summary-section').style.opacity = '1';
-    document.querySelector('.summary-section button').disabled = false;
+    const summary = document.querySelector('.summary-section');
+    if (summary) {
+        summary.style.opacity = '1';
+        summary.querySelector('button').disabled = false;
+    }
 
     // Caso: Carrito con productos
     cartItemsContainer.innerHTML = cart.map((item, index) => {
-        // Lógica de Imagen
+        // Lógica de Imagen (Si no tiene, placeholder)
         let imageHtml = '';
         if (item.image && item.image.trim() !== "") {
+            // Nota: En la versión optimizada NO guardamos imagen en storage para evitar quota error.
+            // Si quieres ver imagen aquí, necesitarías volver a habilitar el guardado o usar URLs cortas.
+            // Por ahora asumimos que no hay imagen guardada y mostramos el icono.
             imageHtml = `<img src="${item.image}" alt="${item.name}" class="cart-item-image">`;
         } else {
             imageHtml = `
@@ -74,7 +83,10 @@ function renderCartItems() {
             
             <div class="cart-item-details">
                 <div class="d-flex justify-content-between">
-                    <h5 class="cart-item-name mb-1">${item.name}</h5>
+                    <div>
+                        <h5 class="cart-item-name mb-1">${item.name}</h5>
+                        ${item.isCombo ? '<span class="badge bg-success mb-1">Combo</span>' : ''}
+                    </div>
                     <button class="btn-remove-item text-danger border-0 bg-transparent" onclick="removeItem(${index})" title="Eliminar">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -106,45 +118,32 @@ function renderCartItems() {
 // ==========================================
 
 function increaseQuantity(index) {
-    cart[index].quantity += 1;
-    saveCart();
-    renderCartItems();
-}
-
-function decreaseQuantity(index) {
-    if (cart[index].quantity > 1) {
-        cart[index].quantity -= 1;
+    if (cart[index]) {
+        cart[index].quantity += 1;
         saveCart();
         renderCartItems();
     }
 }
 
-function removeItem(index) {
-    if (typeof Swal !== 'undefined') {
-        Swal.fire({
-            title: '¿Eliminar producto?',
-            text: "Se quitará de tu carrito",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                executeRemove(index);
-            }
-        });
-    } else {
-        if (confirm('¿Eliminar producto?')) executeRemove(index);
+function decreaseQuantity(index) {
+    if (cart[index]) {
+        if (cart[index].quantity > 1) {
+            cart[index].quantity -= 1;
+            saveCart();
+            renderCartItems();
+        } else {
+            removeItem(index);
+        }
     }
 }
 
-function executeRemove(index) {
-    cart.splice(index, 1);
-    saveCart();
-    renderCartItems();
-    showNotification('Producto eliminado', 'info');
+function removeItem(index) {
+    if (confirm('¿Eliminar producto?')) {
+        cart.splice(index, 1);
+        saveCart();
+        renderCartItems();
+        showNotification('Producto eliminado', 'info');
+    }
 }
 
 function saveCart() {
@@ -167,8 +166,11 @@ function updateSummary() {
     const shipping = 0;
     const total = subtotal + shipping;
 
-    document.getElementById('subtotal').textContent = formatCurrency(subtotal);
-    document.getElementById('totalPrice').textContent = formatCurrency(total);
+    const subEl = document.getElementById('subtotal');
+    const totEl = document.getElementById('totalPrice');
+
+    if (subEl) subEl.textContent = formatCurrency(subtotal);
+    if (totEl) totEl.textContent = formatCurrency(total);
 }
 
 // ==========================================
@@ -180,9 +182,6 @@ function goToCheckout() {
         showNotification('Tu carrito está vacío', 'error');
         return;
     }
-
-    // CORRECCIÓN: Ya no intentamos leer 'orderNote' porque no existe en el HTML de esta página.
-    // Simplemente redirigimos.
     window.location.href = '/finalizar-compra';
 }
 
@@ -198,4 +197,22 @@ function showNotification(message, type = 'success') {
         </div>`;
     document.body.appendChild(notification);
     setTimeout(() => notification.remove(), 3000);
+}
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+        const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+
+        if (usuario && usuario.nombres) {
+            userSpans.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+            });
+        }
+    } catch (error) {
+        console.log("Usuario no autenticado");
+    }
 }

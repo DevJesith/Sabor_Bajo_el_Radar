@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadUserInfo();
     loadAddresses();
     loadPaymentMethods();
+    cargarDatosUsuario();
 });
 
 // ==========================================
@@ -253,4 +254,22 @@ function getIcon(tag) {
     if (t.includes('casa')) return 'home';
     if (t.includes('trabajo')) return 'briefcase';
     return 'map-marker-alt';
+}
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+        const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+
+        if (usuario && usuario.nombres) {
+            userSpans.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+            });
+        }
+    } catch (error) {
+        console.log("Usuario no autenticado");
+    }
 }

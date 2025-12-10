@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initMap();
     cargarDireccionesBackend(); // Carga real
     setupEventListeners();
+    cargarDatosUsuario();
 });
 
 // ==========================================
@@ -442,4 +443,22 @@ function abrirModalNuevaDireccion() {
 
     const modal = new bootstrap.Modal(document.getElementById('modalNuevaDireccion'));
     modal.show();
+}
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+        const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+
+        if (usuario && usuario.nombres) {
+            userSpans.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+            });
+        }
+    } catch (error) {
+        console.log("Usuario no autenticado");
+    }
 }

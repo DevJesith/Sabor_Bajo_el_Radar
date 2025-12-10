@@ -16,8 +16,8 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container-fluid px-4">
-        <a class="navbar-brand d-flex align-items-center" href="cliente-home.html">
-            <img class="me-2" src="https://via.placeholder.com/40/ff6b35/FFFFFF?text=SBR" alt="SBR Logo">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/cliente}">
+            <img class="me-2" alt="SBR Logo" th:src="@{/img/logo_sbr.png}">
             <span class="fw-bold">SBR</span>
         </a>
         
@@ -37,10 +37,6 @@
                         <span class="d-none d-lg-inline">Agregar ubicación</span>
                     </a>
                     
-                    <a class="nav-link position-relative" href="carrito.html">
-                        <i class="fas fa-shopping-cart fs-5"></i>
-                        <span id="cartCount" class="cart-badge">0</span>
-                    </a>
                     
                     <div class="dropdown">
                         <button class="btn btn-link nav-link dropdown-toggle p-0" type="button"
@@ -49,17 +45,22 @@
                             <i class="fas fa-user-circle fs-4" style="color: var(--primary-orange)"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="perfil.html"><i class="fas fa-user me-2"></i>Ver
+                            <li><a class="dropdown-item" th:href="@{/perfil-cliente}"><i class="fas fa-user me-2"></i>Ver
                                 perfil</a></li>
-                            <li><a class="dropdown-item" href="mis-pedidos.html"><i class="fas fa-box me-2"></i>Mis
+                            <li><a class="dropdown-item" th:href="@{/mis-pedidos}"><i class="fas fa-box me-2"></i>Mis
                                 pedidos</a></li>
-                            <li><a class="dropdown-item" href="favoritos.html"><i class="fas fa-heart me-2"></i>Favoritos</a>
+                            <li><a class="dropdown-item" th:href="@{/favoritos}"><i class="fas fa-heart me-2"></i>Favoritos</a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Cerrar
-                                sesión</a></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="btn btn-danger w-100" type="submit"><i
+                                        class="bi bi-box-arrow-right me-2"></i><span
+                                        class="sidebar-text">Cerrar sesión</span></button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>

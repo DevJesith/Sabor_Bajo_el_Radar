@@ -2,7 +2,7 @@
 // VARIABLES GLOBALES
 // ==========================================
 
-// Formateador de moneda (Igual que en home)
+// Formateador de moneda
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -12,20 +12,24 @@ const formatCurrency = (value) => {
     }).format(value);
 };
 
-// Obtener IDs de favoritos del localStorage
+// IDs de favoritos (localStorage)
 let favoritesIds = JSON.parse(localStorage.getItem('favorites')) || [];
 
-// Aquí guardaremos los datos reales traídos del backend
+// Carrito (localStorage)
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Datos reales de los negocios (se llenará desde el backend)
 let allVendors = [];
 
 // ==========================================
 // INICIALIZACIÓN
 // ==========================================
 document.addEventListener('DOMContentLoaded', function () {
-    updateCartCount();
-    cargarFavoritosBackend(); // <--- Cargar datos reales
+    updateCartCount(); // Actualizar badge del carrito
+    cargarFavoritosBackend(); // Cargar datos reales
+    cargarDatosUsuario();
 
-    // Configurar el buscador
+    // Configurar buscador
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
         searchInput.addEventListener('input', function (e) {
@@ -44,10 +48,17 @@ document.addEventListener('DOMContentLoaded', function () {
             renderFavorites(category);
         });
     });
+
+    // --- LÓGICA DEL CARRITO LATERAL ---
+    // Listener para renderizar el carrito cuando se abre la barra lateral
+    const cartOffcanvas = document.getElementById('cartOffcanvas');
+    if (cartOffcanvas) {
+        cartOffcanvas.addEventListener('show.bs.offcanvas', renderCartSidebar);
+    }
 });
 
 // ==========================================
-// LÓGICA DE BACKEND
+// LÓGICA DE BACKEND (FAVORITOS)
 // ==========================================
 
 async function cargarFavoritosBackend() {
@@ -62,6 +73,7 @@ async function cargarFavoritosBackend() {
 
         allVendors = await response.json();
 
+        // Actualizamos estadísticas y renderizamos
         updateStats();
         renderFavorites();
 
@@ -72,14 +84,14 @@ async function cargarFavoritosBackend() {
 }
 
 // ==========================================
-// RENDERIZADO
+// RENDERIZADO (FAVORITOS)
 // ==========================================
 
 function renderFavorites(categoryFilter = 'todos') {
     const favoritesList = document.getElementById('favoritesList');
     const emptyState = document.getElementById('emptyState');
 
-    // 1. Filtrar los negocios que están en la lista de IDs guardados en localStorage
+    // 1. Filtrar solo los que están en favoritos
     let favoriteVendors = allVendors.filter(v => favoritesIds.includes(v.id));
 
     // 2. Filtrar por categoría seleccionada
@@ -90,34 +102,27 @@ function renderFavorites(categoryFilter = 'todos') {
     // Mostrar estado vacío si no hay favoritos
     if (favoriteVendors.length === 0) {
         favoritesList.innerHTML = '';
-        emptyState.style.display = 'block';
+        if (emptyState) emptyState.style.display = 'block';
         return;
     }
 
-    emptyState.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'none';
 
     // Renderizar cards
     favoritesList.innerHTML = favoriteVendors.map(vendor => {
-        // Manejo de imagen
         let imageSrc = vendor.image;
         if (!imageSrc || imageSrc.trim() === '') {
             imageSrc = 'https://via.placeholder.com/300x200/ff6b35/ffffff?text=' + encodeURIComponent(vendor.name);
         }
 
-        // Datos simulados para completar la tarjeta visualmente (ya que el backend aún no los manda todos)
         const deliveryTime = "30-45 min";
-
-        // String seguro para redirección
-        const vendorString = JSON.stringify(vendor).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
         return `
         <div class="col-md-4 col-sm-6 mb-4 favorite-card-item">
             <div class="favorite-card" onclick="irAlHomeConVendor(${vendor.id})" style="cursor: pointer;">
                 <div class="favorite-image-container">
                     <img src="${imageSrc}" class="favorite-image" alt="${vendor.name}">
-                    
                     ${vendor.discount ? `<span class="badge-discount">${vendor.discount}</span>` : ''}
-                    
                     <button class="favorite-heart favorited" onclick="event.stopPropagation(); toggleFavorite(${vendor.id})">
                         <i class="fas fa-heart"></i>
                     </button>
@@ -135,14 +140,8 @@ function renderFavorites(categoryFilter = 'todos') {
                         <span class="text-muted ms-1 small"><i class="fas fa-map-marker-alt ms-2 me-1"></i>${vendor.location || 'Bogotá'}</span>
                     </div>
                     <div class="favorite-stats">
-                        <span>
-                            <i class="fas fa-clock"></i>
-                            ${deliveryTime}
-                        </span>
-                        <span class="text-success">
-                            <i class="fas fa-motorcycle"></i>
-                            Envío gratis
-                        </span>
+                        <span><i class="fas fa-clock"></i> ${deliveryTime}</span>
+                        <span class="text-success"><i class="fas fa-motorcycle"></i> Envío gratis</span>
                     </div>
                 </div>
             </div>
@@ -152,36 +151,29 @@ function renderFavorites(categoryFilter = 'todos') {
 }
 
 // ==========================================
-// FUNCIONALIDAD
+// FUNCIONALIDAD FAVORITOS
 // ==========================================
 
 function toggleFavorite(vendorId) {
     const index = favoritesIds.indexOf(vendorId);
 
     if (index > -1) {
-        // Remover de favoritos
         favoritesIds.splice(index, 1);
         showNotification('Eliminado de favoritos', 'info');
     } else {
-        // Agregar a favoritos (por si acaso, aunque en esta pantalla usualmente se quitan)
         favoritesIds.push(vendorId);
         showNotification('Agregado a favoritos', 'success');
     }
 
-    // Guardar en localStorage
     localStorage.setItem('favorites', JSON.stringify(favoritesIds));
-
-    // Actualizar estadísticas y vista
     updateStats();
 
-    // Re-renderizar respetando el filtro actual
-    const activeFilter = document.querySelector('.category-filter-btn.active');
-    const category = activeFilter ? activeFilter.getAttribute('data-category') : 'todos';
+    const activeFilterBtn = document.querySelector('.category-filter-btn.active');
+    const category = activeFilterBtn ? activeFilterBtn.getAttribute('data-category') : 'todos';
     renderFavorites(category);
 }
 
 function updateStats() {
-    // Calculamos estadísticas basadas en los favoritos reales
     const favoriteVendors = allVendors.filter(v => favoritesIds.includes(v.id));
     const categories = [...new Set(favoriteVendors.map(v => v.category))];
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
@@ -191,38 +183,110 @@ function updateStats() {
     document.getElementById('totalOrders').textContent = orders.length;
 }
 
-// Redirigir al usuario al home (ya que el modal de menú está allá)
 function irAlHomeConVendor(vendorId) {
-    // Podrías implementar lógica para abrir el modal automáticamente al llegar al home
-    // Por ahora, redirigimos simple
     window.location.href = '/cliente';
 }
 
 function filtrarFavoritosVisualmente(searchTerm) {
     const cards = document.querySelectorAll('.favorite-card-item');
-    let visibleCount = 0;
-
     cards.forEach(card => {
         const name = card.querySelector('.favorite-name').textContent.toLowerCase();
         const category = card.querySelector('.badge').textContent.toLowerCase();
-
-        if (name.includes(searchTerm) || category.includes(searchTerm)) {
-            card.style.display = 'block';
-            visibleCount++;
-        } else {
-            card.style.display = 'none';
-        }
+        card.style.display = (name.includes(searchTerm) || category.includes(searchTerm)) ? 'block' : 'none';
     });
-
-    const emptyState = document.getElementById('emptyState');
-    if (visibleCount === 0 && cards.length > 0) {
-        // Si hay cartas pero ninguna coincide con la búsqueda
-        // Opcional: mostrar mensaje de "no coincidencias"
-    }
 }
 
 // ==========================================
-// UTILIDADES
+// LÓGICA DEL CARRITO LATERAL (AGREGADA)
+// ==========================================
+
+function renderCartSidebar() {
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+
+    if (!cartItems || !cartTotal) return;
+
+    // Recargar carrito actualizado
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-basket mb-3 text-muted" style="font-size: 3rem;"></i>
+                <p class="text-muted">Tu carrito está vacío</p>
+                <a href="/cliente" class="btn btn-outline-primary btn-sm rounded-pill">Ir al menú</a>
+            </div>`;
+        cartTotal.textContent = formatCurrency(0);
+        return;
+    }
+
+    cartItems.innerHTML = cart.map(item => {
+        const identificadorUnico = item._uniqueId || item.id;
+        return `
+        <div class="cart-item mb-3 p-2 border-bottom">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.95rem;">${item.name}</h6>
+                    <small class="text-muted" style="font-size: 0.8rem;">${item.vendorName || 'Restaurante'}</small>
+                </div>
+                <i class="fas fa-trash text-danger" style="cursor: pointer;" onclick="removeFromCart('${identificadorUnico}')"></i>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="input-group input-group-sm" style="width: 90px;">
+                    <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('${identificadorUnico}')">-</button>
+                    <span class="input-group-text bg-white border-secondary text-center" style="width: 30px; justify-content: center;">${item.quantity}</span>
+                    <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('${identificadorUnico}')">+</button>
+                </div>
+                <span class="fw-bold text-primary">${formatCurrency(item.price * item.quantity)}</span>
+            </div>
+        </div>
+    `
+    }).join('');
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotal.textContent = formatCurrency(total);
+}
+
+function increaseQuantity(identifier) {
+    const item = cart.find(item => (item._uniqueId || item.id).toString() === identifier.toString());
+    if (item) {
+        item.quantity += 1;
+        saveAndUpdate();
+    }
+}
+
+function decreaseQuantity(identifier) {
+    const item = cart.find(item => (item._uniqueId || item.id).toString() === identifier.toString());
+    if (item && item.quantity > 1) {
+        item.quantity -= 1;
+        saveAndUpdate();
+    }
+}
+
+function removeFromCart(identifier) {
+    cart = cart.filter(item => {
+        const itemId = (item._uniqueId || item.id).toString();
+        return itemId !== identifier.toString();
+    });
+    saveAndUpdate();
+}
+
+function saveAndUpdate() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    renderCartSidebar();
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert("Tu carrito está vacío");
+        return;
+    }
+    window.location.href = '/finalizar-compra';
+}
+
+// ==========================================
+// UTILIDADES COMUNES
 // ==========================================
 
 function updateCartCount() {
@@ -250,4 +314,22 @@ function showNotification(message, type = 'success') {
     `;
     document.body.appendChild(notification);
     setTimeout(() => notification.remove(), 3000);
+}
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+        const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+
+        if (usuario && usuario.nombres) {
+            userSpans.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+            });
+        }
+    } catch (error) {
+        console.log("Usuario no autenticado");
+    }
 }

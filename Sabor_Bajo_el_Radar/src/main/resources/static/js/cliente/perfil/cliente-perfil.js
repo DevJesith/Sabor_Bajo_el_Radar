@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('passwordNueva').value = '';
                 document.getElementById('passwordConfirmar').value = '';
 
+                // Recargar nombre en sidebar
+                cargarDatosUsuario();
+
             } catch (error) {
                 showNotification(error.message, 'error');
             }
@@ -114,85 +117,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Formateo de tarjeta
     const modalTarjeta = document.getElementById('modalAgregarTarjeta');
     if (modalTarjeta) {
-        // ... (código para formatear tarjeta, no interfiere y puede quedarse)
-    }
-});
-
-// Guardar información de cuenta
-document.getElementById('formInfoCuenta').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    // Validar contraseñas si se están cambiando
-    const passwordActual = document.getElementById('passwordActual').value;
-    const passwordNueva = document.getElementById('passwordNueva').value;
-    const passwordConfirmar = document.getElementById('passwordConfirmar').value;
-
-    if (passwordActual || passwordNueva || passwordConfirmar) {
-        if (!passwordActual) {
-            showNotification('Por favor ingresa tu contraseña actual', 'error');
-            return;
-        }
-
-        if (passwordNueva !== passwordConfirmar) {
-            showNotification('Las contraseñas no coinciden', 'error');
-            return;
-        }
-
-        if (passwordNueva.length < 6) {
-            showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
-            return;
-        }
-    }
-
-    // Aquí iría la lógica para guardar los cambios
-    showNotification('Información actualizada correctamente', 'success');
-
-    // Limpiar campos de contraseña
-    document.getElementById('passwordActual').value = '';
-    document.getElementById('passwordNueva').value = '';
-    document.getElementById('passwordConfirmar').value = '';
-});
-
-// Agregar tarjeta
-function agregarTarjeta() {
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgregarTarjeta'));
-
-    // Aquí iría la lógica para agregar la tarjeta
-    showNotification('Método de pago agregado correctamente', 'success');
-
-    modal.hide();
-
-    // Limpiar formulario
-    document.getElementById('formAgregarTarjeta').reset();
-}
-
-// Cerrar sesión
-function cerrarSesion() {
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-        // Limpiar localStorage
-        localStorage.removeItem('cart');
-        localStorage.removeItem('orderNote');
-
-        showNotification('Sesión cerrada correctamente', 'success');
-
-        // Redirigir al login o home
-        setTimeout(() => {
-            window.location.href = 'cliente-home.html';
-        }, 1500);
-    }
-}
-
-
-// Formatear inputs de tarjeta
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('modalAgregarTarjeta');
-
-    if (modal) {
-        const cardNumberInput = modal.querySelector('input[placeholder*="1234"]');
-        const expiryInput = modal.querySelector('input[placeholder="MM/AA"]');
-
+        const cardNumberInput = modalTarjeta.querySelector('input[placeholder*="0000"]');
         if (cardNumberInput) {
             cardNumberInput.addEventListener('input', function (e) {
                 let value = e.target.value.replace(/\s/g, '');
@@ -200,23 +128,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.target.value = formattedValue;
             });
         }
-
-        if (expiryInput) {
-            expiryInput.addEventListener('input', function (e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length >= 2) {
-                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
-                }
-                e.target.value = value;
-            });
-        }
     }
+
+    // Cargar datos al inicio
+    cargarDatosUsuario();
 });
 
+// Cerrar sesión
 function cerrarSesion() {
-    // La forma correcta de cerrar sesión es enviar un POST al endpoint de logout de Spring Security
-    // Esto requiere un formulario o una petición JS con el token CSRF.
-    // Por simplicidad, aquí solo mostramos una confirmación.
     Swal.fire({
         title: '¿Cerrar sesión?',
         text: "Serás redirigido a la página de inicio.",
@@ -227,10 +146,25 @@ function cerrarSesion() {
         confirmButtonText: 'Sí, cerrar sesión'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Para que funcione, necesitas un formulario en tu HTML con el action="/logout"
-            // y luego hacer form.submit()
-            // Ejemplo: document.getElementById('logoutForm').submit();
-            console.log("Cerrando sesión...");
+            // Crear formulario dinámico para logout POST
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/logout';
+
+            // Añadir CSRF token
+            const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
+            const csrfParam = document.querySelector('meta[name="_csrf_param"]')?.content || '_csrf'; // default spring param
+
+            if (csrfToken) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = csrfParam;
+                hiddenField.value = csrfToken;
+                form.appendChild(hiddenField);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
         }
     });
 }
@@ -249,16 +183,13 @@ function showNotification(message, type = 'success') {
 }
 
 // --- LÓGICA DE MÉTODOS DE PAGO ---
-
 document.addEventListener('DOMContentLoaded', function () {
-    // Cargar métodos al iniciar si la sección está activa, o cuando se haga clic en el link
     const linkPagos = document.querySelector('[data-section="metodos-pago"]');
     if (linkPagos) {
         linkPagos.addEventListener('click', cargarMetodosPago);
     }
 });
 
-// Cambiar campos visibles según el tipo (Tarjeta o Billetera)
 function toggleCamposPago() {
     const tipo = document.getElementById('tipoMetodo').value;
     const camposTarjeta = document.getElementById('camposTarjeta');
@@ -299,7 +230,7 @@ async function cargarMetodosPago() {
 
             if (m.tipo === 'NEQUI') {
                 icono = 'fa-mobile-alt';
-                color = 'text-purple'; // Definir estilo o usar text-dark
+                color = 'text-purple';
                 titulo = 'Nequi';
             } else if (m.tipo === 'DAVIPLATA') {
                 icono = 'fa-home';
@@ -316,7 +247,6 @@ async function cargarMetodosPago() {
                                 <div>
                                     <h6 class="mb-0">${m.numeroMascara}</h6>
                                     <small class="text-muted">${titulo} - ${m.titular}</small>
-                                    ${m.fechaVencimiento ? `<small class="d-block text-muted">Vence: ${m.fechaVencimiento}</small>` : ''}
                                 </div>
                             </div>
                             <div>
@@ -348,9 +278,8 @@ async function guardarMetodoPago() {
     let franquicia = null;
 
     if (tipo === 'TARJETA') {
-        numero = document.getElementById('pagoNumero').value.replace(/\s/g, ''); // Quitar espacios
+        numero = document.getElementById('pagoNumero').value.replace(/\s/g, '');
         vencimiento = document.getElementById('pagoVencimiento').value;
-        // Lógica simple para detectar franquicia
         franquicia = numero.startsWith('4') ? 'Visa' : 'Mastercard';
 
         if (numero.length < 13 || !vencimiento) {
@@ -359,7 +288,7 @@ async function guardarMetodoPago() {
         }
     } else {
         numero = document.getElementById('pagoCelular').value;
-        franquicia = tipo; // NEQUI o DAVIPLATA
+        franquicia = tipo;
         if (!numero) {
             showNotification('Ingresa el número de celular', 'error');
             return;
@@ -386,15 +315,10 @@ async function guardarMetodoPago() {
 
         if (response.ok) {
             showNotification('Método agregado exitosamente', 'success');
-            // Cerrar modal
             const modalEl = document.getElementById('modalAgregarTarjeta');
             const modal = bootstrap.Modal.getInstance(modalEl);
             modal.hide();
-
-            // Limpiar form
             document.getElementById('formAgregarTarjeta').reset();
-
-            // Recargar lista
             cargarMetodosPago();
         } else {
             const err = await response.json();
@@ -435,5 +359,32 @@ async function eliminarMetodoPago(id) {
         } catch (error) {
             console.error(error);
         }
+    }
+}
+
+// ===============================================
+// CARGAR NOMBRE EN SIDEBAR (CORREGIDO)
+// ===============================================
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('/api/perfil-cliente');
+        if (!response.ok) return;
+
+        const usuario = await response.json();
+
+        // 1. Sidebar Nombre
+        const sidebarName = document.getElementById('sidebarUserName');
+        if (sidebarName && usuario.nombres) {
+            sidebarName.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+        }
+
+        // 2. Sidebar Inicial (Avatar)
+        const sidebarInitial = document.getElementById('sidebarUserInitial');
+        if (sidebarInitial && usuario.nombres) {
+            sidebarInitial.textContent = usuario.nombres.charAt(0).toUpperCase();
+        }
+
+    } catch (error) {
+        console.log("Usuario no autenticado");
     }
 }

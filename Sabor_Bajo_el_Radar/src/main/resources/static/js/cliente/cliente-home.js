@@ -573,12 +573,22 @@ async function cargarDatosUsuario() {
 
         const usuario = await response.json();
         const userSpans = document.querySelectorAll('.dropdown-toggle .d-none.d-lg-inline');
+        const userPerfil = document.querySelectorAll('.text-white .mb-1');
+
 
         if (usuario && usuario.nombres) {
             userSpans.forEach(span => {
                 span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
             });
         }
+
+        if (usuario && usuario.nombres) {
+            userPerfil.forEach(span => {
+                span.textContent = `Hola, ${usuario.nombres.split(' ')[0]}`;
+            });
+        }
+
+
     } catch (error) {
         console.log("Usuario no autenticado");
     }

@@ -19,13 +19,15 @@
         <div id="sidebar" class="col-md-3 col-lg-2 sidebar">
             <!-- Logo y usuario -->
             <div class="text-center py-4">
-                <a class="d-inline-block mb-3" href="cliente-home.html">
-                    <img class="logo-sidebar" src="https://via.placeholder.com/50/ff6b35/FFFFFF?text=SBR" alt="Logo">
+                <a class="d-inline-block mb-3" th:href="@{/cliente}">
+                    <img class="logo-sidebar" alt="Logo" th:src="@{/img/logo_sbr.png}">
                 </a>
                 <div class="user-avatar mx-auto mb-3">
-                    <span class="avatar-initial">J</span>
+                    <!-- Agregamos ID aquí -->
+                    <span id="sidebarUserInitial" class="avatar-initial">U</span>
                 </div>
-                <h5 class="text-white mb-1">Hola, Jesith</h5>
+                <!-- Agregamos ID aquí -->
+                <h5 id="sidebarUserName" class="text-white mb-1">Cargando...</h5>
             </div>
             
             <hr class="separator">
@@ -39,10 +41,6 @@
                 </a>
                 <a class="sidebar-link" href="#" data-section="metodos-pago">
                     <span class="sidebar-text">Métodos de pago</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <a class="sidebar-link" href="#" data-section="mis-pedidos">
-                    <span class="sidebar-text">Mis pedidos</span>
                     <i class="fas fa-chevron-right"></i>
                 </a>
             </div>
