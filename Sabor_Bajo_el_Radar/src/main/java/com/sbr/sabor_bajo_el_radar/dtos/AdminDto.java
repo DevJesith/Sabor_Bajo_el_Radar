@@ -13,13 +13,11 @@ import java.util.Objects;
 public class AdminDto implements Serializable {
     private final Integer id;
     private final UsuarioDto usuario;
-    private final String cargo;
     private final Instant fechaAsignacion;
 
-    public AdminDto(Integer id, UsuarioDto usuario, String cargo, Instant fechaAsignacion) {
+    public AdminDto(Integer id, UsuarioDto usuario, Instant fechaAsignacion) {
         this.id = id;
         this.usuario = usuario;
-        this.cargo = cargo;
         this.fechaAsignacion = fechaAsignacion;
     }
 
@@ -29,10 +27,6 @@ public class AdminDto implements Serializable {
 
     public UsuarioDto getUsuario() {
         return usuario;
-    }
-
-    public String getCargo() {
-        return cargo;
     }
 
     public Instant getFechaAsignacion() {
@@ -46,13 +40,12 @@ public class AdminDto implements Serializable {
         AdminDto entity = (AdminDto) o;
         return Objects.equals(this.id, entity.id) &&
                 Objects.equals(this.usuario, entity.usuario) &&
-                Objects.equals(this.cargo, entity.cargo) &&
                 Objects.equals(this.fechaAsignacion, entity.fechaAsignacion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, usuario, cargo, fechaAsignacion);
+        return Objects.hash(id, usuario, fechaAsignacion);
     }
 
     @Override
@@ -60,7 +53,6 @@ public class AdminDto implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "usuario = " + usuario + ", " +
-                "cargo = " + cargo + ", " +
                 "fechaAsignacion = " + fechaAsignacion + ")";
     }
 }

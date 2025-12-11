@@ -57,7 +57,11 @@ public class SecurityConfig {
                                         "/quienes-somos/**",
                                         "/muro-social/**",
                                         "/productos/**",
-                                        "/usuarios/**"
+                                        "/usuarios/**",
+                                        "/unete-comunidad/**",
+                                        "/testimonios/**"
+
+
                                         //"/perfil/**"
                                 ).permitAll()
 
