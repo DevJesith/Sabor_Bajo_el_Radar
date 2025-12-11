@@ -1,6 +1,7 @@
 package com.sbr.sabor_bajo_el_radar.repository;
 
 import com.sbr.sabor_bajo_el_radar.model.Compra;
+import com.sbr.sabor_bajo_el_radar.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -34,5 +35,14 @@ public interface CompraRepository extends JpaRepository<Compra, Integer> {
     List<Compra> findByClienteUsuarioCorreoOrderByFechaDesc(String correo);
 
     List<Compra> findByVendedorUsuarioCorreoOrderByFechaDesc(String correo);
+
+    // encontrar por estado
+    List<Compra> findByEstado(String estado);
+
+    List<Compra> findByEstadoAndIgnoradoFalse(String estado);
+
+    List<Compra> findByEstadoAndDomiciliarioAndIgnoradoFalse(String estado, Usuario domiciliario);
+
+
 
 }

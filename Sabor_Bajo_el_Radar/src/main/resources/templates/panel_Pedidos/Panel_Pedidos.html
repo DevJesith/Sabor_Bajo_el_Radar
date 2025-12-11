@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,101 +10,44 @@
     <div>
         <p class="font-bold text-lg">Panel Pedidos</p>
     </div>
-
-    <!-- boton -->
-    <div class="">
-        <button class="bg-white text-black px-1 py-1 sm:bg-white sm:text-black sm:px-5 rounded-lg">
-            Buscar Pedidos
-        </button>
-    </div>
 </header>
 
 <div class="flex flex-col lg:flex-row gap-6 p-4 items-start">
 
     <main class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-
-        <div class="border border-gray-600 bg-gray-900 text-white rounded-lg p-3 w-full shadow-md">
+        <div th:each="pedido : ${pedidos}"
+             class="border border-gray-600 bg-gray-900 text-white rounded-lg p-3 w-full shadow-md">
             <div class="flex justify-between gap-2">
                 <div class="flex flex-col gap-1 text-sm">
-                    <span class="text-gray-400">ID: #27837</span>
-                    <span class="font-bold text-base">Winston Rodriguez</span>
-                    <span class="text-gray-300">5 Producto/s</span>
-                    <span class="text-xs text-gray-400">Hace 5 minutos</span>
+                    <span class="text-gray-400">ID: <span th:text="${pedido.id}"></span></span>
+                    <span class="font-bold text-base">Cliente: <span th:text="${pedido.cliente.usuario.correo}"></span></span>
+                    <span class="text-gray-300">Estado: <span th:text="${pedido.estado}"></span></span>
+                    <span class="text-gray-400">Total: <span th:text="${pedido.total}"></span></span>
                 </div>
                 <div class="flex flex-col gap-2 justify-center">
-                    <button class="bg-red-200 text-red-800 px-3 py-1 rounded text-xs font-bold hover:bg-red-300 transition">Ignorar</button>
-                    <button class="bg-green-200 text-green-800 px-3 py-1 rounded text-xs font-bold hover:bg-green-300 transition">Aceptar</button>
+                    <form th:action="@{'/pedidos/' + ${pedido.id} + '/aceptar'}" method="post">
+                        <button type="submit"
+                                class="bg-green-200 text-green-800 px-3 py-1 rounded text-xs font-bold hover:bg-green-300 transition">
+                            Aceptar
+                        </button>
+                    </form>
+
+                    <form th:action="@{'/pedidos/' + ${pedido.id} + '/ignorar'}" method="post">
+                        <button type="submit"
+                                class="bg-red-200 text-red-800 px-3 py-1 rounded text-xs font-bold hover:bg-red-300 transition">
+                            Ignorar
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <div class="border border-gray-600 bg-gray-900 text-white rounded-lg p-3 w-full shadow-md">
-            <div class="flex justify-between gap-2">
-                <div class="flex flex-col gap-1 text-sm">
-                    <span class="text-gray-400">ID: #8983</span>
-                    <span class="font-bold text-base">Julieth Acevedo</span>
-                    <span class="text-gray-300">3 Producto/s</span>
-                    <span class="text-xs text-gray-400">Hace 2 minutos</span>
-                </div>
-                <div class="flex flex-col gap-2 justify-center">
-                    <button class="bg-red-200 text-red-800 px-3 py-1 rounded text-xs font-bold hover:bg-red-300 transition">Ignorar</button>
-                    <button class="bg-green-200 text-green-800 px-3 py-1 rounded text-xs font-bold hover:bg-green-300 transition">Aceptar</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="border border-gray-600 bg-gray-900 text-white rounded-lg p-3 w-full shadow-md">
-            <div class="flex justify-between gap-2">
-                <div class="flex flex-col gap-1 text-sm">
-                    <span class="text-gray-400">ID: #8162</span>
-                    <span class="font-bold text-base">Damian Mancera</span>
-                    <span class="text-gray-300">2 Producto/s</span>
-                    <span class="text-xs text-gray-400">Hace 6 minutos</span>
-                </div>
-                <div class="flex flex-col gap-2 justify-center">
-                    <button class="bg-red-200 text-red-800 px-3 py-1 rounded text-xs font-bold hover:bg-red-300 transition">Ignorar</button>
-                    <button class="bg-green-200 text-green-800 px-3 py-1 rounded text-xs font-bold hover:bg-green-300 transition">Aceptar</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="border border-gray-600 bg-gray-900 text-white rounded-lg p-3 w-full shadow-md">
-            <div class="flex justify-between gap-2">
-                <div class="flex flex-col gap-1 text-sm">
-                    <span class="text-gray-400">ID: #9999</span>
-                    <span class="font-bold text-base">Nuevo Cliente</span>
-                    <span class="text-gray-300">1 Producto/s</span>
-                    <span class="text-xs text-gray-400">Hace 1 minuto</span>
-                </div>
-                <div class="flex flex-col gap-2 justify-center">
-                    <button class="bg-red-200 text-red-800 px-3 py-1 rounded text-xs font-bold hover:bg-red-300 transition">Ignorar</button>
-                    <button class="bg-green-200 text-green-800 px-3 py-1 rounded text-xs font-bold hover:bg-green-300 transition">Aceptar</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="border border-gray-600 bg-gray-900 text-white rounded-lg p-3 w-full shadow-md">
-            <div class="flex justify-between gap-2">
-                <div class="flex flex-col gap-1 text-sm">
-                    <span class="text-gray-400">ID: #27837</span>
-                    <span class="font-bold text-base">Winston Rodriguez</span>
-                    <span class="text-gray-300">5 Producto/s</span>
-                    <span class="text-xs text-gray-400">Hace 5 minutos</span>
-                </div>
-                <div class="flex flex-col gap-2 justify-center">
-                    <button class="bg-red-200 text-red-800 px-3 py-1 rounded text-xs font-bold hover:bg-red-300 transition">Ignorar</button>
-                    <button class="bg-green-200 text-green-800 px-3 py-1 rounded text-xs font-bold hover:bg-green-300 transition">Aceptar</button>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     <aside class="w-full lg:w-64 flex flex-col gap-4 sticky top-4">
         <div class="bg-gray-800 p-4 rounded-lg border border-gray-600 flex flex-col gap-3">
             <h3 class="text-white font-bold text-lg text-center">Acciones</h3>
-            <button class="w-full bg-white text-black py-2 rounded font-medium hover:bg-gray-200 transition">
-                Ver tus pedidos
+            <button class="w-full bg-white text-black py-2 rounded font-medium hover:bg-gray-200 transition" onclick="location.href='/pedidos/historial'">
+                Ver historial
             </button>
             <button class="w-full bg-transparent border border-white text-white py-2 rounded font-medium hover:bg-white hover:text-black transition" onclick="history.back()">
                 Volver al inicio
@@ -115,7 +58,6 @@
 </div>
 
 <footer class="mt-5">
-
 </footer>
 </body>
 </html>
