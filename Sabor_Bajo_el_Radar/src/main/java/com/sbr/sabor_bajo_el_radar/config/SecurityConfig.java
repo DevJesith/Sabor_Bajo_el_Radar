@@ -37,33 +37,33 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                //.csrf(csrf -> csrf.disable()) // Deshabilitado solo para pruebas
                 .authorizeHttpRequests(auth -> auth
-                                // Rutas públicas
-
-
-                                .requestMatchers(
-                                        "/",
-                                        "/registro/**",
-                                        "/login**",
-                                        "/css/**",
-                                        "/js/**",
-                                        "/img/**",
-                                        "/img/Quienes_Somos/**",
-                                        "/img/testimonio/**",
-                                        "/mapa-navegacion/**",
-                                        "/terminos-y-condiciones/**",
-                                        "/como-funciona/**",
-                                        "/mantenimiento/**",
-                                        "/quienes-somos/**",
-                                        "/muro-social/**",
-                                        "/productos/**",
-                                        "/usuarios/**",
-                                        "/unete-comunidad/**",
-                                        "/testimonios/**"
-
-
-                                        //"/perfil/**"
-                                ).permitAll()
+                        // Rutas públicas
+                        .requestMatchers(
+                                "/",
+                                "/registro/**",
+                                "/login**",
+                                "/css/**",
+                                "/js/**",
+                                "/img/**",
+                                "/img/Quienes_Somos/**",
+                                "/img/testimonio/**",
+                                "/mapa-navegacion/**",
+                                "/terminos-y-condiciones/**",
+                                "/como-funciona/**",
+                                "/mantenimiento/**",
+                                "/quienes-somos/**",
+                                "/muro-social/**",
+                                "/productos/**",
+                                "/usuarios/**",
+                                "/pedidos/**",
+                                "/pedidos/aceptados",
+                                "/pedidos/*/entregar",
+                                "/pedidos/*/ignorar",
+                                "/unete-comunidad/**",
+                                "/testimonios/**"
+                        ).permitAll()
 
 
 //                        // Solo el admin puede ver el Dashboard
@@ -74,6 +74,15 @@ public class SecurityConfig {
                                         "/api/admin/**",    // TODAS las APIs del administrador,
                                         "/api/dashboard"
                                 ).hasRole("ADMINISTRADOR")
+
+                                // Vendedor
+                                .requestMatchers("/api/vendedor/pedidos/**").hasRole("VENDEDOR")
+
+                                // Domiciliario
+                                .requestMatchers("/api/domiciliario/pedidos/**").hasRole("DOMICILIARIO")
+
+                                // Cliente
+                                .requestMatchers("/api/cliente/pedidos/**").hasRole("CLIENTE")
 
 
                                 // Las demás necesitan autenticación
@@ -98,7 +107,7 @@ public class SecurityConfig {
                                 response.sendRedirect("/vendedor");
                             } else if (authentication.getAuthorities().stream()
                                     .anyMatch(d -> d.getAuthority().equals("ROLE_DOMICILIARIO"))) {
-                                response.sendRedirect("/domiciliario/panel-pedidos");
+                                response.sendRedirect("/pedidos/pendientes");
                             }
                         })
                         .failureUrl("/login?error=true")
