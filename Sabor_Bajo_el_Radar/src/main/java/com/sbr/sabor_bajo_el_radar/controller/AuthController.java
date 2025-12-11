@@ -38,7 +38,7 @@ public class AuthController {
             model.addAttribute("mensaje", "Has cerrado sesión correctamente");
         }
         if (registro != null) {
-            model.addAttribute("exito", "Registro exitoso!, ya puedes iniciar sesion");
+            model.addAttribute("exito", "¡Registro exitoso!, ya puedes iniciar sesion");
         }
 
         if (eliminado != null) { // <-- AÑADE ESTE BLOQUE IF
@@ -66,7 +66,7 @@ public class AuthController {
 
         try {
             usuarioService.registrar(registroDTO);
-            redirectAttributes.addFlashAttribute("exito", "Registro exitoso!, ya puedes iniciar sesion");
+            redirectAttributes.addFlashAttribute("exito", "¡Registro exitoso!, ya puedes iniciar sesion");
             return "redirect:/login?registro=exitoso";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
