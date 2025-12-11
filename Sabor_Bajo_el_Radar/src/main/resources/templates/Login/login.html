@@ -29,7 +29,7 @@
         <div class="w-full flex flex-col items-center">
             <form id="loginForm" class="px-10 py-4 flex flex-col w-full sm:px-20 lg:px-70"  th:action="@{/login}" method="POST">
 
-                <div th:if="${exito}" class="alert alert-success text-center" th:text="${exito}"></div>
+                <div th:if="${exito}" class="alert alert-success text-center mb-5 text-green-600" th:text="${exito}"></div>
                 <div th:if="${param.error}" class="text-center">
                     <p style="color:red;">Correo o contraseña incorrectos</p>
                 </div>
