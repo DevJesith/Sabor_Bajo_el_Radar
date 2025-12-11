@@ -49,11 +49,21 @@
             <button class="w-full bg-white text-black py-2 rounded font-medium hover:bg-gray-200 transition" onclick="location.href='/pedidos/historial'">
                 Ver historial
             </button>
-            <button class="w-full bg-transparent border border-white text-white py-2 rounded font-medium hover:bg-white hover:text-black transition" onclick="history.back()">
+            <button class="w-full bg-transparent border border-white text-white py-2 rounded font-medium hover:bg-white hover:text-black transition" th:href="@{/}">
                 Volver al inicio
             </button>
             <button class="w-full bg-transparent border border-white text-white py-2 rounded font-medium hover:bg-white hover:text-black transition" onclick="location.href='/pedidos/tus_entregas'">
                 Tus entregas
+            </button>
+            <form th:action="@{/logout}" method="post">
+                <button class="w-full bg-red-700 border border-white text-white py-2 rounded font-medium hover:bg-white hover:text-black transition" type="submit">
+                    <span
+                        class="sidebar-text">Cerrar sesión
+                    </span>
+                </button>
+            </form>
+            <button  onclick="location.href='/pedidos/tus_entregas'">
+                Cerrar Sesion
             </button>
         </div>
     </aside>
