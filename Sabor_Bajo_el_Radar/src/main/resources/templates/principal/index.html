@@ -24,17 +24,17 @@
 <header>
     <nav class="navbar navbar-expand-lg navegacion-sections">
         <div class="container-fluid">
-            
+
             <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                 <img class="logo-principal me-2" alt="img" th:src="@{/img/logo_sbr.png}">
                 <span class="fw-bold">Sabor Bajo El Radar</span>
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                     aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div id="navbarScroll" class="collapse navbar-collapse ">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item "><a class="nav-link link-header" href="#" aria-current="page">Inicio</a></li>
@@ -44,12 +44,10 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
                             <li><a class="dropdown-item" th:href="@{/como-funciona}">Como Funciona</a></li>
-                            <li><a class="dropdown-item" th:href="@{/dashboard/admin}">Admin</a></li>
                             <li><a class="dropdown-item" th:href="@{/solicitudes/pqrs}"> Peticion PQRS </a></li>
-                            <li><a class="dropdown-item" th:href="@{/}"> Cargar Datos </a></li>
+                            <li><a class="dropdown-item" th:href="@{/consultas/FAQ}"> Preguntas Frecuentes </a></li>
                         </ul>
                     </li>
-                    <li class="nav-item "><a class="nav-link link-header" href="#">Contacto</a></li>
                     <li class="nav-item ">
                         <a id="comunidad" class="nav-link link-header" th:href="@{/unete-comunidad}">Únete a nuestra
                             comunidad</a>

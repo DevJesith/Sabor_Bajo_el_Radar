@@ -38,16 +38,13 @@
             
             <div id="navbarScroll" class="collapse navbar-collapse ">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-                    <li class="nav-item "><a class="nav-link link-header" href="#" aria-current="page">Inicio</a></li>
+                    <li class="nav-item "><a class="nav-link link-header" th:href="@{/}" aria-current="page">Inicio</a></li>
                     <li class="nav-item  dropdown">
                         <a class="nav-link dropdown-toggle link-header" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">Nosotros</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
                             <li><a class="dropdown-item" th:href="@{/como-funciona}">Como Funciona</a></li>
-                            <li><a class="dropdown-item" th:href="@{/dashboard/admin}">Admin</a></li>
-                            <li><a class="dropdown-item" th:href="@{/muro-social}"> Muro Social </a></li>
-                            <li><a class="dropdown-item" th:href="@{/}"> Cargar Datos </a></li>
                         </ul>
                     </li>
                     <li class="nav-item "><a class="nav-link link-header" href="#">Contacto</a></li>
