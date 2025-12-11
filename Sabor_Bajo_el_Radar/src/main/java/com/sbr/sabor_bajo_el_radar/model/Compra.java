@@ -1,6 +1,8 @@
 package com.sbr.sabor_bajo_el_radar.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -8,6 +10,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "compra")
 public class Compra {
@@ -42,59 +46,11 @@ public class Compra {
     @Column(name = "nota")
     private String nota;
 
-    public Integer getId() {
-        return id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "domiciliario_id")
+    private Usuario domiciliario;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "ignorado", nullable = false)
+    private boolean ignorado = false;
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Vendedor getVendedor() {
-        return vendedor;
-    }
-
-    public void setVendedor(Vendedor vendedor) {
-        this.vendedor = vendedor;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public Instant getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Instant fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getNota() {
-        return nota;
-    }
-
-    public void setNota(String nota) {
-        this.nota = nota;
-    }
 }
