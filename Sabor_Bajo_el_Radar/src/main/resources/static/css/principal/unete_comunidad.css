@@ -1,0 +1,413 @@
+.navegacion-sections {
+    background: #f4f4f4;
+    padding: 5px 0;
+}
+
+.logo-principal {
+    width: 50px;
+}
+
+.navbar-brand span {
+    font-family: 'Poppins';
+    font-size: 1.2rem;
+    color: black;
+}
+
+.navbar-nav {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.link-header {
+    margin: 0 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background: #ffaa16;
+    color: white !important;
+    font-weight: bold;
+}
+
+#comunidad {
+    background: #2289e6;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+#login {
+    background: #d72638;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 8px 16px;
+}
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-item {
+        margin-bottom: 10px;
+    }
+
+    #comunidad, #login {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* ========== ESTILOS EXCLUSIVOS COMUNIDAD ========== */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #fff;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- HERO SECTION --- */
+.hero-community {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    background: linear-gradient(135deg, rgba(215, 38, 56, 0.9), rgba(255, 170, 22, 0.8)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    margin-bottom: 50px;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* --- TARJETAS DE ROLES --- */
+.role-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #eee;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #ddd;
+    transition: height 0.3s ease;
+    z-index: -1;
+}
+
+.role-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Colores específicos por rol */
+.role-cliente:hover::before {
+    height: 100%;
+    background: #fff0f0;
+}
+
+.role-cliente .icon-box {
+    background: #ffe5e5;
+    color: #d72638;
+}
+
+.role-cliente .btn-role {
+    background: #d72638;
+    border-color: #d72638;
+}
+
+.role-cliente:hover .title {
+    color: #d72638;
+}
+
+.role-vendedor:hover::before {
+    height: 100%;
+    background: #fffbe5;
+}
+
+.role-vendedor .icon-box {
+    background: #fff5cc;
+    color: #ffaa16;
+}
+
+.role-vendedor .btn-role {
+    background: #ffaa16;
+    border-color: #ffaa16;
+    color: white;
+}
+
+.role-vendedor:hover .title {
+    color: #ffaa16;
+}
+
+.role-domi:hover::before {
+    height: 100%;
+    background: #e8f5e9;
+}
+
+.role-domi .icon-box {
+    background: #c8e6c9;
+    color: #2e7d32;
+}
+
+.role-domi .btn-role {
+    background: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.role-domi:hover .title {
+    color: #2e7d32;
+}
+
+.icon-box {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 25px;
+    transition: all 0.3s ease;
+}
+
+.role-card:hover .icon-box {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.role-card .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    transition: color 0.3s;
+}
+
+.role-card p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.btn-role {
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    color: white;
+    transition: all 0.3s;
+}
+
+.btn-role:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+    color: white;
+}
+
+/* --- SECCIÓN DE ESTADÍSTICAS / CONFIANZA --- */
+.stats-section {
+    background-color: #f8f9fa;
+    padding: 80px 0;
+    margin-top: 80px;
+    text-align: center;
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #333;
+}
+
+.stat-item p {
+    color: #777;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* ------------- */
+
+.footer {
+    background: #ececec;
+}
+
+.footer-text {
+    display: block;
+    color: black;
+}
+
+.footer-titulo {
+    margin: 20px 0;
+    font-family: 'Poppins';
+    font-weight: 700;
+}
+
+.footer-logo {
+    width: 200px;
+
+}
+
+.playstore, .appstore {
+    margin-bottom: 10px;
+    width: 150px;
+}
+
+.footer-container-redsocial {
+    display: flex;
+    align-self: center;
+}
+
+.footer-redsocial {
+    padding: 15px;
+    margin: 0 5px;
+    background: white;
+    border-radius: 50%;
+}
+
+.icono-redsocial {
+    width: 25px;
+
+}
+
+.fondo-facebook {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.facebook {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-facebook:hover {
+    background-color: #0165E1;
+}
+
+.fondo-facebook:hover .facebook {
+    filter: brightness(0) invert(1);
+}
+
+/* Instagram */
+.fondo-instagram {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.instagram {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-instagram:hover {
+    background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
+}
+
+.fondo-instagram:hover .instagram {
+    filter: brightness(0) invert(1);
+}
+
+/* Twitter */
+
+
+.fondo-twitter {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.twitter {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-twitter:hover {
+    background-color: black;
+}
+
+.fondo-twitter:hover .twitter {
+    filter: brightness(0) invert(1);
+}
+
+
+/* linkedin */
+.fondo-linkedin {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.linkedin {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-linkedin:hover {
+    background-color: #0165E1;
+}
+
+.fondo-linkedin:hover .linkedin {
+    filter: brightness(0) invert(1);
+}
+
+/* ------- */
+
+footer {
+    margin: 0;
+}
+
+.footer-container {
+    margin: 20px 20px;
+}
+
+.footer-footer-link {
+
+    text-decoration: none;
+    color: black;
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 15px;
+    margin: 10px 5px;
+    padding-right: 10px;
+    border-right: solid 2px black;
+
+}
+
+.footer-footer-text {
+    display: inline;
+    float: right;
+}

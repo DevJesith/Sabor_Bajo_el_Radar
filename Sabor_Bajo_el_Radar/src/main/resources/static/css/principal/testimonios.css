@@ -1,0 +1,326 @@
+.navegacion-sections {
+    background: #f4f4f4;
+    padding: 5px 0;
+}
+
+.logo-principal {
+    width: 50px;
+}
+
+.navbar-brand span {
+    font-family: 'Poppins';
+    font-size: 1.2rem;
+    color: black;
+}
+
+.navbar-nav {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.link-header {
+    margin: 0 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background: #ffaa16;
+    color: white !important;
+    font-weight: bold;
+}
+
+#comunidad {
+    background: #2289e6;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+#login {
+    background: #d72638;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 8px 16px;
+}
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-item {
+        margin-bottom: 10px;
+    }
+
+    #comunidad, #login {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* ========== ESTILOS ESPECÍFICOS DE TESTIMONIOS ========== */
+body {
+    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+}
+
+.testimonials-header {
+    padding: 60px 0 40px;
+    text-align: center;
+}
+
+.testimonials-header h1 {
+    color: #d72638; /* Rojo SBR */
+    font-weight: 700;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.testimonials-header h1::after {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 4px;
+    background: #ffaa16; /* Amarillo SBR */
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.testimonials-header p {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* CARD DISEÑO */
+.testimonial-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid transparent;
+    height: 100%;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: #ffaa16;
+}
+
+/* Icono de comillas de fondo */
+.quote-icon-bg {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-size: 100px;
+    color: rgba(215, 38, 56, 0.05); /* Rojo muy transparente */
+    font-family: serif;
+    z-index: 0;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.stars {
+    color: #ffaa16;
+    margin-bottom: 15px;
+}
+
+.testimonial-text {
+    color: #555;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+/* Perfil del usuario */
+.user-profile {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f0f0f0;
+    margin-right: 15px;
+}
+
+.user-info h5 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #333;
+}
+
+.user-info span {
+    font-size: 0.85rem;
+    color: #d72638; /* Rojo para el rol */
+    font-weight: 500;
+}
+
+/* ------------- */
+
+.footer {
+    background: #ececec;
+}
+
+.footer-text {
+    display: block;
+    color: black;
+}
+
+.footer-titulo {
+    margin: 20px 0;
+    font-family: 'Poppins';
+    font-weight: 700;
+}
+
+.footer-logo {
+    width: 200px;
+
+}
+
+.playstore, .appstore {
+    margin-bottom: 10px;
+    width: 150px;
+}
+
+.footer-container-redsocial {
+    display: flex;
+    align-self: center;
+}
+
+.footer-redsocial {
+    padding: 15px;
+    margin: 0 5px;
+    background: white;
+    border-radius: 50%;
+}
+
+.icono-redsocial {
+    width: 25px;
+
+}
+
+.fondo-facebook {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.facebook {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-facebook:hover {
+    background-color: #0165E1;
+}
+
+.fondo-facebook:hover .facebook {
+    filter: brightness(0) invert(1);
+}
+
+/* Instagram */
+.fondo-instagram {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.instagram {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-instagram:hover {
+    background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
+}
+
+.fondo-instagram:hover .instagram {
+    filter: brightness(0) invert(1);
+}
+
+/* Twitter */
+
+
+.fondo-twitter {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.twitter {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-twitter:hover {
+    background-color: black;
+}
+
+.fondo-twitter:hover .twitter {
+    filter: brightness(0) invert(1);
+}
+
+
+/* linkedin */
+.fondo-linkedin {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.linkedin {
+    transition: transform 0.3s, filter 0.3s;
+
+}
+
+.fondo-linkedin:hover {
+    background-color: #0165E1;
+}
+
+.fondo-linkedin:hover .linkedin {
+    filter: brightness(0) invert(1);
+}
+
+/* ------- */
+
+footer {
+    margin: 0;
+}
+
+.footer-container {
+    margin: 20px 20px;
+}
+
+.footer-footer-link {
+
+    text-decoration: none;
+    color: black;
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 15px;
+    margin: 10px 5px;
+    padding-right: 10px;
+    border-right: solid 2px black;
+
+}
+
+.footer-footer-text {
+    display: inline;
+    float: right;
+}
