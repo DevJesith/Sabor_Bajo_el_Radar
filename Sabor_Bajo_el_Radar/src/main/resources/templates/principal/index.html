@@ -44,8 +44,6 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/quienes-somos}">Quienes somos</a></li>
                             <li><a class="dropdown-item" th:href="@{/como-funciona}">Como Funciona</a></li>
-                            <li><a class="dropdown-item" th:href="@{/solicitudes/pqrs}"> Peticion PQRS </a></li>
-                            <li><a class="dropdown-item" th:href="@{/consultas/FAQ}"> Preguntas Frecuentes </a></li>
                         </ul>
                     </li>
                     <li class="nav-item ">
@@ -229,8 +227,10 @@
                 
                 <div class="col">
                     <p class="footer-titulo">Soporte</p>
-                    <div><a class="footer-text" href="#">Contáctanos</a> <a class="footer-text" href="#">PQRS</a> <a
-                        class="footer-text" href="#">FAQ</a></div>
+                    <div>
+                        <a class="footer-text" th:href="@{/solicitudes/pqrs}">PQRS</a>
+                        <a class="footer-text" th:href="@{/consultas/FAQ}">FAQ</a>
+                    </div>
                 </div>
                 
                 <div class="col"><img class="footer-logo" alt="" th:src="@{/img/logo_sbr.png}"></div>
