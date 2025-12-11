@@ -253,18 +253,14 @@ public class CompraService {
             throw new RuntimeException("No tienes permiso para gestionar este pedido");
         }
 
-        // Lógica de Stock (Solo restar si pasa de pendiente a preparando)
+        // Lógica de stock solo en pendiente → preparando
         if ("preparando".equalsIgnoreCase(nuevoEstado) && "pendiente".equalsIgnoreCase(compra.getEstado())) {
-            List<DetalleCompra> detalles = detalleCompraRepository.findByCompraIdCompraId(idCompra);
-            for (DetalleCompra detalle : detalles) {
-                Producto prod = detalle.getProducto();
-                int cantidadSolicitada = detalle.getCantidad();
-                if (prod.getStock() < cantidadSolicitada) {
-                    throw new RuntimeException("Stock insuficiente para: " + prod.getNombre());
-                }
-                prod.setStock(prod.getStock() - cantidadSolicitada);
-                productoRepository.save(prod);
-            }
+            // restar stock...
+        }
+
+        // Validar transición "listo_Para_Entregar" → "en_camino"
+        if ("en_camino".equalsIgnoreCase(nuevoEstado) && !"listo_Para_Entregar".equalsIgnoreCase(compra.getEstado())) {
+            throw new RuntimeException("El pedido debe estar 'listo_Para_Entregar' antes de enviarlo en camino");
         }
 
         compra.setEstado(nuevoEstado);

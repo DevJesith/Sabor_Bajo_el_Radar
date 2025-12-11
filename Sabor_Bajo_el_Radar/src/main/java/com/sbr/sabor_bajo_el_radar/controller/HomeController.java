@@ -52,7 +52,6 @@ public class HomeController {
         return "Muro_Social/muro_social";
     }
 
-
     @GetMapping("/perfil")
     public String editarPerfil() {
         return "perfil/perfil";
@@ -67,5 +66,8 @@ public class HomeController {
     public String uneteComunidad() {
         return "principal/unete_comunidad";
     }
+
+    @GetMapping("/solicitudes/pqrs")
+    public String peticonPqrs(){return "pqrs/solicitar_pqrs";}
 
 }

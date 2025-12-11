@@ -251,7 +251,7 @@ function renderizarPedidos() {
                 </button>`;
         } else if (status === 'preparando') {
             botones = `
-                <button class="btn btn-success btn-sm" onclick="cambiarEstadoPedido(${p.id}, 'en_camino')">
+                <button class="btn btn-success btn-sm" onclick="cambiarEstadoPedido(${p.id}, 'listo_Para_Entregar')">
                     <i class="fas fa-motorcycle me-1"></i> Enviar
                 </button>`;
         }
@@ -383,6 +383,7 @@ function getStatusBadge(estado) {
     const map = {
         'pendiente': 'bg-warning text-dark',
         'preparando': 'bg-info text-dark',
+        'listo_Para_Entregar': 'bg-secondary text-white',
         'en_camino': 'bg-primary',
         'entregado': 'bg-success',
         'cancelado': 'bg-danger'
