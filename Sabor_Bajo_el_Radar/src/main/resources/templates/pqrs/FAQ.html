@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Preguntas Frecuentes - Sabor Bajo El Radar</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Configuración personalizada (Mismos colores y fuentes que tu diseño anterior) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ea580c', /* Naranja SBR */
+                        secondary: '#1f2937',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fuentes Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        /* Animación para el icono del acordeón */
+        .rotate-180 { transform: rotate(180deg); }
+        .accordion-content { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+<!-- ================= HEADER (Igual al anterior) ================= -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+
+            <!-- Logo -->
+            <a class="flex items-center gap-2" th:href="@{/}">
+                <img class="h-10 w-auto" alt="Logo SBR" th:src="@{/img/logo_sbr.png}">
+                <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Sabor Bajo El Radar</span>
+            </a>
+
+            <!-- Botón Menú Móvil -->
+            <div class="flex items-center lg:hidden">
+                <button id="mobile-menu-btn" type="button" class="text-gray-500 hover:text-gray-900 focus:outline-none p-2">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Menú Escritorio -->
+            <div class="hidden lg:flex lg:items-center lg:space-x-8">
+                <a href="#" class="text-gray-600 hover:text-primary font-medium transition">Inicio</a>
+
+                <div class="relative group">
+                    <button class="flex items-center text-gray-600 hover:text-primary font-medium focus:outline-none transition">
+                        Nosotros
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform z-50">
+                        <a th:href="@{/quienes-somos}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Quienes somos</a>
+                        <a th:href="@{/como-funciona}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Cómo Funciona</a>
+                        <a th:href="@{/dashboard/admin}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Admin</a>
+                    </div>
+                </div>
+
+                <a href="#" class="text-gray-600 hover:text-primary font-medium transition">Contacto</a>
+
+                <a th:href="@{/unete-comunidad}" class="text-primary border border-primary px-4 py-2 rounded-full hover:bg-primary hover:text-white transition font-medium text-sm">
+                    Únete a la comunidad
+                </a>
+                <a th:href="@{/login}" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-orange-700 transition font-medium text-sm shadow-md hover:shadow-lg">
+                    Iniciar Sesión
+                </a>
+            </div>
+        </div>
+
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-gray-200">
+            <div class="flex flex-col space-y-2 mt-2">
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Inicio</a>
+                <a th:href="@{/quienes-somos}" class="block px-3 py-2 text-sm text-gray-600 hover:text-primary">Quienes somos</a>
+                <a th:href="@{/como-funciona}" class="block px-3 py-2 text-sm text-gray-600 hover:text-primary">Cómo Funciona</a>
+                <a th:href="@{/unete-comunidad}" class="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50">Únete a la comunidad</a>
+                <a th:href="@{/login}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- ================= MAIN CONTENT (FAQ) ================= -->
+<main class="flex-grow">
+
+    <!-- Encabezado de la sección -->
+    <section class="bg-white pt-16 pb-12 text-center px-4">
+        <div class="container mx-auto">
+            <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Preguntas
+                <span class="text-primary">Frecuentes</span>
+            </h1>
+            <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+                Resolvemos tus dudas sobre cómo encontrar los mejores puestos de comida callejera o cómo registrar tu propio negocio en <span class="font-bold text-gray-700">Sabor Bajo El Radar</span>.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contenedor del Acordeón -->
+    <section class="pb-24 px-4">
+        <div class="container mx-auto max-w-3xl">
+            <div class="space-y-4">
+
+                <!-- PREGUNTA 1 -->
+                <div class="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition duration-300">
+                    <button class="accordion-toggle flex items-center justify-between w-full p-5 text-left bg-white group-hover:bg-gray-50 transition duration-300 focus:outline-none">
+                        <span class="font-heading font-semibold text-lg text-gray-800 group-hover:text-primary transition">¿Tiene algún costo usar la plataforma?</span>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transform transition-transform duration-300 accordion-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content hidden px-5 pb-5 text-gray-600 leading-relaxed">
+                        <p>No, para los usuarios que buscan comida (comensales) el uso de Sabor Bajo El Radar es <strong>completamente gratuito</strong>. Puedes buscar, ver menús y contactar vendedores sin costo alguno.</p>
+                    </div>
+                </div>
+
+                <!-- PREGUNTA 2 -->
+                <div class="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition duration-300">
+                    <button class="accordion-toggle flex items-center justify-between w-full p-5 text-left bg-white group-hover:bg-gray-50 transition duration-300 focus:outline-none">
+                        <span class="font-heading font-semibold text-lg text-gray-800 group-hover:text-primary transition">¿Cómo puedo registrar mi puesto de comida?</span>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transform transition-transform duration-300 accordion-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content hidden px-5 pb-5 text-gray-600 leading-relaxed">
+                        <p>Es muy sencillo. Solo debes ir a la sección <a th:href="@{/unete-comunidad}" class="text-primary font-medium hover:underline">Únete a la comunidad</a>, crear una cuenta como vendedor y completar el formulario con la ubicación, fotos y menú de tu puesto. ¡En minutos estarás en el mapa!</p>
+                    </div>
+                </div>
+
+                <!-- PREGUNTA 3 -->
+                <div class="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition duration-300">
+                    <button class="accordion-toggle flex items-center justify-between w-full p-5 text-left bg-white group-hover:bg-gray-50 transition duration-300 focus:outline-none">
+                        <span class="font-heading font-semibold text-lg text-gray-800 group-hover:text-primary transition">¿La información de los horarios es precisa?</span>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transform transition-transform duration-300 accordion-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content hidden px-5 pb-5 text-gray-600 leading-relaxed">
+                        <p>Nos esforzamos para que así sea. Los vendedores gestionan sus propios perfiles y pueden actualizar su estado a "Abierto" o "Cerrado" en tiempo real. Sin embargo, siempre recomendamos contactar al vendedor a través del botón de WhatsApp disponible en su perfil antes de ir.</p>
+                    </div>
+                </div>
+
+                <!-- PREGUNTA 4 -->
+                <div class="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition duration-300">
+                    <button class="accordion-toggle flex items-center justify-between w-full p-5 text-left bg-white group-hover:bg-gray-50 transition duration-300 focus:outline-none">
+                        <span class="font-heading font-semibold text-lg text-gray-800 group-hover:text-primary transition">¿Qué hago si tengo una mala experiencia?</span>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transform transition-transform duration-300 accordion-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content hidden px-5 pb-5 text-gray-600 leading-relaxed">
+                        <p>Valoramos mucho la calidad. Puedes dejar una reseña en el perfil del vendedor para alertar a otros usuarios. Si es un tema grave de seguridad o higiene, por favor contáctanos directamente a través de nuestro formulario de Soporte para investigar el caso.</p>
+                    </div>
+                </div>
+
+                <!-- PREGUNTA 5 -->
+                <div class="group border border-gray-200 rounded-xl bg-white overflow-hidden hover:shadow-md transition duration-300">
+                    <button class="accordion-toggle flex items-center justify-between w-full p-5 text-left bg-white group-hover:bg-gray-50 transition duration-300 focus:outline-none">
+                        <span class="font-heading font-semibold text-lg text-gray-800 group-hover:text-primary transition">¿Cómo puedo contactar a soporte?</span>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transform transition-transform duration-300 accordion-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content hidden px-5 pb-5 text-gray-600 leading-relaxed">
+                        <p>Si tienes problemas técnicos con la plataforma, escríbenos a <span class="text-primary font-medium">soporte@saborbajoelradar.com</span> o usa la sección de contacto en el pie de página.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Call to Action al final -->
+            <div class="mt-12 text-center bg-orange-50 rounded-2xl p-8 border border-orange-100">
+                <h3 class="font-heading text-xl font-bold text-gray-900 mb-2">¿No encontraste tu respuesta?</h3>
+                <p class="text-gray-600 mb-6">Estamos aquí para ayudarte. Ponte en contacto con nuestro equipo.</p>
+                <a href="#" class="inline-block bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-orange-700 transition shadow-lg hover:shadow-xl">
+                    Contactar Soporte
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ================= FOOTER (Igual al anterior) ================= -->
+<footer class="bg-gray-900 text-white pt-16 pb-8">
+    <div class="container mx-auto px-4">
+        <!-- Grid Footer -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12 text-center sm:text-left">
+
+            <!-- Columna Nosotros -->
+            <div class="flex flex-col space-y-4">
+                <p class="font-bold text-lg text-white mb-2">Nosotros</p>
+                <a class="text-gray-400 hover:text-white transition" th:href="@{/quienes-somos}">Quienes somos</a>
+                <a class="text-gray-400 hover:text-white transition" href="#">Equipo</a>
+                <a class="text-gray-400 hover:text-white transition" th:href="@{/testimonios}">Testimonios</a>
+            </div>
+
+            <!-- Columna Soporte -->
+            <div class="flex flex-col space-y-4">
+                <p class="font-bold text-lg text-white mb-2">Soporte</p>
+                <a class="text-gray-400 hover:text-white transition" href="#">Contáctanos</a>
+                <a class="text-gray-400 hover:text-white transition" href="#">PQRS</a>
+                <a class="text-gray-400 hover:text-white transition text-white font-semibold" href="#">FAQ</a> <!-- Resaltado por estar aqui -->
+            </div>
+
+            <!-- Columna Logo -->
+            <div class="flex flex-col items-center justify-start">
+                <img class="w-24 h-auto mb-4" alt="Logo Footer" th:src="@{/img/logo_sbr.png}"/>
+                <span class="text-sm text-gray-500 font-heading">Sabor Bajo El Radar</span>
+            </div>
+
+            <!-- Columna Plataformas -->
+            <div class="flex flex-col items-center sm:items-start space-y-4">
+                <p class="font-bold text-lg text-white mb-2">Plataformas</p>
+                <a href="#" class="hover:opacity-80 transition"><img class="h-10 w-auto" alt="Play Store" th:src="@{/img/playstore.png}"/></a>
+                <a href="#" class="hover:opacity-80 transition"><img class="h-10 w-auto" alt="App Store" th:src="@{/img/appstore.png}"/></a>
+            </div>
+
+            <!-- Columna Redes Sociales -->
+            <div class="flex flex-col items-center sm:items-start">
+                <p class="font-bold text-lg text-white mb-4">Redes sociales</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition">
+                        <img class="w-5 h-5 filter invert" alt="FB" th:src="@{/img/facebook.png}">
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition">
+                        <img class="w-5 h-5 filter invert" alt="IG" th:src="@{img/instagram.png}">
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center hover:bg-sky-600 transition">
+                        <img class="w-5 h-5 filter invert" alt="TW" th:src="@{img/twitter.png}"/>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-blue-800 rounded-full flex items-center justify-center hover:bg-blue-900 transition">
+                        <img class="w-5 h-5 filter invert" alt="IN" th:src="@{img/linkedin.png}"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra inferior -->
+        <div class="border-t border-gray-800 pt-8 mt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-4">
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white">Política de privacidad</a>
+                    <a th:href="@{/terminos-condiciones}" class="hover:text-white">Términos y condiciones</a>
+                    <a th:href="@{/mapa-navegacion}" class="hover:text-white">Mapa de navegación</a>
+                </div>
+                <p>© 2023 Sabor Bajo El Radar. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Javascript para Interacciones -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lógica del Menú Móvil
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Lógica del Acordeón (FAQ)
+        const toggles = document.querySelectorAll('.accordion-toggle');
+
+        toggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('.accordion-icon');
+
+                // Toggle para mostrar/ocultar el contenido actual
+                content.classList.toggle('hidden');
+
+                // Rotar el icono
+                if (!content.classList.contains('hidden')) {
+                    icon.classList.add('rotate-180');
+                    toggle.querySelector('span').classList.add('text-primary'); // Highlight título
+                } else {
+                    icon.classList.remove('rotate-180');
+                    toggle.querySelector('span').classList.remove('text-primary');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
