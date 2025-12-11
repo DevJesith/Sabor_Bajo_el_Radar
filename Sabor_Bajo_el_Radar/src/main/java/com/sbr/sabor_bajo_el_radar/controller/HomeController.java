@@ -70,4 +70,7 @@ public class HomeController {
     @GetMapping("/solicitudes/pqrs")
     public String peticonPqrs(){return "pqrs/solicitar_pqrs";}
 
+    @GetMapping("consultas/FAQ")
+    public String dudasInquietudes(){return "pqrs/FAQ";}
+
 }

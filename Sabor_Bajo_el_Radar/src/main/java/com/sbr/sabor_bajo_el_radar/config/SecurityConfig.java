@@ -62,7 +62,9 @@ public class SecurityConfig {
                                 "/pedidos/*/entregar",
                                 "/pedidos/*/ignorar",
                                 "/unete-comunidad/**",
-                                "/testimonios/**"
+                                "/testimonios/**",
+                                "/solicitudes/**",
+                                "/consultas/**"
                         ).permitAll()
 
 
