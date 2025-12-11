@@ -39,7 +39,7 @@ public class HomeController {
 
     @GetMapping("/testimonios")
     public String testimonios() {
-        return "principal/testimonio/testimonios";
+        return "principal/testimonios";
     }
 
     @GetMapping("/mantenimiento")
@@ -61,6 +61,11 @@ public class HomeController {
     @GetMapping("/domiciliario/panel-pedidos")
     public String panelPedidos() {
         return "panel_Pedidos/Panel_Pedidos";
+    }
+
+    @GetMapping("/unete-comunidad")
+    public String uneteComunidad() {
+        return "principal/unete_comunidad";
     }
 
 }
